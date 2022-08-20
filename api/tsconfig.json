@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "apiframework/*": ["node_modules/apiframework/dist/*"]
+    }
+  }
+}
