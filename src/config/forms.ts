@@ -40,6 +40,7 @@ interface FieldInterface {
 interface FormModel {
   name: string;
   slug: string; // url friendly
+  title: string;
   fields: FieldInterface[];
   schema: SchemaOf<any>;
 }
@@ -136,7 +137,8 @@ const employeeFields: FieldInterface[] = [
 export const formModels: FormModel[] = [
   {
     name: "Pilot",
-    slug: "piloto",
+    slug: "pilotos",
+    title: "Piloto",
     fields: [
       ...employeeFields,
       {
@@ -151,7 +153,8 @@ export const formModels: FormModel[] = [
   },
   {
     name: "Flight_Attendant",
-    slug: "comissario",
+    slug: "comissarios",
+    title: "Comissário",
     fields: employeeFields,
     schema: employeeSchema,
   },

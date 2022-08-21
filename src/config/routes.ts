@@ -10,12 +10,19 @@ enum layoutTypes {
   none = "none",
 }
 
+enum ManagerViewsInterface {
+  view = "View",
+  edit = "Edit",
+  create = "Create",
+}
+
 interface ObjectRoute {
   path: string;
   key: string;
-  component: React.FC<any>;
+  component: any;
   schema?: Object[];
   yupSchema?: SchemaOf<any>;
+  title?: string;
   index?: boolean;
   exact?: boolean;
 }
@@ -27,9 +34,10 @@ interface Route {
 
 // Preenche as rotas administrativas com os modelos de formulários cadastrados em './forms'
 export const managerRoutes: ObjectRoute[] = formModels.map(
-  ({ name, slug, fields, schema }) => ({
+  ({ name, slug, title, fields, schema }) => ({
     path: slug,
     key: name,
+    title,
     component: Pages.Manager,
     layout: layoutTypes.manager,
     schema: fields,
@@ -44,6 +52,7 @@ export const routes: Route[] = [
       {
         path: "/",
         key: "home",
+        title: "Página Inicial",
         index: true,
         exact: true,
         component: Pages.Home,
@@ -60,6 +69,7 @@ export const routes: Route[] = [
       {
         path: "*",
         key: "notFound",
+        title: "Página não encontrada",
         component: Pages.NotFound,
       },
     ],

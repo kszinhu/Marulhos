@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 
 import { routes as applicationRoutes } from "../config/routes";
@@ -22,20 +21,82 @@ export default function ApplicationRouter() {
               ({
                 path,
                 key,
+                title,
                 component: Component,
                 exact,
                 index,
                 schema,
                 yupSchema,
-              }) => (
-                <Route
-                  key={key}
-                  path={path}
-                  element={<Component schema={schema} yupSchema={yupSchema} />}
-                  index={index}
-                  {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
-                />
-              )
+              }) =>
+                !isManagerRoute ? (
+                  <Route
+                    key={key}
+                    path={path}
+                    element={
+                      <Component
+                        schema={schema}
+                        title={title}
+                        yupSchema={yupSchema}
+                      />
+                    }
+                    index={index}
+                    {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
+                  />
+                ) : (
+                  <Route
+                    key={key}
+                    path={path}
+                    element={
+                      <Component.List
+                        schema={schema}
+                        title={title}
+                        yupSchema={yupSchema}
+                      />
+                    }
+                    index={index}
+                    {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
+                  >
+                    <Route
+                      key={key}
+                      path={`:id`}
+                      element={
+                        <Component.View
+                          schema={schema}
+                          title={title}
+                          yupSchema={yupSchema}
+                        />
+                      }
+                      index={index}
+                      {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
+                    />
+                    <Route
+                      key={key}
+                      path={`:id/edit`}
+                      element={
+                        <Component.Edit
+                          schema={schema}
+                          title={title}
+                          yupSchema={yupSchema}
+                        />
+                      }
+                      index={index}
+                      {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
+                    />
+                    <Route
+                      key={key}
+                      path={"add"}
+                      element={
+                        <Component.Add
+                          schema={schema}
+                          title={title}
+                          yupSchema={yupSchema}
+                        />
+                      }
+                      index={index}
+                      {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
+                    />
+                  </Route>
+                )
             )}
           </Route>
         );
