@@ -3,7 +3,7 @@ import { useForm, yupResolver } from "@mantine/form";
 
 import { SchemaOf } from "yup";
 
-import { Box, Button } from "@mantine/core";
+import { Box, Button, Group } from "@mantine/core";
 
 enum fieldType {
   text = "text",
@@ -144,9 +144,11 @@ export default function ManagerListModel({
               }
             }
           )}
-          <Button type='submit' onClick={onSubmit}>
-            Adicionar
-          </Button>
+          <Group position='center' mt='md'>
+            <Button type='submit' onClick={onSubmit} style={{ width: "100%" }}>
+              Adicionar
+            </Button>
+          </Group>
         </form>
       </Box>
     </section>

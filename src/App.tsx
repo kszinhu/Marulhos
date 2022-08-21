@@ -8,11 +8,12 @@ import {
 
 import { BrowserRouter as Router } from "react-router-dom";
 import ApplicationRouter from "./components/router";
+import { applicationTheme } from "./config/theme";
 
 function App() {
   const [colorScheme, toggleColorScheme] = useToggle<ColorScheme>([
-    "light",
     "dark",
+    "light",
   ]);
 
   return (
@@ -21,7 +22,11 @@ function App() {
       toggleColorScheme={toggleColorScheme}
     >
       <MantineProvider
-        theme={{ colorScheme }}
+        theme={{
+          colorScheme,
+          fontFamily: "Inter, sans-serif !important",
+          ...(applicationTheme as any),
+        }}
         withGlobalStyles
         withNormalizeCSS
       >

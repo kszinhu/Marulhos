@@ -3,17 +3,13 @@ import * as Pages from "../pages";
 import { SchemaOf } from "yup";
 
 import { formModels } from "./forms";
+import React from "react";
+import { Icon } from "tabler-icons-react";
 
 enum layoutTypes {
   default = "default",
   manager = "manager",
   none = "none",
-}
-
-enum ManagerViewsInterface {
-  view = "View",
-  edit = "Edit",
-  create = "Create",
 }
 
 interface ObjectRoute {
@@ -75,3 +71,19 @@ export const routes: Route[] = [
     ],
   },
 ];
+
+interface ManagerNavItemInterface {
+  key: string;
+  title: string;
+  path: string;
+  icon: Icon;
+}
+
+export const managerNavItems: ManagerNavItemInterface[] = formModels.map(
+  ({ name, slug, title, icon }) => ({
+    key: name,
+    title,
+    path: slug,
+    icon,
+  })
+);

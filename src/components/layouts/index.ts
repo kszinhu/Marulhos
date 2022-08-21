@@ -1,4 +1,4 @@
 import Layout from "./default";
-import Manager from "./form";
+import FormLayout from "./manager";
 
-export { Layout, Manager };
+export { Layout, FormLayout };

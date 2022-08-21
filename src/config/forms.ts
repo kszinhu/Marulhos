@@ -1,3 +1,5 @@
+import React from "react";
+
 import { SchemaOf } from "yup";
 import "dayjs/locale/pt-br";
 
@@ -10,6 +12,8 @@ import {
   TextInput,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
+
+import { User, Plane, Icon, PackgeImport } from "tabler-icons-react";
 
 // Schemas
 import { employeeSchema, pilotSchema } from "../schema";
@@ -38,14 +42,6 @@ interface FieldInterface {
   formatter?: (value: any) => any;
   options?: { label: string; value: string }[];
   locale?: string;
-}
-
-interface FormModel {
-  name: string;
-  slug: string; // url friendly
-  title: string;
-  fields: FieldInterface[];
-  schema: SchemaOf<any>;
 }
 
 const employeeFields: FieldInterface[] = [
@@ -137,11 +133,21 @@ const employeeFields: FieldInterface[] = [
   },
 ];
 
+interface FormModel {
+  name: string;
+  slug: string; // url friendly
+  title: string;
+  icon: Icon;
+  fields: FieldInterface[];
+  schema: SchemaOf<any>;
+}
+
 export const formModels: FormModel[] = [
   {
     name: "Pilot",
     slug: "pilotos",
     title: "Piloto",
+    icon: User,
     fields: [
       ...employeeFields,
       {
@@ -158,6 +164,7 @@ export const formModels: FormModel[] = [
     name: "Flight_Attendant",
     slug: "comissarios",
     title: "Comissário",
+    icon: User,
     fields: [
       ...employeeFields,
       {
@@ -174,6 +181,7 @@ export const formModels: FormModel[] = [
     name: "plane",
     slug: "avioes",
     title: "Avião",
+    icon: Plane,
     fields: [
       {
         inputComponent: NumberInput,
@@ -197,7 +205,7 @@ export const formModels: FormModel[] = [
         allowFreeInput: true,
         locale: "pt-br",
         required: true,
-      }
+      },
     ],
     schema: employeeSchema,
   },
@@ -205,6 +213,7 @@ export const formModels: FormModel[] = [
     name: "terminal",
     slug: "terminais",
     title: "Terminal",
+    icon: PackgeImport,
     fields: [
       {
         inputComponent: NumberInput,
@@ -219,8 +228,8 @@ export const formModels: FormModel[] = [
         type: fieldType.number,
         label: "Capacidade do Terminal",
         required: true,
-      }
+      },
     ],
     schema: terminalSchema,
-  }
+  },
 ];

@@ -8,13 +8,22 @@ export default function ApplicationRouter() {
   return (
     <Routes>
       {applicationRoutes.map(({ layout, routes }) => {
-        const layoutComponent = (layouts as any)[layout];
+        let LayoutComponent: any;
+        switch (layout) {
+          case "manager":
+            LayoutComponent = layouts.FormLayout;
+            break;
+
+          case "default":
+            LayoutComponent = layouts.Layout;
+            break;
+        }
         const isManagerRoute = layout === "manager";
 
         return (
           <Route
             key={layout}
-            element={layoutComponent}
+            element={layout !== "none" && <LayoutComponent />}
             {...(isManagerRoute ? { path: "/manager" } : {})}
           >
             {routes.map(

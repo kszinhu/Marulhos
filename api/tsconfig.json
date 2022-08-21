@@ -1,9 +1,19 @@
 {
   "compilerOptions": {
-    "moduleResolution": "nodenext",
+    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "strict": true,
+    "pretty": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "apiframework/*": ["node_modules/apiframework/dist/*"]
     }
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
