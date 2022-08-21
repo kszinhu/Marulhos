@@ -1,29 +1,63 @@
 import * as Pages from "../pages";
 
+import { formModels } from "./forms";
+
 enum layoutTypes {
   default = "default",
-  auth = "auth",
+  manager = "manager",
+  none = "none",
 }
 
 interface ObjectRoute {
   path: string;
   key: string;
+  component: React.FC<any>;
+  schema?: Object[];
+  index?: boolean;
   exact?: boolean;
-  layout?: layoutTypes;
-  component: Function;
 }
 
-export const routes: ObjectRoute[] = [
+interface Route {
+  layout: layoutTypes;
+  routes: ObjectRoute[];
+}
+
+// Preenche as rotas administrativas com os modelos de formulários cadastrados em './forms'
+export const managerRoutes: ObjectRoute[] = formModels.map(
+  ({ name, slug, fields }) => ({
+    path: slug,
+    key: name,
+    component: Pages.Manager,
+    layout: layoutTypes.manager,
+    schema: fields,
+  })
+);
+
+export const routes: Route[] = [
   {
-    path: "/",
-    key: "home",
-    exact: true,
     layout: layoutTypes.default,
-    component: Pages.Home,
+    routes: [
+      {
+        path: "/",
+        key: "home",
+        index: true,
+        exact: true,
+        component: Pages.Home,
+      },
+    ],
   },
   {
-    path: "*",
-    key: "notFound",
-    component: Pages.NotFound,
+    layout: layoutTypes.manager,
+    routes: managerRoutes,
+  },
+  {
+    layout: layoutTypes.none,
+    routes: [
+      {
+        path: "*",
+        key: "notFound",
+        component: Pages.NotFound,
+      },
+    ],
   },
 ];
