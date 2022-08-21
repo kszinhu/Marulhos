@@ -1,5 +1,7 @@
 import * as Pages from "../pages";
 
+import { SchemaOf } from "yup";
+
 import { formModels } from "./forms";
 
 enum layoutTypes {
@@ -13,6 +15,7 @@ interface ObjectRoute {
   key: string;
   component: React.FC<any>;
   schema?: Object[];
+  yupSchema?: SchemaOf<any>;
   index?: boolean;
   exact?: boolean;
 }
@@ -24,12 +27,13 @@ interface Route {
 
 // Preenche as rotas administrativas com os modelos de formulários cadastrados em './forms'
 export const managerRoutes: ObjectRoute[] = formModels.map(
-  ({ name, slug, fields }) => ({
+  ({ name, slug, fields, schema }) => ({
     path: slug,
     key: name,
     component: Pages.Manager,
     layout: layoutTypes.manager,
     schema: fields,
+    yupSchema: schema,
   })
 );
 

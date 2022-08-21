@@ -19,11 +19,19 @@ export default function ApplicationRouter() {
             {...(isManagerRoute ? { path: "/manager" } : {})}
           >
             {routes.map(
-              ({ path, key, component: Component, exact, index, schema }) => (
+              ({
+                path,
+                key,
+                component: Component,
+                exact,
+                index,
+                schema,
+                yupSchema,
+              }) => (
                 <Route
                   key={key}
                   path={path}
-                  element={<Component schema={schema} />}
+                  element={<Component schema={schema} yupSchema={yupSchema} />}
                   index={index}
                   {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
                 />
