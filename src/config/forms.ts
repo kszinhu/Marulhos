@@ -13,6 +13,7 @@ import { DatePicker } from "@mantine/dates";
 
 // Schemas
 import { employeeSchema, pilotSchema } from "../schema";
+import { terminalSchema } from "../schema/terminalSchema";
 
 enum fieldType {
   text = "text",
@@ -30,7 +31,9 @@ interface FieldInterface {
   placeholder?: string;
   description?: string;
   required?: boolean;
+  allowFreeInput?: boolean;
   defaultValue?: number | string;
+  dateParser?: (value: any) => any;
   parser?: (value: any) => any;
   formatter?: (value: any) => any;
   options?: { label: string; value: string }[];
@@ -155,7 +158,69 @@ export const formModels: FormModel[] = [
     name: "Flight_Attendant",
     slug: "comissarios",
     title: "Comissário",
-    fields: employeeFields,
+    fields: [
+      ...employeeFields,
+      {
+        inputComponent: NumberInput,
+        name: "work_registration_number",
+        type: fieldType.number,
+        label: "Número do Registro",
+        required: true,
+      },
+    ],
     schema: employeeSchema,
   },
+  {
+    name: "plane",
+    slug: "avioes",
+    title: "Avião",
+    fields: [
+      {
+        inputComponent: NumberInput,
+        name: "capacity",
+        type: fieldType.number,
+        label: "Capacidade",
+        required: true,
+      },
+      {
+        inputComponent: TextInput,
+        name: "model",
+        type: fieldType.text,
+        label: "Modelo",
+        required: true,
+      },
+      {
+        inputComponent: DatePicker,
+        name: "manufacture_date",
+        type: fieldType.date,
+        label: "Ano de Fabricação",
+        allowFreeInput: true,
+        locale: "pt-br",
+        required: true,
+      }
+    ],
+    schema: employeeSchema,
+  },
+  {
+    name: "terminal",
+    slug: "terminais",
+    title: "Terminal",
+    fields: [
+      {
+        inputComponent: NumberInput,
+        name: "terminal_number",
+        type: fieldType.number,
+        label: "Número do Terminal",
+        required: true,
+      },
+      {
+        inputComponent: NumberInput,
+        name: "terminal_capacity",
+        type: fieldType.number,
+        label: "Capacidade do Terminal",
+        required: true,
+      }
+    ],
+    schema: terminalSchema,
+  }
 ];

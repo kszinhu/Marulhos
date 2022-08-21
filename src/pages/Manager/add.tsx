@@ -52,8 +52,6 @@ export default function ManagerAddModel({
   useEffect(() => {
     // change title of the page
     document.title = `Manager - ${title}`;
-
-    // call api to get data
   }, []);
 
   return (
