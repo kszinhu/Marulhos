@@ -4,6 +4,8 @@ import CompanyHandler from "./CompanyHandlers/CompanyHandler.js";
 import CompanyByIdHandler from "./CompanyHandlers/CompanyByIdHandler.js";
 import PlaneHandler from "./PlaneHandlers/PlaneHandler.js";
 import PlaneByIdHandler from "./PlaneHandlers/PlaneByIdHandler.js";
+import PilotHandler from "./PilotHandlers/PilotHandler.js";
+import PilotByIdHandler from "./PilotHandlers/PilotByIdHandler.js";
 
 export const Handlers: { [key: string]: any } = {
   Terminal: {
@@ -17,5 +19,9 @@ export const Handlers: { [key: string]: any } = {
   Plane: {
     Plane: PlaneHandler,
     PlaneById: PlaneByIdHandler,
+  },
+  Pilot: {
+    Pilot: PilotHandler,
+    PilotById: PilotByIdHandler,
   },
 };

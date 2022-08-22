@@ -1,11 +1,11 @@
 import { Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
 
-import Company from "../../models/Company.js";
+import Pilot from "../../models/Pilot.js";
 
-export default class CompanyHandler extends Handler {
+export default class PilotHandler extends Handler {
   async get(req: Request): Promise<Response> {
-    const data = await Company.all();
+    const data = await Pilot.all();
 
     return Response.json(data);
   }
@@ -16,14 +16,12 @@ export default class CompanyHandler extends Handler {
     }
 
     const data = {
-      cnpj: req.parsedBody.cnpj,
-      name: req.parsedBody.name,
-      contact: req.parsedBody.contact,
+      ...req.parsedBody,
     };
 
-    const saved = await Company.create(data);
+    const saved = await Pilot.create(data);
     if (!saved) {
-      throw new HTTPError("Failed to save Company.", 500);
+      throw new HTTPError("Failed to save Pilot.", 500);
     }
 
     return Response.json(data).withStatus(201);

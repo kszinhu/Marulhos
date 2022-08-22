@@ -23,6 +23,7 @@ const {
   Terminal: { Terminal, TerminalById },
   Company: { Company, CompanyById },
   Plane: { Plane, PlaneById },
+  Pilot: { Pilot, PilotById },
 } = Handlers;
 
 Router.group("/terminals", () => {
@@ -58,6 +59,18 @@ Router.group("/planes", () => {
     Router.put("/", PlaneById).withName("plane.update");
     Router.patch("/", PlaneById).withName("plane.patch");
     Router.delete("/", PlaneById).withName("plane.delete");
+  });
+});
+
+Router.group("/pilots", () => {
+  Router.get("/", Pilot).withName("pilot.list");
+  Router.post("/", Pilot).withName("pilot.create");
+
+  Router.group("/{id}", () => {
+    Router.get("/", PilotById).withName("pilot.get");
+    Router.put("/", PilotById).withName("pilot.update");
+    Router.patch("/", PilotById).withName("pilot.patch");
+    Router.delete("/", PilotById).withName("pilot.delete");
   });
 });
 
