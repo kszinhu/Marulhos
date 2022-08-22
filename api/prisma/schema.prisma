@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,12 +5,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-enum Sex {
-  M
-  F
-  X
 }
 
 model User {
@@ -42,8 +33,8 @@ model Pilot {
   passport_number          Int               @unique
   work_registration_number Int               @unique
   pilot_license_number     Int               @unique
-  flights                  Flight_Instance[] @relation("pilot")
   co_flights               Flight_Instance[] @relation("copilot")
+  flights                  Flight_Instance[] @relation("pilot")
 }
 
 model Fly_Attendant {
@@ -82,10 +73,10 @@ model Flight_Instance {
   flight_id      Int
   plane_id       Int
   terminal_id    Int
-  pilot          Pilot           @relation(name: "pilot", fields: [pilot_cpf], references: [cpf])
   pilot_cpf      String
-  copilot        Pilot           @relation(name: "copilot", fields: [copilot_cpf], references: [cpf])
   copilot_cpf    String
+  copilot        Pilot           @relation("copilot", fields: [copilot_cpf], references: [cpf])
+  pilot          Pilot           @relation("pilot", fields: [pilot_cpf], references: [cpf])
   Ticket         Ticket[]        @relation("travel")
   fly_attendant  Fly_Attendant[]
 }
@@ -93,10 +84,10 @@ model Flight_Instance {
 model Ticket {
   id                 Int             @id @default(autoincrement())
   price              Decimal
-  flight_instace     Flight_Instance @relation(name: "travel", fields: [flight_instance_id], references: [id])
   flight_instance_id Int
-  user               User            @relation(name: "traveller", fields: [passenger_cpf], references: [cpf])
   passenger_cpf      String
+  flight_instace     Flight_Instance @relation("travel", fields: [flight_instance_id], references: [id])
+  user               User            @relation("traveller", fields: [passenger_cpf], references: [cpf])
 }
 
 model Company {
@@ -115,4 +106,10 @@ model Plane {
   manufacture_date DateTime?
   company_cnpj     String
   company          Company   @relation(fields: [company_cnpj], references: [cnpj])
+}
+
+enum Sex {
+  M
+  F
+  X
 }
