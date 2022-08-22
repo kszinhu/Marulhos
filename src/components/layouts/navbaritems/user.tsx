@@ -41,7 +41,7 @@ export function User() {
       >
         <Group>
           <Avatar
-            src='https://lh3.googleusercontent.com/qJBjEc0mfdMTxhs-cSM3YhARp8-ob1MI29BRbdSyRmfPZL4jQQ6wNYd-EWE4B1MPlWjlxXnNu3nl0Yx6Hpvc-xzdfJGjJ49Ng3_lBA=w600'
+            src='https://media.discordapp.net/attachments/699400972195332116/1011092071647543397/unknown.png'
             radius='xl'
           />
           <Box sx={{ flex: 1 }}>

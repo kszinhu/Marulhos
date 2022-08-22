@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 
-import { User, Plane, Icon, PackgeImport } from "tabler-icons-react";
+import { User, Man, Plane, Icon, PackgeImport } from "tabler-icons-react";
 
 // Schemas
 import { employeeSchema, pilotSchema } from "../schema";
@@ -129,6 +129,13 @@ const employeeFields: FieldInterface[] = [
     name: "passport_number",
     type: fieldType.number,
     label: "Número do Passaporte",
+    required: true,
+  },
+  {
+    inputComponent: TextInput,
+    name: "work_registration_number",
+    type: fieldType.text,
+    label: "Número do Registro de Trabalho",
     required: true,
   },
 ];

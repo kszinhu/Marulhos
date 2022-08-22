@@ -63,7 +63,7 @@ model Fly_Attendant {
 }
 
 model Terminal {
-  id       Int @id
+  id       Int @id @default(autoincrement())
   capacity Int
 }
 
