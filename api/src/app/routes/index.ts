@@ -20,7 +20,9 @@ const Router = new RouterWrapper();
 Router.pipeline([ParseBodyMiddleware, HTTPErrorMiddleware]);
 
 const {
-  Terminals: { Terminal, TerminalById },
+  Terminal: { Terminal, TerminalById },
+  Company: { Company, CompanyById },
+  Plane: { Plane, PlaneById },
 } = Handlers;
 
 Router.group("/terminals", () => {
@@ -32,6 +34,30 @@ Router.group("/terminals", () => {
     Router.put("/", TerminalById).withName("terminal.update");
     Router.patch("/", TerminalById).withName("terminal.patch");
     Router.delete("/", TerminalById).withName("terminal.delete");
+  });
+});
+
+Router.group("/companies", () => {
+  Router.get("/", Company).withName("company.list");
+  Router.post("/", Company).withName("company.create");
+
+  Router.group("/{id}", () => {
+    Router.get("/", CompanyById).withName("company.get");
+    Router.put("/", CompanyById).withName("company.update");
+    Router.patch("/", CompanyById).withName("company.patch");
+    Router.delete("/", CompanyById).withName("company.delete");
+  });
+});
+
+Router.group("/planes", () => {
+  Router.get("/", Plane).withName("plane.list");
+  Router.post("/", Plane).withName("plane.create");
+
+  Router.group("/{id}", () => {
+    Router.get("/", PlaneById).withName("plane.get");
+    Router.put("/", PlaneById).withName("plane.update");
+    Router.patch("/", PlaneById).withName("plane.patch");
+    Router.delete("/", PlaneById).withName("plane.delete");
   });
 });
 

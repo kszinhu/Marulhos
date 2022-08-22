@@ -145,9 +145,6 @@ CREATE UNIQUE INDEX "Fly_Attendant_passport_number_key" ON "Fly_Attendant"("pass
 CREATE UNIQUE INDEX "Fly_Attendant_work_registration_number_key" ON "Fly_Attendant"("work_registration_number");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Company_cnpj_key" ON "Company"("cnpj");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Company_name_key" ON "Company"("name");
 
 -- CreateIndex

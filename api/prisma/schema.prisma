@@ -91,7 +91,7 @@ model Ticket {
 }
 
 model Company {
-  cnpj      String   @id @unique
+  cnpj      String   @id
   name      String   @unique
   contact   String
   createdAt DateTime @default(now())

@@ -1,21 +1,21 @@
 import { Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
 
-import Terminal from "../../models/terminal.js";
+import Plane from "../../models/Plane.js";
 
-export default class TerminalByIdHandler extends Handler {
+export default class PlaneByIdHandler extends Handler {
   async get(req: Request): Promise<Response> {
     const id = req.params.get("id");
     if (!id) {
       throw new HTTPError("Invalid ID.", 400);
     }
 
-    const terminal = await Terminal.get(parseInt(id));
-    if (!terminal) {
-      throw new HTTPError("Terminal not found.", 404);
+    const plane = await Plane.get(parseInt(id));
+    if (!plane) {
+      throw new HTTPError("Plane not found.", 404);
     }
 
-    return Response.json(terminal);
+    return Response.json(plane);
   }
 
   async put(req: Request): Promise<Response> {
@@ -24,21 +24,24 @@ export default class TerminalByIdHandler extends Handler {
       throw new HTTPError("Invalid ID.", 400);
     }
 
-    const terminal = await Terminal.get(parseInt(id));
+    const plane = await Plane.get(parseInt(id));
 
-    if (!terminal) {
-      throw new HTTPError("Terminal not found.", 404);
+    if (!plane) {
+      throw new HTTPError("Plane not found.", 404);
     }
 
     if (!req.parsedBody) {
       throw new HTTPError("Invalid body.", 400);
     }
 
-    terminal.capacity = req.parsedBody;
+    plane.capacity = req.parsedBody.capacity;
+    plane.model = req.parsedBody.model;
+    plane.manufacture_date = req.parsedBody.manufacture_date;
+    plane.company_cnpj = req.parsedBody.company_cnpj;
 
-    await Terminal.save(terminal.id, terminal);
+    await Plane.save(plane.id, plane);
 
-    return Response.json(terminal);
+    return Response.json(plane);
   }
 
   async patch(req: Request): Promise<Response> {
@@ -47,21 +50,24 @@ export default class TerminalByIdHandler extends Handler {
       throw new HTTPError("Invalid ID.", 400);
     }
 
-    const terminal = await Terminal.get(parseInt(id));
+    const plane = await Plane.get(parseInt(id));
 
-    if (!terminal) {
-      throw new HTTPError("Terminal not found.", 404);
+    if (!plane) {
+      throw new HTTPError("Plane not found.", 404);
     }
 
     if (!req.parsedBody) {
       throw new HTTPError("Invalid body.", 400);
     }
 
-    terminal.capacity = req.parsedBody;
+    plane.capacity = req.parsedBody.capacity;
+    plane.model = req.parsedBody.model;
+    plane.manufacture_date = req.parsedBody.manufacture_date;
+    plane.company_cnpj = req.parsedBody.company_cnpj;
 
-    await Terminal.save(terminal.id, terminal);
+    await Plane.save(plane.id, plane);
 
-    return Response.json(terminal);
+    return Response.json(plane);
   }
 
   async delete(req: Request): Promise<Response> {
@@ -70,13 +76,13 @@ export default class TerminalByIdHandler extends Handler {
       throw new HTTPError("Invalid ID.", 400);
     }
 
-    const terminal = await Terminal.get(parseInt(id));
+    const plane = await Plane.get(parseInt(id));
 
-    if (!terminal) {
-      throw new HTTPError("Terminal not found.", 404);
+    if (!plane) {
+      throw new HTTPError("Plane not found.", 404);
     }
 
-    await Terminal.delete(terminal.id);
+    await Plane.delete(plane.id);
 
     return Response.empty();
   }
