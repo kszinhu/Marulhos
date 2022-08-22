@@ -9,3 +9,110 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Sex {
+  M
+  F
+  X
+}
+
+model User {
+  cpf            String    @id
+  name           String
+  last_name      String
+  rg             String?
+  sex            Sex
+  birth_date     DateTime?
+  address_cep    String
+  address_number String
+  tickets        Ticket[]  @relation("traveller")
+}
+
+model Pilot {
+  cpf                      String            @id
+  name                     String
+  last_name                String
+  rg                       String?
+  sex                      Sex
+  birth_date               DateTime?
+  address_cep              String
+  address_number           String
+  salary                   Decimal
+  vaccination_number       Int               @unique
+  passport_number          Int               @unique
+  work_registration_number Int               @unique
+  pilot_license_number     Int               @unique
+  flights                  Flight_Instance[] @relation("pilot")
+  co_flights               Flight_Instance[] @relation("copilot")
+}
+
+model Fly_Attendant {
+  cpf                      String            @id
+  name                     String
+  last_name                String
+  rg                       String?
+  sex                      Sex
+  birth_date               DateTime?
+  address_cep              String
+  address_number           String
+  salary                   Decimal
+  vaccination_number       Int               @unique
+  passport_number          Int               @unique
+  work_registration_number Int               @unique
+  flights                  Flight_Instance[]
+}
+
+model Terminal {
+  id       Int @id
+  capacity Int
+}
+
+model Flight {
+  id                       Int      @id @default(autoincrement())
+  estimated_departure_date DateTime
+  estimated_arrival_date   DateTime
+  origin                   String
+  destination              String
+}
+
+model Flight_Instance {
+  id             Int             @id @default(autoincrement())
+  departure_date DateTime
+  arrival_date   DateTime
+  flight_id      Int
+  plane_id       Int
+  terminal_id    Int
+  pilot          Pilot           @relation(name: "pilot", fields: [pilot_cpf], references: [cpf])
+  pilot_cpf      String
+  copilot        Pilot           @relation(name: "copilot", fields: [copilot_cpf], references: [cpf])
+  copilot_cpf    String
+  Ticket         Ticket[]        @relation("travel")
+  fly_attendant  Fly_Attendant[]
+}
+
+model Ticket {
+  id                 Int             @id @default(autoincrement())
+  price              Decimal
+  flight_instace     Flight_Instance @relation(name: "travel", fields: [flight_instance_id], references: [id])
+  flight_instance_id Int
+  user               User            @relation(name: "traveller", fields: [passenger_cpf], references: [cpf])
+  passenger_cpf      String
+}
+
+model Company {
+  cnpj      String   @id @unique
+  name      String   @unique
+  contact   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  planes    Plane[]
+}
+
+model Plane {
+  id               Int       @id @default(autoincrement())
+  capacity         Int
+  model            String
+  manufacture_date DateTime?
+  company_cnpj     String
+  company          Company   @relation(fields: [company_cnpj], references: [cnpj])
+}
