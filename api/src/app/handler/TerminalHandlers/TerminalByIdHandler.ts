@@ -36,9 +36,9 @@ export default class TerminalByIdHandler extends Handler {
 
     terminal.capacity = req.parsedBody;
 
-    await Terminal.save(terminal.id, terminal);
+    const savedTerminal = await Terminal.save(terminal.id, terminal);
 
-    return Response.json(terminal);
+    return Response.json(savedTerminal);
   }
 
   async delete(req: Request): Promise<Response> {

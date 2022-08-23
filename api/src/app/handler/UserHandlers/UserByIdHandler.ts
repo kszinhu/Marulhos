@@ -44,9 +44,9 @@ export default class UserByIdHandler extends Handler {
     user.address_number = req.parsedBody.address_number;
     user.tickets = req.parsedBody.tickets;
 
-    await User.save(user.cpf, user);
+    const savedUser = await User.save(user.cpf, user);
 
-    return Response.json(user);
+    return Response.json(savedUser);
   }
 
   async delete(req: Request): Promise<Response> {

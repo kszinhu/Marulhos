@@ -62,10 +62,14 @@ export default class User {
         address_cep,
         address_number,
         tickets: {
-          connectOrCreate: tickets.map((ticket) => ({
-            where: { id: ticket.id },
-            create: { ...ticket },
-          })),
+          connect: tickets
+            .filter((t) => t.id)
+            .map((ticket) => ({ id: ticket.id })),
+          create: tickets
+            .filter((t) => !t.id)
+            .map((ticket) => ({
+              price: ticket.price,
+            })),
         },
       },
       include: {

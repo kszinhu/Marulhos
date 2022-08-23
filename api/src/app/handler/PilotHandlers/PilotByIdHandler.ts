@@ -34,7 +34,6 @@ export default class PilotByIdHandler extends Handler {
       throw new HTTPError("Invalid body.", 400);
     }
 
-    pilot.cpf = req.parsedBody.cpf;
     pilot.name = req.parsedBody.name;
     pilot.last_name = req.parsedBody.last_name;
     pilot.rg = req.parsedBody.rg;
@@ -50,9 +49,9 @@ export default class PilotByIdHandler extends Handler {
     pilot.co_flights = req.parsedBody.co_flights;
     pilot.sex = req.parsedBody.sex;
 
-    await Pilot.save(pilot.cpf, pilot);
+    const savedPilot = await Pilot.save(pilot.cpf, pilot);
 
-    return Response.json(pilot);
+    return Response.json(savedPilot);
   }
 
   async delete(req: Request): Promise<Response> {

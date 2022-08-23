@@ -39,9 +39,9 @@ export default class PlaneByIdHandler extends Handler {
     plane.manufacture_date = req.parsedBody.manufacture_date;
     plane.company_cnpj = req.parsedBody.company_cnpj;
 
-    await Plane.save(plane.id, plane);
+    const savedPlane = await Plane.save(plane.id, plane);
 
-    return Response.json(plane);
+    return Response.json(savedPlane);
   }
 
   async delete(req: Request): Promise<Response> {

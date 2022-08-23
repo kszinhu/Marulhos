@@ -97,7 +97,7 @@ Router.group("/tickets", () => {
   });
 });
 
-Router.group("/user", () => {
+Router.group("/users", () => {
   Router.get("/", User).withName("user.list");
   Router.post("/", User).withName("user.create");
 

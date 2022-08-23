@@ -14,7 +14,7 @@ export default class UserHandler extends Handler {
     if (!req.parsedBody) {
       throw new HTTPError("Invalid body.", 400);
     }
-
+    
     const data = {
       ...req.parsedBody,
     };
