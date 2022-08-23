@@ -9,14 +9,18 @@
     "clean": "tsc -b --clean",
     "dev": "nodemon -r tsconfig-paths/register --experimental-specifier-resolution=node --inspect src/server.ts",
     "start": "node .",
+    "prisma:seed": "prisma db seed",
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate --schema=./prisma/schema.prisma",
     "test": "ts-node-esm src/test/index.ts"
   },
+  "prisma": {
+    "seed": "node --loader ts-node/esm prisma/seed.ts"
+  },
   "keywords": [],
   "author": "kszinhu",
   "devDependencies": {
-    "@types/node": "^18.7.3",
+    "@types/node": "^18.7.11",
     "autocannon": "^7.9.0",
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1",

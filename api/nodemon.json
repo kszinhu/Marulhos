@@ -1,4 +1,5 @@
 {
+  "delay": "2500",
   "execMap": {
     "ts": "node --loader ts-node/esm"
   }
