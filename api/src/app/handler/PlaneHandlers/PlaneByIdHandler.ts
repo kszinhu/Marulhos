@@ -44,32 +44,6 @@ export default class PlaneByIdHandler extends Handler {
     return Response.json(plane);
   }
 
-  async patch(req: Request): Promise<Response> {
-    const id = req.params.get("id");
-    if (!id) {
-      throw new HTTPError("Invalid ID.", 400);
-    }
-
-    const plane = await Plane.get(parseInt(id));
-
-    if (!plane) {
-      throw new HTTPError("Plane not found.", 404);
-    }
-
-    if (!req.parsedBody) {
-      throw new HTTPError("Invalid body.", 400);
-    }
-
-    plane.capacity = req.parsedBody.capacity;
-    plane.model = req.parsedBody.model;
-    plane.manufacture_date = req.parsedBody.manufacture_date;
-    plane.company_cnpj = req.parsedBody.company_cnpj;
-
-    await Plane.save(plane.id, plane);
-
-    return Response.json(plane);
-  }
-
   async delete(req: Request): Promise<Response> {
     const id = req.params.get("id");
     if (!id) {
@@ -94,9 +68,6 @@ export default class PlaneByIdHandler extends Handler {
 
       case "PUT":
         return await this.put(req);
-
-      case "PATCH":
-        return await this.patch(req);
 
       case "DELETE":
         return await this.delete(req);
