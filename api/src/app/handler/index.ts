@@ -6,6 +6,10 @@ import PlaneHandler from "./PlaneHandlers/PlaneHandler.js";
 import PlaneByIdHandler from "./PlaneHandlers/PlaneByIdHandler.js";
 import PilotHandler from "./PilotHandlers/PilotHandler.js";
 import PilotByIdHandler from "./PilotHandlers/PilotByIdHandler.js";
+import FlightByIdHandler from "./FlightHandlers/FlightByIdHandler.js";
+import FlightHandler from "./FlightHandlers/FlightHandler.js";
+import TicketHandler from "./TicketHandlers/TicketHandler.js";
+import TicketByIdHandler from "./TicketHandlers/TicketByIdHandler.js";
 
 export const Handlers: { [key: string]: any } = {
   Terminal: {
@@ -23,5 +27,13 @@ export const Handlers: { [key: string]: any } = {
   Pilot: {
     Pilot: PilotHandler,
     PilotById: PilotByIdHandler,
+  },
+  Flight: {
+    FlightById: FlightByIdHandler,
+    Flight: FlightHandler,
+  },
+  Ticket: {
+    Ticket: TicketHandler,
+    TicketById: TicketByIdHandler,
   },
 };

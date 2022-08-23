@@ -86,7 +86,7 @@ model Ticket {
   price              Decimal
   flight_instance_id Int
   passenger_cpf      String
-  flight_instace     Flight_Instance @relation("travel", fields: [flight_instance_id], references: [id])
+  flight_instance    Flight_Instance @relation("travel", fields: [flight_instance_id], references: [id])
   user               User            @relation("traveller", fields: [passenger_cpf], references: [cpf])
 }
 
