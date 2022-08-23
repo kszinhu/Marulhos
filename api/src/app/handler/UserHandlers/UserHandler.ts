@@ -14,17 +14,17 @@ export default class UserHandler extends Handler {
     if (!req.parsedBody) {
       throw new HTTPError("Invalid body.", 400);
     }
-    
+
     const data = {
       ...req.parsedBody,
     };
 
-    const saved = await User.create(data);
-    if (!saved) {
+    const savedUser = await User.create(data);
+    if (!savedUser) {
       throw new HTTPError("Failed to save a new User.", 500);
     }
 
-    return Response.json(data).withStatus(201);
+    return Response.json(savedUser).withStatus(201);
   }
 
   async handle(req: Request): Promise<Response> {

@@ -19,12 +19,12 @@ export default class TicketHandler extends Handler {
       ...req.parsedBody,
     };
 
-    const saved = await Ticket.create(data);
-    if (!saved) {
+    const savedTicket = await Ticket.create(data);
+    if (!savedTicket) {
       throw new HTTPError("Failed to save a new Ticket.", 500);
     }
 
-    return Response.json(data).withStatus(201);
+    return Response.json(savedTicket).withStatus(201);
   }
 
   async handle(req: Request): Promise<Response> {

@@ -36,8 +36,8 @@ export default class TicketByIdHandler extends Handler {
     }
 
     ticket.price = req.parsedBody.price;
-    ticket.passenger_cpf = req.parsedBody.passenger_cpf;
-    ticket.flight_instance_id = req.parsedBody.flight_instance;
+    ticket.user = { ...req.parsedBody.user };
+    ticket.flight_instance = { ...req.parsedBody.flight_instance };
 
     const savedTicket = await Ticket.save(ticket.id, ticket);
 

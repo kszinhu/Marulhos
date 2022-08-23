@@ -1,4 +1,4 @@
-import { Prisma, Flight_Instance } from "@prisma/client";
+import { Prisma, Flight_Instance, User } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/index.js";
 import { prisma } from "../lib/Prisma.js";
 
@@ -30,7 +30,18 @@ export default class Ticket {
 
   static async create(data: Prisma.TicketCreateInput) {
     return await prisma.ticket.create({
-      data,
+      data: {
+        ...data,
+        user: {
+          connect: {
+            //@ts-ignore
+            cpf: data.user.cpf,
+          },
+        },
+      },
+      include: {
+        user: true,
+      },
     });
   }
 
@@ -39,6 +50,10 @@ export default class Ticket {
       where: {
         id,
       },
+      include: {
+        flight_instance: true,
+        user: true,
+      },
     });
   }
 
@@ -46,12 +61,12 @@ export default class Ticket {
     id: number,
     {
       price,
-      flight_instance_id,
-      passenger_cpf,
+      flight_instance,
+      user,
     }: {
       price: Decimal;
-      flight_instance_id: number | null;
-      passenger_cpf: string;
+      flight_instance: Flight_Instance | null;
+      user: User;
     }
   ) {
     return await prisma.ticket.update({
@@ -62,12 +77,12 @@ export default class Ticket {
         price,
         flight_instance: {
           connect: {
-            id: flight_instance_id || undefined,
+            id: flight_instance?.id,
           },
         },
         user: {
           connect: {
-            cpf: passenger_cpf,
+            cpf: user?.cpf,
           },
         },
       },
