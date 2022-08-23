@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Plane } from "@prisma/client";
 import { prisma } from "../lib/Prisma.js";
 
 export default class Company {
@@ -40,6 +40,7 @@ export default class Company {
       }[];
     }
   ) {
+    console;
     return await prisma.company.update({
       where: {
         cnpj,
@@ -48,14 +49,20 @@ export default class Company {
         name,
         contact,
         planes: {
-          createMany: {
-            data: planes.map(({ model, capacity, manufacture_date }) => ({
-              model,
-              capacity,
-              manufacture_date,
+          connect: planes
+            .filter((p) => p.id)
+            .map((plane) => ({ id: plane.id! })),
+          create: planes
+            .filter((p) => !p.id)
+            .map((plane) => ({
+              model: plane.model,
+              capacity: plane.capacity,
+              manufacture_date: plane.manufacture_date,
             })),
-          },
         },
+      },
+      include: {
+        planes: true,
       },
     });
   }

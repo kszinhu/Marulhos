@@ -45,9 +45,9 @@ export default class FlightInstanceByIdHandler extends Handler {
     flight.tickets = { ...req.parsedBody.tickets };
     flight.fly_attendants = { ...req.parsedBody.fly_attendants };
 
-    await FlightInstance.save(flight.id, flight);
+    const savedFlightInstance = await FlightInstance.save(flight.id, flight);
 
-    return Response.json(flight);
+    return Response.json(savedFlightInstance);
   }
 
   async delete(req: Request): Promise<Response> {

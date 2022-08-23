@@ -34,14 +34,13 @@ export default class CompanyByIdHandler extends Handler {
       throw new HTTPError("Invalid body.", 400);
     }
 
-    company.cnpj = req.parsedBody.cnpj;
     company.name = req.parsedBody.name;
     company.contact = req.parsedBody.contact;
     company.planes = req.parsedBody.planes;
 
-    await Company.save(company.cnpj, company);
+    const updatedCompany = await Company.save(company.cnpj, company);
 
-    return Response.json(company);
+    return Response.json(updatedCompany);
   }
 
   async delete(req: Request): Promise<Response> {

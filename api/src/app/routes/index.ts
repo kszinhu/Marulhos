@@ -46,7 +46,7 @@ Router.group("/companies", () => {
   Router.get("/", Company).withName("company.list");
   Router.post("/", Company).withName("company.create");
 
-  Router.group("/{id}", () => {
+  Router.group("/{cnpj}", () => {
     Router.get("/", CompanyById).withName("company.get");
     Router.put("/", CompanyById).withName("company.update");
     Router.delete("/", CompanyById).withName("company.delete");
@@ -68,7 +68,7 @@ Router.group("/pilots", () => {
   Router.get("/", Pilot).withName("pilot.list");
   Router.post("/", Pilot).withName("pilot.create");
 
-  Router.group("/{id}", () => {
+  Router.group("/{cpf}", () => {
     Router.get("/", PilotById).withName("pilot.get");
     Router.put("/", PilotById).withName("pilot.update");
     Router.delete("/", PilotById).withName("pilot.delete");
@@ -101,7 +101,7 @@ Router.group("/user", () => {
   Router.get("/", User).withName("user.list");
   Router.post("/", User).withName("user.create");
 
-  Router.group("/{id}", () => {
+  Router.group("/{cpf}", () => {
     Router.get("/", UserById).withName("user.get");
     Router.put("/", UserById).withName("user.update");
     Router.delete("/", UserById).withName("user.delete");
@@ -112,7 +112,7 @@ Router.group("/fly_attendants", () => {
   Router.get("/", FlyAttendant).withName("fly_attendant.list");
   Router.post("/", FlyAttendant).withName("fly_attendant.create");
 
-  Router.group("/{id}", () => {
+  Router.group("/{cpf}", () => {
     Router.get("/", FlyAttendantById).withName("fly_attendant.get");
     Router.put("/", FlyAttendantById).withName("fly_attendant.update");
     Router.delete("/", FlyAttendantById).withName("fly_attendant.delete");

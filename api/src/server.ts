@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 
 import { Server } from "apiframework/app";
 import { ConsoleLogger, LogLevel } from "apiframework/log";
+import { Scrypt } from "apiframework/hash";
 
 import router from "./app/routes/index.js";
 import { prisma } from "./app/lib/Prisma.js";
@@ -13,6 +14,7 @@ export const server = new Server({
   providers: {
     router,
     logger: new ConsoleLogger({ minLevel: LogLevel.DEBUG }),
+    hash: new Scrypt(),
   },
 });
 
@@ -23,7 +25,7 @@ await new Promise<void>((resolve, reject) => {
     .listen(port)
     .on("listening", async () => {
       await prisma.$connect();
-      console.log(`Server is running on port ${port}`);
+      console.log(`Server is running on port ${port}\n`);
       resolve();
     })
     .on("close", async () => {

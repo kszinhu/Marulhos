@@ -40,9 +40,9 @@ export default class FlightByIdHandler extends Handler {
     flight.origin = req.parsedBody.origin;
     flight.destination = req.parsedBody.destination;
 
-    await Flight.save(flight.id, flight);
+    const savedFlight = await Flight.save(flight.id, flight);
 
-    return Response.json(flight);
+    return Response.json(savedFlight);
   }
 
   async delete(req: Request): Promise<Response> {

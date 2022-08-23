@@ -48,9 +48,12 @@ export default class FlyAttendantByIdHandler extends Handler {
       req.parsedBody.work_registration_number;
     flyAttendant.flights = req.parsedBody.flights;
 
-    await FlyAttendant.save(flyAttendant.cpf, flyAttendant);
+    const savedFlyAttendant = await FlyAttendant.save(
+      flyAttendant.cpf,
+      flyAttendant
+    );
 
-    return Response.json(flyAttendant);
+    return Response.json(savedFlyAttendant);
   }
 
   async delete(req: Request): Promise<Response> {
