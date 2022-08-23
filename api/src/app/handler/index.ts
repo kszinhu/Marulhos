@@ -14,6 +14,8 @@ import UserHandler from "./UserHandlers/UserHandler.js";
 import UserByIdHandler from "./UserHandlers/UserByIdHandler.js";
 import FlyAttendantHandler from "./FlyAttendantHandlers/FlyAttendantHandler.js";
 import FlyAttendantByIdHandler from "./FlyAttendantHandlers/FlyAttendantByIdHandler.js";
+import FlightInstanceHandler from "./FlightInstaceHandlers/FlightInstanceHandler.js";
+import FlightInstanceByIdHandler from "./FlightInstaceHandlers/FlightInstanceByIdHandler.js";
 
 export const Handlers: { [key: string]: any } = {
   Terminal: {
@@ -47,5 +49,9 @@ export const Handlers: { [key: string]: any } = {
   FlyAttendant: {
     FlyAttendant: FlyAttendantHandler,
     FlyAttendantById: FlyAttendantByIdHandler,
+  },
+  FlightInstance: {
+    FlightInstance: FlightInstanceHandler,
+    FlightInstanceById: FlightInstanceByIdHandler,
   },
 };

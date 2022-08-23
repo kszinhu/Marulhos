@@ -76,20 +76,21 @@ model Flight_Instance {
   terminal_id    Int
   pilot_cpf      String
   copilot_cpf    String
+  tickets        Ticket[]
+  fly_attendants Fly_Attendant[]
   flight         Flight          @relation(fields: [flight_id], references: [id])
   copilot        Pilot           @relation("copilot", fields: [copilot_cpf], references: [cpf])
   pilot          Pilot           @relation("pilot", fields: [pilot_cpf], references: [cpf])
-  ticket         Ticket[]        @relation("travel")
-  fly_attendant  Fly_Attendant[]
+  plane          Plane           @relation("seletedPlane", fields: [plane_id], references: [id])
 }
 
 model Ticket {
-  id                 Int             @id @default(autoincrement())
+  id                 Int              @id @default(autoincrement())
   price              Decimal
-  flight_instance_id Int
   passenger_cpf      String
-  flight_instance    Flight_Instance @relation("travel", fields: [flight_instance_id], references: [id])
-  user               User            @relation("traveller", fields: [passenger_cpf], references: [cpf])
+  flight_instance    Flight_Instance? @relation(fields: [flight_instance_id], references: [id])
+  flight_instance_id Int?
+  user               User             @relation("traveller", fields: [passenger_cpf], references: [cpf])
 }
 
 model Company {
@@ -102,12 +103,13 @@ model Company {
 }
 
 model Plane {
-  id               Int       @id @default(autoincrement())
+  id               Int               @id @default(autoincrement())
   capacity         Int
   model            String
   manufacture_date DateTime?
   company_cnpj     String
-  company          Company   @relation(fields: [company_cnpj], references: [cnpj])
+  Flight_Instance  Flight_Instance[] @relation("seletedPlane")
+  company          Company           @relation(fields: [company_cnpj], references: [cnpj])
 }
 
 enum Sex {

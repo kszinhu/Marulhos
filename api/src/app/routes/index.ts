@@ -28,6 +28,7 @@ const {
   Ticket: { Ticket, TicketById },
   User: { User, UserById },
   FlyAttendant: { FlyAttendant, FlyAttendantById },
+  FlightInstance: { FlightInstance, FlightInstanceById },
 } = Handlers;
 
 Router.group("/terminals", () => {
@@ -74,14 +75,14 @@ Router.group("/pilots", () => {
   });
 });
 
-Router.group("/flights", () => {
-  Router.get("/", Flight).withName("flight.list");
-  Router.post("/", Flight).withName("flight.create");
+Router.group("/flights_scheduled", () => {
+  Router.get("/", Flight).withName("flights_scheduled.list");
+  Router.post("/", Flight).withName("flights_scheduled.create");
 
   Router.group("/{id}", () => {
-    Router.get("/", FlightById).withName("flight.get");
-    Router.put("/", FlightById).withName("flight.update");
-    Router.delete("/", FlightById).withName("flight.delete");
+    Router.get("/", FlightById).withName("flights_scheduled.get");
+    Router.put("/", FlightById).withName("flights_scheduled.update");
+    Router.delete("/", FlightById).withName("flights_scheduled.delete");
   });
 });
 
@@ -115,6 +116,17 @@ Router.group("/fly_attendants", () => {
     Router.get("/", FlyAttendantById).withName("fly_attendant.get");
     Router.put("/", FlyAttendantById).withName("fly_attendant.update");
     Router.delete("/", FlyAttendantById).withName("fly_attendant.delete");
+  });
+});
+
+Router.group("/flights", () => {
+  Router.get("/", FlightInstance).withName("flight.list");
+  Router.post("/", FlightInstance).withName("flight.create");
+
+  Router.group("/{id}", () => {
+    Router.get("/", FlightInstanceById).withName("flight.get");
+    Router.put("/", FlightInstanceById).withName("flight.update");
+    Router.delete("/", FlightInstanceById).withName("flight.delete");
   });
 });
 

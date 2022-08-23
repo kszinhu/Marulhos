@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Flight_Instance } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/index.js";
 import { prisma } from "../lib/Prisma.js";
 
@@ -48,7 +48,11 @@ export default class Ticket {
       price,
       flight_instance_id,
       passenger_cpf,
-    }: { price: Decimal; flight_instance_id: number; passenger_cpf: string }
+    }: {
+      price: Decimal;
+      flight_instance_id: number | null;
+      passenger_cpf: string;
+    }
   ) {
     return await prisma.ticket.update({
       where: {
@@ -58,7 +62,7 @@ export default class Ticket {
         price,
         flight_instance: {
           connect: {
-            id: flight_instance_id,
+            id: flight_instance_id || undefined,
           },
         },
         user: {

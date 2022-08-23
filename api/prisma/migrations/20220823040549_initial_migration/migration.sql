@@ -89,8 +89,8 @@ CREATE TABLE "Flight_Instance" (
 CREATE TABLE "Ticket" (
     "id" SERIAL NOT NULL,
     "price" DECIMAL(65,30) NOT NULL,
-    "flight_instance_id" INTEGER NOT NULL,
     "passenger_cpf" TEXT NOT NULL,
+    "flight_instance_id" INTEGER,
 
     CONSTRAINT "Ticket_pkey" PRIMARY KEY ("id")
 );
@@ -145,6 +145,9 @@ CREATE UNIQUE INDEX "Fly_Attendant_passport_number_key" ON "Fly_Attendant"("pass
 CREATE UNIQUE INDEX "Fly_Attendant_work_registration_number_key" ON "Fly_Attendant"("work_registration_number");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Flight_Instance_flight_id_key" ON "Flight_Instance"("flight_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Company_name_key" ON "Company"("name");
 
 -- CreateIndex
@@ -154,13 +157,19 @@ CREATE UNIQUE INDEX "_Flight_InstanceToFly_Attendant_AB_unique" ON "_Flight_Inst
 CREATE INDEX "_Flight_InstanceToFly_Attendant_B_index" ON "_Flight_InstanceToFly_Attendant"("B");
 
 -- AddForeignKey
+ALTER TABLE "Flight_Instance" ADD CONSTRAINT "Flight_Instance_flight_id_fkey" FOREIGN KEY ("flight_id") REFERENCES "Flight"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Flight_Instance" ADD CONSTRAINT "Flight_Instance_copilot_cpf_fkey" FOREIGN KEY ("copilot_cpf") REFERENCES "Pilot"("cpf") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Flight_Instance" ADD CONSTRAINT "Flight_Instance_pilot_cpf_fkey" FOREIGN KEY ("pilot_cpf") REFERENCES "Pilot"("cpf") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_flight_instance_id_fkey" FOREIGN KEY ("flight_instance_id") REFERENCES "Flight_Instance"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Flight_Instance" ADD CONSTRAINT "Flight_Instance_plane_id_fkey" FOREIGN KEY ("plane_id") REFERENCES "Plane"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_flight_instance_id_fkey" FOREIGN KEY ("flight_instance_id") REFERENCES "Flight_Instance"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_passenger_cpf_fkey" FOREIGN KEY ("passenger_cpf") REFERENCES "User"("cpf") ON DELETE RESTRICT ON UPDATE CASCADE;
