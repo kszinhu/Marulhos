@@ -6,7 +6,7 @@ export default class Ticket {
   static async all() {
     return await prisma.ticket.findMany({
       include: {
-        flight_instace: {
+        flight_instance: {
           select: {
             flight_id: true,
             departure_date: true,
@@ -56,7 +56,7 @@ export default class Ticket {
       },
       data: {
         price,
-        flight_instace: {
+        flight_instance: {
           connect: {
             id: flight_instance_id,
           },

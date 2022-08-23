@@ -26,6 +26,7 @@ const {
   Pilot: { Pilot, PilotById },
   Flight: { Flight, FlightById },
   Ticket: { Ticket, TicketById },
+  User: { User, UserById },
 } = Handlers;
 
 Router.group("/terminals", () => {
@@ -35,7 +36,6 @@ Router.group("/terminals", () => {
   Router.group("/{id}", () => {
     Router.get("/", TerminalById).withName("terminal.get");
     Router.put("/", TerminalById).withName("terminal.update");
-    Router.patch("/", TerminalById).withName("terminal.patch");
     Router.delete("/", TerminalById).withName("terminal.delete");
   });
 });
@@ -47,7 +47,6 @@ Router.group("/companies", () => {
   Router.group("/{id}", () => {
     Router.get("/", CompanyById).withName("company.get");
     Router.put("/", CompanyById).withName("company.update");
-    Router.patch("/", CompanyById).withName("company.patch");
     Router.delete("/", CompanyById).withName("company.delete");
   });
 });
@@ -59,7 +58,6 @@ Router.group("/planes", () => {
   Router.group("/{id}", () => {
     Router.get("/", PlaneById).withName("plane.get");
     Router.put("/", PlaneById).withName("plane.update");
-    Router.patch("/", PlaneById).withName("plane.patch");
     Router.delete("/", PlaneById).withName("plane.delete");
   });
 });
@@ -71,7 +69,6 @@ Router.group("/pilots", () => {
   Router.group("/{id}", () => {
     Router.get("/", PilotById).withName("pilot.get");
     Router.put("/", PilotById).withName("pilot.update");
-    Router.patch("/", PilotById).withName("pilot.patch");
     Router.delete("/", PilotById).withName("pilot.delete");
   });
 });
@@ -83,7 +80,6 @@ Router.group("/flights", () => {
   Router.group("/{id}", () => {
     Router.get("/", FlightById).withName("flight.get");
     Router.put("/", FlightById).withName("flight.update");
-    Router.patch("/", FlightById).withName("flight.patch");
     Router.delete("/", FlightById).withName("flight.delete");
   });
 });
@@ -95,8 +91,18 @@ Router.group("/tickets", () => {
   Router.group("/{id}", () => {
     Router.get("/", TicketById).withName("ticket.get");
     Router.put("/", TicketById).withName("ticket.update");
-    Router.patch("/", TicketById).withName("ticket.patch");
     Router.delete("/", TicketById).withName("ticket.delete");
+  });
+});
+
+Router.group("/user", () => {
+  Router.get("/", User).withName("user.list");
+  Router.post("/", User).withName("user.create");
+
+  Router.group("/{id}", () => {
+    Router.get("/", UserById).withName("user.get");
+    Router.put("/", UserById).withName("user.update");
+    Router.delete("/", UserById).withName("user.delete");
   });
 });
 

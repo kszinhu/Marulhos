@@ -10,6 +10,8 @@ import FlightByIdHandler from "./FlightHandlers/FlightByIdHandler.js";
 import FlightHandler from "./FlightHandlers/FlightHandler.js";
 import TicketHandler from "./TicketHandlers/TicketHandler.js";
 import TicketByIdHandler from "./TicketHandlers/TicketByIdHandler.js";
+import UserHandler from "./UserHandlers/UserHandler.js";
+import UserByIdHandler from "./UserHandlers/UserByIdHandler.js";
 
 export const Handlers: { [key: string]: any } = {
   Terminal: {
@@ -35,5 +37,9 @@ export const Handlers: { [key: string]: any } = {
   Ticket: {
     Ticket: TicketHandler,
     TicketById: TicketByIdHandler,
+  },
+  User: {
+    User: UserHandler,
+    UserById: UserByIdHandler,
   },
 };
