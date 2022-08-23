@@ -3,7 +3,6 @@ import * as Pages from "../pages";
 import { SchemaOf } from "yup";
 
 import { formModels } from "./forms";
-import React from "react";
 import { Icon } from "tabler-icons-react";
 
 enum layoutTypes {
