@@ -94,12 +94,13 @@ model Ticket {
 }
 
 model Company {
-  cnpj      String   @id
-  name      String   @unique
-  contact   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  planes    Plane[]
+  cnpj             String   @id
+  name             String   @unique
+  contact          String
+  number_of_planes Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  planes           Plane[]
 }
 
 model Plane {

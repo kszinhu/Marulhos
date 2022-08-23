@@ -1,21 +1,52 @@
-CREATE OR REPLACE FUNCTION company_planes_function() RETURNS trigger AS 
-'
-BEGIN
-  IF (TG_OP = "INSERT") THEN
-    UPDATE Company SET number_of_planes = number_of_planes + 1 WHERE cnpj = NEW.company_cnpj;
-  ELSEIF (TG_OP = "DELETE") THEN 
-  UPDATE Company SET number_of_planes = number_of_planes - 1 WHERE cnpj = OLD.company_cnpj;
-  ELSE
-    UPDATE Company SET number_of_planes = number_of_planes + 1 WHERE cnpj = NEW.company_cnpj;
-    UPDATE Company SET number_of_planes = number_of_planes - 1 WHERE cnpj = OLD.company_cnpj;
+-- Add column
+ALTER TABLE "Company"
+ADD "number_of_planes" INTEGER NOT NULL DEFAULT 0;
+
+-- Update number_of_planes if a plane exists in the database
+UPDATE public."Company"
+SET number_of_planes = (
+  SELECT COUNT(*)
+  FROM public."Plane"
+  WHERE "Company".cnpj = "Plane".company_cnpj
+);
+
+-- Trigger to update number_of_planes when a plane is created
+CREATE OR REPLACE FUNCTION public.update_number_of_planes() RETURNS TRIGGER AS $$ BEGIN
+UPDATE public."Company"
+SET number_of_planes = (
+  SELECT COUNT(*)
+  FROM public."Plane"
+  WHERE "Company".cnpj = "Plane".company_cnpj
+);
+RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Trigger to not assign a fly_attendant to a flight_instance if departure_date is before the last_arrival_date
+CREATE OR REPLACE FUNCTION public.check_fly_attendant() RETURNS TRIGGER AS $$ BEGIN
+  IF NEW.departure_date < (
+      SELECT
+        arrival_date
+      FROM
+        public."Flight_Instance" AS fi,
+        public."Fly_Attendant" AS fa 
+      WHERE
+        fi.id = fa.flight_instance_id
+        AND fa.cpf = NEW.fly_attendant_cpf
+      ORDER BY
+        arrival_date DESC
+      LIMIT
+        1
+    ) THEN RAISE EXCEPTION 'Fly attendant is not available at this time' USING ERRCODE='20808';
   END IF;
-END
-'
-LANGUAGE plpgsql;
+  RETURN NEW;
+END;
+$$ language 'plpgsql';
 
-UPDATE public."Company" SET "number_of_planes" = (SELECT COUNT(*) FROM public."Plane" WHERE "Company"."cnpj" = "Plane"."company_cnpj");
+-- Apply triggers
 
-CREATE TRIGGER trigger_company_planes
-AFTER INSERT OR UPDATE OR DELETE ON public."Company"
-FOR EACH ROW
-EXECUTE PROCEDURE company_planes_function();
+CREATE TRIGGER check_fly_attendant
+BEFORE INSERT OR UPDATE ON public."Flight_Instance" FOR EACH ROW EXECUTE PROCEDURE public.check_fly_attendant();
+
+CREATE TRIGGER update_number_of_planes
+AFTER INSERT OR UPDATE OR DELETE ON public."Plane" FOR EACH ROW EXECUTE PROCEDURE public.update_number_of_planes();
