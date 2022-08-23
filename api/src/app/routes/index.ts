@@ -27,6 +27,7 @@ const {
   Flight: { Flight, FlightById },
   Ticket: { Ticket, TicketById },
   User: { User, UserById },
+  FlyAttendant: { FlyAttendant, FlyAttendantById },
 } = Handlers;
 
 Router.group("/terminals", () => {
@@ -103,6 +104,17 @@ Router.group("/user", () => {
     Router.get("/", UserById).withName("user.get");
     Router.put("/", UserById).withName("user.update");
     Router.delete("/", UserById).withName("user.delete");
+  });
+});
+
+Router.group("/fly_attendants", () => {
+  Router.get("/", FlyAttendant).withName("fly_attendant.list");
+  Router.post("/", FlyAttendant).withName("fly_attendant.create");
+
+  Router.group("/{id}", () => {
+    Router.get("/", FlyAttendantById).withName("fly_attendant.get");
+    Router.put("/", FlyAttendantById).withName("fly_attendant.update");
+    Router.delete("/", FlyAttendantById).withName("fly_attendant.delete");
   });
 });
 

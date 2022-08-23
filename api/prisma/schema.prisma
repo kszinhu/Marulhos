@@ -59,25 +59,27 @@ model Terminal {
 }
 
 model Flight {
-  id                       Int      @id @default(autoincrement())
+  id                       Int              @id @default(autoincrement())
   estimated_departure_date DateTime
   estimated_arrival_date   DateTime
   origin                   String
   destination              String
+  flight_instance          Flight_Instance?
 }
 
 model Flight_Instance {
   id             Int             @id @default(autoincrement())
   departure_date DateTime
   arrival_date   DateTime
-  flight_id      Int
+  flight_id      Int             @unique
   plane_id       Int
   terminal_id    Int
   pilot_cpf      String
   copilot_cpf    String
+  flight         Flight          @relation(fields: [flight_id], references: [id])
   copilot        Pilot           @relation("copilot", fields: [copilot_cpf], references: [cpf])
   pilot          Pilot           @relation("pilot", fields: [pilot_cpf], references: [cpf])
-  Ticket         Ticket[]        @relation("travel")
+  ticket         Ticket[]        @relation("travel")
   fly_attendant  Fly_Attendant[]
 }
 
