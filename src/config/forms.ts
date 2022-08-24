@@ -61,14 +61,14 @@ const employeeFields: FieldInterface[] = [
   },
   {
     inputComponent: NumberInput,
-    name: "CPF",
+    name: "cpf",
     type: fieldType.number,
     label: "CPF",
     required: true,
   },
   {
     inputComponent: NumberInput,
-    name: "RG",
+    name: "rg",
     type: fieldType.number,
     label: "RG",
   },
@@ -92,16 +92,16 @@ const employeeFields: FieldInterface[] = [
     locale: "pt-br",
   },
   {
-    inputComponent: NumberInput,
+    inputComponent: TextInput,
     name: "address_cep",
-    type: fieldType.number,
+    type: fieldType.text,
     label: "CEP",
     required: true,
   },
   {
-    inputComponent: NumberInput,
+    inputComponent: TextInput,
     name: "address_number",
-    type: fieldType.number,
+    type: fieldType.text,
     label: "Número",
     required: true,
   },
@@ -129,7 +129,7 @@ const employeeFields: FieldInterface[] = [
     name: "passport_number",
     type: fieldType.number,
     label: "Número do Passaporte",
-    required: true,
+    required: true, 
   },
   {
     inputComponent: TextInput,
@@ -151,7 +151,7 @@ interface FormModel {
 
 export const formModels: FormModel[] = [
   {
-    name: "Pilot",
+    name: "pilot",
     slug: "pilotos",
     title: "Piloto",
     icon: User,
@@ -168,7 +168,7 @@ export const formModels: FormModel[] = [
     schema: pilotSchema,
   },
   {
-    name: "Flight_Attendant",
+    name: "flight_attendant",
     slug: "comissarios",
     title: "Comissário",
     icon: User,

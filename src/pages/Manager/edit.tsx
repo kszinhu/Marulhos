@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useForm, yupResolver } from "@mantine/form";
 
-import { SchemaOf } from "yup";
+import { ManagerProps } from ".";
 
 import { Box, Button } from "@mantine/core";
 
@@ -12,28 +12,6 @@ enum fieldType {
   date = "date",
   select = "select",
   radio = "radio",
-}
-
-interface FieldInterface {
-  inputComponent: any;
-  name: string;
-  type: string;
-  label?: string;
-  placeholder?: string;
-  description?: string;
-  required?: boolean;
-  defaultValue?: number | string;
-  parser?: (value: any) => any;
-  formatter?: (value: any) => any;
-  options?: { label: string; value: string }[];
-  locale?: string;
-}
-
-interface ManagerProps {
-  schema: FieldInterface[];
-  yupSchema: SchemaOf<any>;
-  title: string;
-  onSubmit: (values: any) => void; // OnSubmit is a function that takes the form values and submits them to the server
 }
 
 export default function ManagerEditModel({

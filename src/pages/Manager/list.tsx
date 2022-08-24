@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import { useForm, yupResolver } from "@mantine/form";
+import { showNotification, updateNotification } from "@mantine/notifications";
 
-import { SchemaOf } from "yup";
+import { ManagerProps } from ".";
+
+import API from "../../services/api";
 
 import { Box, Button, Group } from "@mantine/core";
+import { IconX, IconCheck } from "@tabler/icons";
 
 enum fieldType {
   text = "text",
@@ -13,29 +17,8 @@ enum fieldType {
   radio = "radio",
 }
 
-interface FieldInterface {
-  inputComponent: any;
-  name: string;
-  type: string;
-  label?: string;
-  placeholder?: string;
-  description?: string;
-  required?: boolean;
-  defaultValue?: number | string;
-  parser?: (value: any) => any;
-  formatter?: (value: any) => any;
-  options?: { label: string; value: string }[];
-  locale?: string;
-}
-
-interface ManagerProps {
-  schema: FieldInterface[];
-  yupSchema: SchemaOf<any>;
-  title: string;
-  onSubmit: (values: any) => void; // OnSubmit is a function that takes the form values and submits them to the server
-}
-
 export default function ManagerListModel({
+  endpoint,
   schema,
   yupSchema,
   title,
@@ -53,7 +36,36 @@ export default function ManagerListModel({
     // change title of the page
     document.title = `Manager - ${title}`;
 
-    // call api to get data
+    showNotification({
+      id: `${endpoint}-list`,
+      message: `Conectando ao servidor`,
+      loading: true,
+      disallowClose: true,
+    });
+
+    API.get(`${import.meta.env.VITE_API_URL}${endpoint}`)
+      .then(({ data }: any) => {
+        form.setValues(data);
+        updateNotification({
+          id: `${endpoint}-list`,
+          message: `Lista de ${title} carregada com sucesso!`,
+          color: "teal",
+          icon: <IconCheck size={20} />,
+          loading: false,
+          autoClose: 1500,
+        });
+      })
+      .catch((err: any) => {
+        console.error(err);
+        updateNotification({
+          id: `${endpoint}-list`,
+          message: "Não foi possível carregar",
+          color: "red",
+          icon: <IconX size={20} />,
+          loading: false,
+          autoClose: 1500,
+        });
+      });
   }, []);
 
   return (

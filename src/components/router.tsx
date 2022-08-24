@@ -31,6 +31,7 @@ export default function ApplicationRouter() {
                 path,
                 key,
                 title,
+                modelName,
                 component: Component,
                 exact,
                 index,
@@ -52,24 +53,27 @@ export default function ApplicationRouter() {
                     {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
                   />
                 ) : (
-                  <Route
-                    key={key}
-                    path={path}
-                    element={
-                      <Component.List
-                        schema={schema}
-                        title={title}
-                        yupSchema={yupSchema}
-                      />
-                    }
-                    index={index}
-                    {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
-                  >
+                  <>
                     <Route
                       key={key}
-                      path={`:id`}
+                      path={path}
+                      element={
+                        <Component.List
+                          endpoint={`${modelName}s`}
+                          schema={schema}
+                          title={title}
+                          yupSchema={yupSchema}
+                        />
+                      }
+                      index={index}
+                      {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
+                    />
+                    <Route
+                      key={key}
+                      path={`${path}/:id`}
                       element={
                         <Component.View
+                          endpoint={`${modelName}s`}
                           schema={schema}
                           title={title}
                           yupSchema={yupSchema}
@@ -80,9 +84,10 @@ export default function ApplicationRouter() {
                     />
                     <Route
                       key={key}
-                      path={`:id/edit`}
+                      path={`${path}/:id/edit`}
                       element={
                         <Component.Edit
+                          endpoint={`${modelName}s`}
                           schema={schema}
                           title={title}
                           yupSchema={yupSchema}
@@ -93,9 +98,10 @@ export default function ApplicationRouter() {
                     />
                     <Route
                       key={key}
-                      path={"add"}
+                      path={`${path}/new`}
                       element={
                         <Component.Add
+                          endpoint={`${modelName}s`}
                           schema={schema}
                           title={title}
                           yupSchema={yupSchema}
@@ -104,7 +110,7 @@ export default function ApplicationRouter() {
                       index={index}
                       {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
                     />
-                  </Route>
+                  </>
                 )
             )}
           </Route>

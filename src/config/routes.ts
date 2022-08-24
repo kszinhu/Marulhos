@@ -15,6 +15,7 @@ interface ObjectRoute {
   path: string;
   key: string;
   component: any;
+  modelName?: string;
   schema?: Object[];
   yupSchema?: SchemaOf<any>;
   title?: string;
@@ -33,6 +34,8 @@ export const managerRoutes: ObjectRoute[] = formModels.map(
     path: slug,
     key: name,
     title,
+    name,
+    modelName: name,
     component: Pages.Manager,
     layout: layoutTypes.manager,
     schema: fields,

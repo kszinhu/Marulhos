@@ -6,6 +6,8 @@ import {
   MantineProvider,
 } from "@mantine/core";
 
+import { NotificationsProvider } from "@mantine/notifications";
+
 import { BrowserRouter as Router } from "react-router-dom";
 import ApplicationRouter from "./components/router";
 import { applicationTheme } from "./config/theme";
@@ -30,9 +32,11 @@ function App() {
         withGlobalStyles
         withNormalizeCSS
       >
-        <Router>
-          <ApplicationRouter />
-        </Router>
+        <NotificationsProvider position='top-center' limit={5}>
+          <Router>
+            <ApplicationRouter />
+          </Router>
+        </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );
