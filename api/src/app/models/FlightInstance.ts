@@ -130,6 +130,7 @@ export default class FlightInstance {
             cpf: true,
           },
         },
+        terminal: true,
       },
     });
   }
@@ -139,7 +140,7 @@ export default class FlightInstance {
     {
       departure_date,
       arrival_date,
-      terminal_id,
+      terminal,
       plane,
       pilot,
       copilot,
@@ -149,7 +150,9 @@ export default class FlightInstance {
     }: {
       departure_date: Date;
       arrival_date: Date;
-      terminal_id: number;
+      terminal: {
+        id: number;
+      };
       pilot: {
         cpf: string;
       };
@@ -179,7 +182,11 @@ export default class FlightInstance {
       data: {
         departure_date,
         arrival_date,
-        terminal_id,
+        terminal: {
+          connect: {
+            id: terminal.id,
+          },
+        },
         tickets: {
           connectOrCreate: tickets.map((ticket) => ({
             where: { id: ticket.id },

@@ -44,7 +44,6 @@ END;
 $$ language 'plpgsql';
 
 -- Apply triggers
-
 CREATE TRIGGER check_fly_attendant
 BEFORE INSERT OR UPDATE ON public."Flight_Instance" FOR EACH ROW EXECUTE PROCEDURE public.check_fly_attendant();
 

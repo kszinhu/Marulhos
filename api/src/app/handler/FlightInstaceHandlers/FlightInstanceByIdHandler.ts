@@ -37,7 +37,7 @@ export default class FlightInstanceByIdHandler extends Handler {
 
     flight.departure_date = req.parsedBody.departure_date;
     flight.arrival_date = req.parsedBody.arrival_date;
-    flight.terminal_id = req.parsedBody.terminal_id;
+    flight.terminal = { ...req.parsedBody.terminal };
     flight.plane = { ...req.parsedBody.plane };
     flight.flight = { ...req.parsedBody.flight };
     flight.pilot = { ...req.parsedBody.pilot };
