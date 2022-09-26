@@ -1,9 +1,17 @@
-import React from "react";
+import { useEffect } from "react";
 
 import { Text, Center, Title, Button, MediaQuery } from "@mantine/core";
 import { Link } from "react-router-dom";
 
-export default function NotFound() {
+interface NotFoundProps {
+  title: string;
+}
+
+export default function NotFound({ title }: NotFoundProps) {
+  useEffect(() => {
+    document.title = title;
+  }, []);
+
   return (
     <div
       style={{

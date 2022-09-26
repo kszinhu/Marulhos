@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Outlet } from "react-router-dom";
 
 import { routes as applicationRoutes } from "../config/routes";
 
@@ -7,7 +7,7 @@ import * as layouts from "./layouts";
 export default function ApplicationRouter() {
   return (
     <Routes>
-      {applicationRoutes.map(({ layout, routes }) => {
+      {applicationRoutes.map(({ layout, routes }, index) => {
         let LayoutComponent: any;
         switch (layout) {
           case "manager":
@@ -22,8 +22,8 @@ export default function ApplicationRouter() {
 
         return (
           <Route
-            key={layout}
-            element={layout !== "none" && <LayoutComponent />}
+            key={`route-${index}`}
+            element={layout !== "none" ? <LayoutComponent /> : <Outlet />}
             {...(isManagerRoute ? { path: "/manager" } : {})}
           >
             {routes.map(
@@ -42,20 +42,13 @@ export default function ApplicationRouter() {
                   <Route
                     key={key}
                     path={path}
-                    element={
-                      <Component
-                        schema={schema}
-                        title={title}
-                        yupSchema={yupSchema}
-                      />
-                    }
-                    index={index}
-                    {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
+                    element={<Component title={title} />}
+                    index={index ? undefined : false}
                   />
                 ) : (
                   <>
                     <Route
-                      key={key}
+                      key={`list-${key}`}
                       path={path}
                       element={
                         <Component.List
@@ -69,7 +62,7 @@ export default function ApplicationRouter() {
                       {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
                     />
                     <Route
-                      key={key}
+                      key={`view-${key}`}
                       path={`${path}/:id`}
                       element={
                         <Component.View
@@ -83,7 +76,7 @@ export default function ApplicationRouter() {
                       {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
                     />
                     <Route
-                      key={key}
+                      key={`edit-${key}`}
                       path={`${path}/:id/edit`}
                       element={
                         <Component.Edit
@@ -97,7 +90,7 @@ export default function ApplicationRouter() {
                       {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
                     />
                     <Route
-                      key={key}
+                      key={`new-${key}`}
                       path={`${path}/new`}
                       element={
                         <Component.Add

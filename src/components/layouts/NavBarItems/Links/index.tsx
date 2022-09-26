@@ -1,7 +1,7 @@
 import { ThemeIcon, UnstyledButton, Group, Text, Stack } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { Icon } from "tabler-icons-react";
-import { formModels } from "../../../config/forms";
+import { formModels } from "../../../../config/forms";
 
 interface MainLinksProps {
   title: string;

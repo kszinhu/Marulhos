@@ -1,10 +1,7 @@
 import { AppShell, Header } from "@mantine/core";
+import { Outlet } from "react-router-dom";
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-export default function Layout({ children }: LayoutProps) {
+export default function Layout() {
   return (
     <AppShell
       padding='md'
@@ -22,7 +19,7 @@ export default function Layout({ children }: LayoutProps) {
         },
       })}
     >
-      {children}
+      <Outlet />
     </AppShell>
   );
 }

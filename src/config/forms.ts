@@ -129,7 +129,7 @@ const employeeFields: FieldInterface[] = [
     name: "passport_number",
     type: fieldType.number,
     label: "Número do Passaporte",
-    required: true, 
+    required: true,
   },
   {
     inputComponent: TextInput,
@@ -140,7 +140,7 @@ const employeeFields: FieldInterface[] = [
   },
 ];
 
-interface FormModel {
+interface FormModelInterface {
   name: string;
   slug: string; // url friendly
   title: string;
@@ -149,7 +149,7 @@ interface FormModel {
   schema: SchemaOf<any>;
 }
 
-export const formModels: FormModel[] = [
+export const formModels: FormModelInterface[] = [
   {
     name: "pilot",
     slug: "pilotos",

@@ -1,9 +1,7 @@
 import { useState } from "react";
 
-import { Outlet } from "react-router-dom";
 import {
   AppShell,
-  Aside,
   Burger,
   Header,
   MediaQuery,
@@ -11,11 +9,8 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
-
-import { managerNavItems } from "../../config/routes";
-import { MainLinks } from "./navbaritems/links";
-import { Brand } from "./navbaritems/brand";
-import { User } from "./navbaritems/user";
+import { MainLinks, User } from "./NavBarItems";
+import { Outlet } from "react-router-dom";
 
 export default function FormLayout() {
   const theme = useMantineTheme();
