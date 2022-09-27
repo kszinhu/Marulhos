@@ -1,22 +1,19 @@
 import dotenv from "dotenv";
 
 import { Server } from "apiframework/app";
-import { ConsoleLogger, LogLevel } from "apiframework/log";
-import { Scrypt } from "apiframework/hash";
 
-import router from "./app/routes/index.js";
-import { prisma } from "./app/lib/Prisma.js";
+// import router from "./app/routes/index.js";
+import pipeline from "./pipeline.js";
+import providers from "./providers.js";
+import { prisma } from "./core/lib/prisma.js";
 
 dotenv.config({ path: "./.env.dev", override: true });
 dotenv.config({ override: true });
 
-export const server = new Server({
-  providers: {
-    router,
-    logger: new ConsoleLogger({ minLevel: LogLevel.DEBUG }),
-    hash: new Scrypt(),
-  },
-});
+export const server = new Server();
+
+providers(server);
+pipeline(server);
 
 const port = parseInt(process.env.API_PORT || "3000");
 

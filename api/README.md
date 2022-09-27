@@ -12,8 +12,10 @@ The API is built using [Modscleo4 API framework](https://github.com/modscleo4/ap
 
 - Node.js 16.13
 
-### Installation
+#### Installation
 
-- Clone the repository
-- Install dependencies with `npm ci`
-- Run the API with `npm run dev`
+1. Clone the repository
+2. Install dependencies with `npm ci`
+3. Copy `.env.example` to `.env` and fill in the values
+4. Create a keys for JWT signing and encryption using `npm run generateKeys`
+5. Run the API with `npm run dev`

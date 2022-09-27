@@ -1,11 +1,21 @@
 import { EStatusCode, Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
+import { Auth } from "apiframework/auth";
+import { Server } from "apiframework/app";
 
-import TicketDAO from "@core/dao/TicketDAO.js";
+import FlightInstanceDAO from "@core/dao/FlightInstanceDAO.js";
 
-export default class TicketHandler extends Handler {
+export default class FlightInstanceHandler extends Handler {
+  #auth: Auth;
+
+  constructor(server: Server) {
+    super(server);
+
+    this.#auth = server.providers.get("Auth");
+  }
+
   async get(req: Request): Promise<Response> {
-    const data = await TicketDAO.all();
+    const data = await FlightInstanceDAO.all();
 
     return Response.json(data);
   }
@@ -19,15 +29,15 @@ export default class TicketHandler extends Handler {
       ...req.parsedBody,
     };
 
-    const savedTicket = await TicketDAO.create(data);
-    if (!savedTicket) {
+    const saved = await FlightInstanceDAO.create(data);
+    if (!saved) {
       throw new HTTPError(
-        "Failed to save a new Ticket.",
+        "Failed to save a new Flight Instance.",
         EStatusCode.INTERNAL_SERVER_ERROR
       );
     }
 
-    return Response.json(savedTicket).withStatus(201);
+    return Response.json(data).withStatus(EStatusCode.CREATED);
   }
 
   async handle(req: Request): Promise<Response> {
@@ -39,6 +49,6 @@ export default class TicketHandler extends Handler {
         return await this.post(req);
     }
 
-    return Response.status(405);
+    return Response.status(EStatusCode.METHOD_NOT_ALLOWED);
   }
 }

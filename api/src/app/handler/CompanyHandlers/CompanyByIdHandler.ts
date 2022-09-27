@@ -1,18 +1,28 @@
-import { Handler, Request, Response } from "apiframework/http";
+import { EStatusCode, Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
+import { Auth } from "apiframework/auth";
+import { Server } from "apiframework/app";
 
-import Company from "../../models/Company.js";
+import CompanyDAO from "@core/dao/CompanyDAO.js";
 
 export default class CompanyByIdHandler extends Handler {
+  #auth: Auth;
+
+  constructor(server: Server) {
+    super(server);
+
+    this.#auth = server.providers.get("Auth");
+  }
+
   async get(req: Request): Promise<Response> {
     const cnpj = req.params.get("cnpj");
     if (!cnpj) {
-      throw new HTTPError("Invalid CNPJ.", 400);
+      throw new HTTPError("Invalid CNPJ.", EStatusCode.BAD_REQUEST);
     }
 
-    const company = await Company.get(cnpj);
+    const company = await CompanyDAO.get({ where: { cnpj } });
     if (!company) {
-      throw new HTTPError("Company not found.", 404);
+      throw new HTTPError("Company not found.", EStatusCode.NOT_FOUND);
     }
 
     return Response.json(company);
@@ -21,24 +31,22 @@ export default class CompanyByIdHandler extends Handler {
   async put(req: Request): Promise<Response> {
     const cnpj = req.params.get("cnpj");
     if (!cnpj) {
-      throw new HTTPError("Invalid CNPJ.", 400);
+      throw new HTTPError("Invalid CNPJ.", EStatusCode.BAD_REQUEST);
     }
 
-    const company = await Company.get(cnpj);
-
+    const company = await CompanyDAO.get({ where: { cnpj } });
     if (!company) {
-      throw new HTTPError("Company not found.", 404);
+      throw new HTTPError("Company not found.", EStatusCode.NOT_FOUND);
     }
 
     if (!req.parsedBody) {
-      throw new HTTPError("Invalid body.", 400);
+      throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
     company.name = req.parsedBody.name;
     company.contact = req.parsedBody.contact;
-    company.planes = req.parsedBody.planes;
 
-    const updatedCompany = await Company.save(company.cnpj, company);
+    const updatedCompany = await CompanyDAO.save(company.cnpj, company);
 
     return Response.json(updatedCompany);
   }
@@ -46,16 +54,15 @@ export default class CompanyByIdHandler extends Handler {
   async delete(req: Request): Promise<Response> {
     const cnpj = req.params.get("cnpj");
     if (!cnpj) {
-      throw new HTTPError("Invalid CNPJ.", 400);
+      throw new HTTPError("Invalid CNPJ.", EStatusCode.BAD_REQUEST);
     }
 
-    const company = await Company.get(cnpj);
-
+    const company = await CompanyDAO.get({ where: { cnpj } });
     if (!company) {
-      throw new HTTPError("Company not found.", 404);
+      throw new HTTPError("Company not found.", EStatusCode.NOT_FOUND);
     }
 
-    await Company.delete(company.cnpj);
+    await CompanyDAO.delete(company.cnpj);
 
     return Response.empty();
   }
@@ -72,6 +79,6 @@ export default class CompanyByIdHandler extends Handler {
         return await this.delete(req);
     }
 
-    return Response.status(405);
+    return Response.status(EStatusCode.METHOD_NOT_ALLOWED);
   }
 }

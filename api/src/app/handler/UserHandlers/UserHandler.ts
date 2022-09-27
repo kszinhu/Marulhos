@@ -1,30 +1,33 @@
-import { Handler, Request, Response } from "apiframework/http";
+import { EStatusCode, Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
 
-import User from "../../models/User.js";
+import UserDAO from "@core/dao/UserDAO.js";
 
 export default class UserHandler extends Handler {
   async get(req: Request): Promise<Response> {
-    const data = await User.all();
+    const data = await UserDAO.all();
 
     return Response.json(data);
   }
 
   async post(req: Request): Promise<Response> {
     if (!req.parsedBody) {
-      throw new HTTPError("Invalid body.", 400);
+      throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
     const data = {
       ...req.parsedBody,
     };
 
-    const savedUser = await User.create(data);
+    const savedUser = await UserDAO.create(data);
     if (!savedUser) {
-      throw new HTTPError("Failed to save a new User.", 500);
+      throw new HTTPError(
+        "Failed to save a new User.",
+        EStatusCode.INTERNAL_SERVER_ERROR
+      );
     }
 
-    return Response.json(savedUser).withStatus(201);
+    return Response.json(savedUser).withStatus(EStatusCode.CREATED);
   }
 
   async handle(req: Request): Promise<Response> {
@@ -36,6 +39,6 @@ export default class UserHandler extends Handler {
         return await this.post(req);
     }
 
-    return Response.status(405);
+    return Response.status(EStatusCode.METHOD_NOT_ALLOWED);
   }
 }

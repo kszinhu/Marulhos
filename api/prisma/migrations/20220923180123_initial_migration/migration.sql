@@ -3,7 +3,11 @@ CREATE TYPE "Sex" AS ENUM ('M', 'F', 'X');
 
 -- CreateTable
 CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
     "cpf" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "username" VARCHAR(255) NOT NULL,
+    "password" VARCHAR(255) NOT NULL,
     "name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
     "rg" TEXT,
@@ -11,8 +15,10 @@ CREATE TABLE "User" (
     "birth_date" TIMESTAMP(3),
     "address_cep" TEXT NOT NULL,
     "address_number" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("cpf")
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -89,7 +95,7 @@ CREATE TABLE "Flight_Instance" (
 CREATE TABLE "Ticket" (
     "id" SERIAL NOT NULL,
     "price" DECIMAL(65,30) NOT NULL,
-    "passenger_cpf" TEXT NOT NULL,
+    "passenger_id" INTEGER NOT NULL,
     "flight_instance_id" INTEGER,
 
     CONSTRAINT "Ticket_pkey" PRIMARY KEY ("id")
@@ -100,6 +106,7 @@ CREATE TABLE "Company" (
     "cnpj" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "contact" TEXT NOT NULL,
+    "number_of_planes" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -122,6 +129,15 @@ CREATE TABLE "_Flight_InstanceToFly_Attendant" (
     "A" INTEGER NOT NULL,
     "B" TEXT NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_cpf_key" ON "User"("cpf");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Pilot_vaccination_number_key" ON "Pilot"("vaccination_number");
@@ -157,6 +173,9 @@ CREATE UNIQUE INDEX "_Flight_InstanceToFly_Attendant_AB_unique" ON "_Flight_Inst
 CREATE INDEX "_Flight_InstanceToFly_Attendant_B_index" ON "_Flight_InstanceToFly_Attendant"("B");
 
 -- AddForeignKey
+ALTER TABLE "Flight_Instance" ADD CONSTRAINT "Flight_Instance_terminal_id_fkey" FOREIGN KEY ("terminal_id") REFERENCES "Terminal"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Flight_Instance" ADD CONSTRAINT "Flight_Instance_flight_id_fkey" FOREIGN KEY ("flight_id") REFERENCES "Flight"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -172,7 +191,7 @@ ALTER TABLE "Flight_Instance" ADD CONSTRAINT "Flight_Instance_plane_id_fkey" FOR
 ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_flight_instance_id_fkey" FOREIGN KEY ("flight_instance_id") REFERENCES "Flight_Instance"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_passenger_cpf_fkey" FOREIGN KEY ("passenger_cpf") REFERENCES "User"("cpf") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_passenger_id_fkey" FOREIGN KEY ("passenger_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Plane" ADD CONSTRAINT "Plane_company_cnpj_fkey" FOREIGN KEY ("company_cnpj") REFERENCES "Company"("cnpj") ON DELETE RESTRICT ON UPDATE CASCADE;

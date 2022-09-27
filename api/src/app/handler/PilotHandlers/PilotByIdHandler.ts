@@ -1,18 +1,28 @@
-import { Handler, Request, Response } from "apiframework/http";
+import { EStatusCode, Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
+import { Auth } from "apiframework/auth";
+import { Server } from "apiframework/app";
 
-import Pilot from "../../models/Pilot.js";
+import PilotDAO from "@core/dao/PilotDAO.js";
 
 export default class PilotByIdHandler extends Handler {
+  #auth: Auth;
+
+  constructor(server: Server) {
+    super(server);
+
+    this.#auth = server.providers.get("Auth");
+  }
+
   async get(req: Request): Promise<Response> {
     const cpf = req.params.get("cpf");
     if (!cpf) {
-      throw new HTTPError("Invalid CPF.", 400);
+      throw new HTTPError("Invalid CPF.", EStatusCode.BAD_REQUEST);
     }
 
-    const pilot = await Pilot.get(cpf);
+    const pilot = await PilotDAO.get({ where: { cpf } });
     if (!pilot) {
-      throw new HTTPError("Pilot not found.", 404);
+      throw new HTTPError("Pilot not found.", EStatusCode.NOT_FOUND);
     }
 
     return Response.json(pilot);
@@ -21,17 +31,17 @@ export default class PilotByIdHandler extends Handler {
   async put(req: Request): Promise<Response> {
     const cpf = req.params.get("cpf");
     if (!cpf) {
-      throw new HTTPError("Invalid CPF.", 400);
+      throw new HTTPError("Invalid CPF.", EStatusCode.BAD_REQUEST);
     }
 
-    const pilot = await Pilot.get(cpf);
+    const pilot = await PilotDAO.get({ where: { cpf } });
 
     if (!pilot) {
-      throw new HTTPError("Pilot not found.", 404);
+      throw new HTTPError("Pilot not found.", EStatusCode.NOT_FOUND);
     }
 
     if (!req.parsedBody) {
-      throw new HTTPError("Invalid body.", 400);
+      throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
     pilot.name = req.parsedBody.name;
@@ -45,11 +55,9 @@ export default class PilotByIdHandler extends Handler {
     pilot.passport_number = req.parsedBody.passport_number;
     pilot.work_registration_number = req.parsedBody.work_registration_number;
     pilot.pilot_license_number = req.parsedBody.pilot_license_number;
-    pilot.flights = req.parsedBody.flights;
-    pilot.co_flights = req.parsedBody.co_flights;
     pilot.sex = req.parsedBody.sex;
 
-    const savedPilot = await Pilot.save(pilot.cpf, pilot);
+    const savedPilot = await PilotDAO.save(pilot.cpf, pilot);
 
     return Response.json(savedPilot);
   }
@@ -57,16 +65,16 @@ export default class PilotByIdHandler extends Handler {
   async delete(req: Request): Promise<Response> {
     const cpf = req.params.get("cpf");
     if (!cpf) {
-      throw new HTTPError("Invalid CPF.", 400);
+      throw new HTTPError("Invalid CPF.", EStatusCode.BAD_REQUEST);
     }
 
-    const pilot = await Pilot.get(cpf);
+    const pilot = await PilotDAO.get({ where: { cpf } });
 
     if (!pilot) {
-      throw new HTTPError("Pilot not found.", 404);
+      throw new HTTPError("Pilot not found.", EStatusCode.NOT_FOUND);
     }
 
-    await Pilot.delete(pilot.cpf);
+    await PilotDAO.delete(pilot.cpf);
 
     return Response.empty();
   }
@@ -83,6 +91,6 @@ export default class PilotByIdHandler extends Handler {
         return await this.delete(req);
     }
 
-    return Response.status(405);
+    return Response.status(EStatusCode.METHOD_NOT_ALLOWED);
   }
 }

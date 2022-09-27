@@ -3,9 +3,9 @@ import { HTTPError } from "apiframework/errors";
 import { Auth } from "apiframework/auth";
 import { Server } from "apiframework/app";
 
-import FlightDAO from "@core/dao/FlightDAO.js";
+import FlightInstanceDAO from "@core/dao/FlightInstanceDAO.js";
 
-export default class FlightByIdHandler extends Handler {
+export default class FlightInstanceByIdHandler extends Handler {
   #auth: Auth;
 
   constructor(server: Server) {
@@ -20,10 +20,10 @@ export default class FlightByIdHandler extends Handler {
       throw new HTTPError("Invalid ID.", EStatusCode.BAD_REQUEST);
     }
 
-    const flight = await FlightDAO.get({ where: { id: Number(id) } });
+    const flight = await FlightInstanceDAO.get({ where: { id: Number(id) } });
 
     if (!flight) {
-      throw new HTTPError("Flight not found.", EStatusCode.NOT_FOUND);
+      throw new HTTPError("Flight Instance not found.", EStatusCode.NOT_FOUND);
     }
 
     return Response.json(flight);
@@ -35,24 +35,27 @@ export default class FlightByIdHandler extends Handler {
       throw new HTTPError("Invalid ID.", EStatusCode.BAD_REQUEST);
     }
 
-    const flight = await FlightDAO.get({ where: { id: Number(id) } });
+    const flight = await FlightInstanceDAO.get({ where: { id: Number(id) } });
 
     if (!flight) {
-      throw new HTTPError("Flight not found.", EStatusCode.NOT_FOUND);
+      throw new HTTPError("Flight Instance not found.", EStatusCode.NOT_FOUND);
     }
 
     if (!req.parsedBody) {
       throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
-    flight.estimated_departure_date = req.parsedBody.estimated_departure_date;
-    flight.estimated_arrival_date = req.parsedBody.estimated_arrival_date;
-    flight.origin = req.parsedBody.origin;
-    flight.destination = req.parsedBody.destination;
+    flight.departure_date = req.parsedBody.departure_date;
+    flight.arrival_date = req.parsedBody.arrival_date;
+    flight.terminal_id = req.parsedBody.terminal_id;
+    flight.plane_id = req.parsedBody.plane_id;
+    flight.flight_id = req.parsedBody.flight_id;
+    flight.pilot_cpf = req.parsedBody.pilot_cpf;
+    flight.copilot_cpf = req.parsedBody.copilot_cpf;
 
-    const savedFlight = await FlightDAO.save(flight.id, flight);
+    const savedFlightInstance = await FlightInstanceDAO.save(flight.id, flight);
 
-    return Response.json(savedFlight);
+    return Response.json(savedFlightInstance);
   }
 
   async delete(req: Request): Promise<Response> {
@@ -61,13 +64,13 @@ export default class FlightByIdHandler extends Handler {
       throw new HTTPError("Invalid ID.", EStatusCode.BAD_REQUEST);
     }
 
-    const flight = await FlightDAO.get({ where: { id: Number(id) } });
+    const flight = await FlightInstanceDAO.get({ where: { id: Number(id) } });
 
     if (!flight) {
-      throw new HTTPError("Flight not found.", EStatusCode.NOT_FOUND);
+      throw new HTTPError("Flight Instance not found.", EStatusCode.NOT_FOUND);
     }
 
-    await FlightDAO.delete(flight.id);
+    await FlightInstanceDAO.delete(flight.id);
 
     return Response.empty();
   }

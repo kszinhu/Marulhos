@@ -1,11 +1,21 @@
 import { Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
+import { Auth } from "apiframework/auth";
+import { Server } from "apiframework/app";
 
-import Pilot from "../../models/Pilot.js";
+import PilotDAO from "@core/dao/PilotDAO.js";
 
 export default class PilotHandler extends Handler {
+  #auth: Auth;
+
+  constructor(server: Server) {
+    super(server);
+
+    this.#auth = server.providers.get("Auth");
+  }
+
   async get(req: Request): Promise<Response> {
-    const data = await Pilot.all();
+    const data = await PilotDAO.all();
 
     return Response.json(data);
   }
@@ -19,7 +29,7 @@ export default class PilotHandler extends Handler {
       ...req.parsedBody,
     };
 
-    const saved = await Pilot.create(data);
+    const saved = await PilotDAO.create(data);
     if (!saved) {
       throw new HTTPError("Failed to save Pilot.", 500);
     }

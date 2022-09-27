@@ -1,0 +1,1 @@
+export { Flight_Instance } from "@prisma/client";
