@@ -15,7 +15,10 @@ export default class CompanyByIdHandler extends Handler {
   }
 
   async get(req: Request): Promise<Response> {
-    const cnpj = req.params.get("cnpj");
+    const cnpj = req.params
+      .get("cnpj")
+      ?.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+
     if (!cnpj) {
       throw new HTTPError("Invalid CNPJ.", EStatusCode.BAD_REQUEST);
     }
@@ -29,7 +32,10 @@ export default class CompanyByIdHandler extends Handler {
   }
 
   async put(req: Request): Promise<Response> {
-    const cnpj = req.params.get("cnpj");
+    const cnpj = req.params
+      .get("cnpj")
+      ?.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+
     if (!cnpj) {
       throw new HTTPError("Invalid CNPJ.", EStatusCode.BAD_REQUEST);
     }
@@ -43,16 +49,19 @@ export default class CompanyByIdHandler extends Handler {
       throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
-    company.name = req.parsedBody.name;
-    company.contact = req.parsedBody.contact;
-
-    const updatedCompany = await CompanyDAO.save(company.cnpj, company);
+    const updatedCompany = await CompanyDAO.save(company.cnpj, {
+      ...company,
+      ...req.parsedBody,
+    });
 
     return Response.json(updatedCompany);
   }
 
   async delete(req: Request): Promise<Response> {
-    const cnpj = req.params.get("cnpj");
+    const cnpj = req.params
+      .get("cnpj")
+      ?.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+
     if (!cnpj) {
       throw new HTTPError("Invalid CNPJ.", EStatusCode.BAD_REQUEST);
     }
