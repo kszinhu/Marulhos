@@ -1,18 +1,28 @@
-import { Handler, Request, Response } from "apiframework/http";
+import { EStatusCode, Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
+import { Auth } from "apiframework/auth";
+import { Server } from "apiframework/app";
 
-import Terminal from "../../models/terminal.js";
+import TerminalDAO from "@core/dao/TerminalDAO.js";
 
 export default class TerminalByIdHandler extends Handler {
+  #auth: Auth;
+
+  constructor(server: Server) {
+    super(server);
+
+    this.#auth = server.providers.get("Auth");
+  }
+
   async get(req: Request): Promise<Response> {
     const id = req.params.get("id");
     if (!id) {
-      throw new HTTPError("Invalid ID.", 400);
+      throw new HTTPError("Invalid ID.", EStatusCode.BAD_REQUEST);
     }
 
-    const terminal = await Terminal.get(parseInt(id));
+    const terminal = await TerminalDAO.get({ where: { id: parseInt(id) } });
     if (!terminal) {
-      throw new HTTPError("Terminal not found.", 404);
+      throw new HTTPError("Terminal not found.", EStatusCode.NOT_FOUND);
     }
 
     return Response.json(terminal);
@@ -21,22 +31,22 @@ export default class TerminalByIdHandler extends Handler {
   async put(req: Request): Promise<Response> {
     const id = req.params.get("id");
     if (!id) {
-      throw new HTTPError("Invalid ID.", 400);
+      throw new HTTPError("Invalid ID.", EStatusCode.BAD_REQUEST);
     }
 
-    const terminal = await Terminal.get(parseInt(id));
+    const terminal = await TerminalDAO.get({ where: { id: parseInt(id) } });
 
     if (!terminal) {
-      throw new HTTPError("Terminal not found.", 404);
+      throw new HTTPError("Terminal not found.", EStatusCode.NOT_FOUND);
     }
 
     if (!req.parsedBody) {
-      throw new HTTPError("Invalid body.", 400);
+      throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
     terminal.capacity = req.parsedBody;
 
-    const savedTerminal = await Terminal.save(terminal.id, terminal);
+    const savedTerminal = await TerminalDAO.save(terminal.id, terminal);
 
     return Response.json(savedTerminal);
   }
@@ -44,16 +54,16 @@ export default class TerminalByIdHandler extends Handler {
   async delete(req: Request): Promise<Response> {
     const id = req.params.get("id");
     if (!id) {
-      throw new HTTPError("Invalid ID.", 400);
+      throw new HTTPError("Invalid ID.", EStatusCode.BAD_REQUEST);
     }
 
-    const terminal = await Terminal.get(parseInt(id));
+    const terminal = await TerminalDAO.get({ where: { id: parseInt(id) } });
 
     if (!terminal) {
-      throw new HTTPError("Terminal not found.", 404);
+      throw new HTTPError("Terminal not found.", EStatusCode.NOT_FOUND);
     }
 
-    await Terminal.delete(terminal.id);
+    await TerminalDAO.delete(terminal.id);
 
     return Response.empty();
   }
@@ -70,6 +80,6 @@ export default class TerminalByIdHandler extends Handler {
         return await this.delete(req);
     }
 
-    return Response.status(405);
+    return Response.status(EStatusCode.METHOD_NOT_ALLOWED);
   }
 }

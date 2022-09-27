@@ -1,18 +1,28 @@
-import { Handler, Request, Response } from "apiframework/http";
+import { EStatusCode, Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
+import { Auth } from "apiframework/auth";
+import { Server } from "apiframework/app";
 
-import Plane from "../../models/Plane.js";
+import PlaneDAO from "@core/dao/PlaneDAO.js";
 
 export default class PlaneByIdHandler extends Handler {
+  #auth: Auth;
+
+  constructor(server: Server) {
+    super(server);
+
+    this.#auth = server.providers.get("Auth");
+  }
+
   async get(req: Request): Promise<Response> {
     const id = req.params.get("id");
     if (!id) {
-      throw new HTTPError("Invalid ID.", 400);
+      throw new HTTPError("Invalid ID.", EStatusCode.BAD_REQUEST);
     }
 
-    const plane = await Plane.get(parseInt(id));
+    const plane = await PlaneDAO.get({ where: { id: parseInt(id) } });
     if (!plane) {
-      throw new HTTPError("Plane not found.", 404);
+      throw new HTTPError("Plane not found.", EStatusCode.NOT_FOUND);
     }
 
     return Response.json(plane);
@@ -21,17 +31,17 @@ export default class PlaneByIdHandler extends Handler {
   async put(req: Request): Promise<Response> {
     const id = req.params.get("id");
     if (!id) {
-      throw new HTTPError("Invalid ID.", 400);
+      throw new HTTPError("Invalid ID.", EStatusCode.BAD_REQUEST);
     }
 
-    const plane = await Plane.get(parseInt(id));
+    const plane = await PlaneDAO.get({ where: { id: parseInt(id) } });
 
     if (!plane) {
-      throw new HTTPError("Plane not found.", 404);
+      throw new HTTPError("Plane not found.", EStatusCode.NOT_FOUND);
     }
 
     if (!req.parsedBody) {
-      throw new HTTPError("Invalid body.", 400);
+      throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
     plane.capacity = req.parsedBody.capacity;
@@ -39,7 +49,7 @@ export default class PlaneByIdHandler extends Handler {
     plane.manufacture_date = req.parsedBody.manufacture_date;
     plane.company_cnpj = req.parsedBody.company_cnpj;
 
-    const savedPlane = await Plane.save(plane.id, plane);
+    const savedPlane = await PlaneDAO.save(plane.id, plane);
 
     return Response.json(savedPlane);
   }
@@ -47,16 +57,16 @@ export default class PlaneByIdHandler extends Handler {
   async delete(req: Request): Promise<Response> {
     const id = req.params.get("id");
     if (!id) {
-      throw new HTTPError("Invalid ID.", 400);
+      throw new HTTPError("Invalid ID.", EStatusCode.BAD_REQUEST);
     }
 
-    const plane = await Plane.get(parseInt(id));
+    const plane = await PlaneDAO.get({ where: { id: parseInt(id) } });
 
     if (!plane) {
-      throw new HTTPError("Plane not found.", 404);
+      throw new HTTPError("Plane not found.", EStatusCode.NOT_FOUND);
     }
 
-    await Plane.delete(plane.id);
+    await PlaneDAO.delete(plane.id);
 
     return Response.empty();
   }
@@ -73,6 +83,6 @@ export default class PlaneByIdHandler extends Handler {
         return await this.delete(req);
     }
 
-    return Response.status(405);
+    return Response.status(EStatusCode.METHOD_NOT_ALLOWED);
   }
 }

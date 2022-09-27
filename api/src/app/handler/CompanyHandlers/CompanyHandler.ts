@@ -1,18 +1,28 @@
-import { Handler, Request, Response } from "apiframework/http";
+import { EStatusCode, Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
+import { Auth } from "apiframework/auth";
+import { Server } from "apiframework/app";
 
-import Company from "../../models/Company.js";
+import CompanyDAO from "@core/dao/CompanyDAO.js";
 
 export default class CompanyHandler extends Handler {
+  #auth: Auth;
+
+  constructor(server: Server) {
+    super(server);
+
+    this.#auth = server.providers.get("Auth");
+  }
+
   async get(req: Request): Promise<Response> {
-    const data = await Company.all();
+    const data = await CompanyDAO.all();
 
     return Response.json(data);
   }
 
   async post(req: Request): Promise<Response> {
     if (!req.parsedBody) {
-      throw new HTTPError("Invalid body.", 400);
+      throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
     const data = {
@@ -21,12 +31,15 @@ export default class CompanyHandler extends Handler {
       contact: req.parsedBody.contact,
     };
 
-    const saved = await Company.create(data);
+    const saved = await CompanyDAO.create(data);
     if (!saved) {
-      throw new HTTPError("Failed to save Company.", 500);
+      throw new HTTPError(
+        "Failed to save Company.",
+        EStatusCode.INTERNAL_SERVER_ERROR
+      );
     }
 
-    return Response.json(data).withStatus(201);
+    return Response.json(data).withStatus(EStatusCode.CREATED);
   }
 
   async handle(req: Request): Promise<Response> {
@@ -38,6 +51,6 @@ export default class CompanyHandler extends Handler {
         return await this.post(req);
     }
 
-    return Response.status(405);
+    return Response.status(EStatusCode.METHOD_NOT_ALLOWED);
   }
 }

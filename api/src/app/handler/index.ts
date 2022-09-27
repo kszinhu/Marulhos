@@ -14,8 +14,10 @@ import UserHandler from "./UserHandlers/UserHandler.js";
 import UserByIdHandler from "./UserHandlers/UserByIdHandler.js";
 import FlyAttendantHandler from "./FlyAttendantHandlers/FlyAttendantHandler.js";
 import FlyAttendantByIdHandler from "./FlyAttendantHandlers/FlyAttendantByIdHandler.js";
-import FlightInstanceHandler from "./FlightInstaceHandlers/FlightInstanceHandler.js";
-import FlightInstanceByIdHandler from "./FlightInstaceHandlers/FlightInstanceByIdHandler.js";
+import FlightInstanceHandler from "./FlightInstanceHandlers/FlightInstanceHandler.js";
+import FlightInstanceByIdHandler from "./FlightInstanceHandlers/FlightInstanceByIdHandler.js";
+import Oauth2Handler from "./OauthHandlers/Oauth.js";
+import AuthHandler from "./AuthHandlers/AuthHandler.js";
 
 export const Handlers: { [key: string]: any } = {
   Terminal: {
@@ -54,4 +56,6 @@ export const Handlers: { [key: string]: any } = {
     FlightInstance: FlightInstanceHandler,
     FlightInstanceById: FlightInstanceByIdHandler,
   },
+  Oauth2Handler,
+  AuthHandler,
 };

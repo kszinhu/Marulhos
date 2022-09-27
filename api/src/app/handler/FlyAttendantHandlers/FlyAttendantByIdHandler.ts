@@ -1,38 +1,48 @@
-import { Handler, Request, Response } from "apiframework/http";
+import { EStatusCode, Handler, Request, Response } from "apiframework/http";
 import { HTTPError } from "apiframework/errors";
+import { Auth } from "apiframework/auth";
+import { Server } from "apiframework/app";
 
-import FlyAttendant from "../../models/FlyAttendant.js";
+import FlyAttendantDAO from "@core/dao/FlyAttendantDAO.js";
 
 export default class FlyAttendantByIdHandler extends Handler {
+  #auth: Auth;
+
+  constructor(server: Server) {
+    super(server);
+
+    this.#auth = server.providers.get("Auth");
+  }
+
   async get(req: Request): Promise<Response> {
     const cpf = req.params.get("cpf");
     if (!cpf) {
-      throw new HTTPError("Invalid CPF.", 400);
+      throw new HTTPError("Invalid CPF.", EStatusCode.BAD_REQUEST);
     }
 
-    const flight = await FlyAttendant.get(cpf);
+    const flyAttendant = await FlyAttendantDAO.get({ where: { cpf } });
 
-    if (!flight) {
-      throw new HTTPError("Fly Attendant not found.", 404);
+    if (!flyAttendant) {
+      throw new HTTPError("Fly Attendant not found.", EStatusCode.NOT_FOUND);
     }
 
-    return Response.json(flight);
+    return Response.json(flyAttendant);
   }
 
   async put(req: Request): Promise<Response> {
     const cpf = req.params.get("cpf");
     if (!cpf) {
-      throw new HTTPError("Invalid CPF.", 400);
+      throw new HTTPError("Invalid CPF.", EStatusCode.BAD_REQUEST);
     }
 
-    const flyAttendant = await FlyAttendant.get(cpf);
+    const flyAttendant = await FlyAttendantDAO.get({ where: { cpf } });
 
     if (!flyAttendant) {
-      throw new HTTPError("Fly Attendant not found.", 404);
+      throw new HTTPError("Fly Attendant not found.", EStatusCode.NOT_FOUND);
     }
 
     if (!req.parsedBody) {
-      throw new HTTPError("Invalid body.", 400);
+      throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
     flyAttendant.name = req.parsedBody.name;
@@ -46,9 +56,8 @@ export default class FlyAttendantByIdHandler extends Handler {
     flyAttendant.vaccination_number = req.parsedBody.vaccination_number;
     flyAttendant.work_registration_number =
       req.parsedBody.work_registration_number;
-    flyAttendant.flights = req.parsedBody.flights;
 
-    const savedFlyAttendant = await FlyAttendant.save(
+    const savedFlyAttendant = await FlyAttendantDAO.save(
       flyAttendant.cpf,
       flyAttendant
     );
@@ -59,16 +68,16 @@ export default class FlyAttendantByIdHandler extends Handler {
   async delete(req: Request): Promise<Response> {
     const cpf = req.params.get("cpf");
     if (!cpf) {
-      throw new HTTPError("Invalid CPF.", 400);
+      throw new HTTPError("Invalid CPF.", EStatusCode.BAD_REQUEST);
     }
 
-    const flight = await FlyAttendant.get(cpf);
+    const flyAttendant = await FlyAttendantDAO.get({ where: { cpf } });
 
-    if (!flight) {
-      throw new HTTPError("Fly Attendant not found.", 404);
+    if (!flyAttendant) {
+      throw new HTTPError("Fly Attendant not found.", EStatusCode.NOT_FOUND);
     }
 
-    await FlyAttendant.delete(flight.cpf);
+    await FlyAttendantDAO.delete(flyAttendant.cpf);
 
     return Response.empty();
   }
@@ -85,6 +94,6 @@ export default class FlyAttendantByIdHandler extends Handler {
         return await this.delete(req);
     }
 
-    return Response.status(405);
+    return Response.status(EStatusCode.METHOD_NOT_ALLOWED);
   }
 }

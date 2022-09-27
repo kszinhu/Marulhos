@@ -8,7 +8,11 @@ datasource db {
 }
 
 model User {
-  cpf            String    @id
+  id             Int       @id @default(autoincrement())
+  cpf            String    @unique
+  email          String    @unique
+  username       String    @unique @db.VarChar(255)
+  password       String    @db.VarChar(255)
   name           String
   last_name      String
   rg             String?
@@ -17,6 +21,8 @@ model User {
   address_cep    String
   address_number String
   tickets        Ticket[]  @relation("traveller")
+  created_at     DateTime  @default(now())
+  updated_at     DateTime? @updatedAt
 }
 
 model Pilot {
@@ -89,10 +95,10 @@ model Flight_Instance {
 model Ticket {
   id                 Int              @id @default(autoincrement())
   price              Decimal
-  passenger_cpf      String
+  passenger_id       Int
   flight_instance    Flight_Instance? @relation(fields: [flight_instance_id], references: [id])
   flight_instance_id Int?
-  user               User             @relation("traveller", fields: [passenger_cpf], references: [cpf])
+  user               User             @relation("traveller", fields: [passenger_id], references: [id])
 }
 
 model Company {
