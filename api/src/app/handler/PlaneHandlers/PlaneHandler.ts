@@ -25,11 +25,7 @@ export default class PlaneHandler extends Handler {
       throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
-    const data = {
-      ...req.parsedBody,
-    };
-
-    const saved = await PlaneDAO.create(data);
+    const saved = await PlaneDAO.create(req.parsedBody);
     if (!saved) {
       throw new HTTPError(
         "Failed to save Plane.",
@@ -37,7 +33,7 @@ export default class PlaneHandler extends Handler {
       );
     }
 
-    return Response.json(data).withStatus(201);
+    return Response.json(saved).withStatus(201);
   }
 
   async handle(req: Request): Promise<Response> {
