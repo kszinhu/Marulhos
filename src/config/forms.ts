@@ -19,18 +19,20 @@ import { User, Man, Plane, Icon, PackgeImport } from "tabler-icons-react";
 import { employeeSchema, pilotSchema } from "../schema";
 import { terminalSchema } from "../schema/terminalSchema";
 
-enum fieldType {
+export enum FieldType {
   text = "text",
   number = "number",
   date = "date",
   select = "select",
   radio = "radio",
+  modelSelect = "model-select",
+  modelTable = "model-table",
 }
 
-interface FieldInterface {
-  inputComponent: Function;
+export interface FieldInterface {
+  inputComponent: any;
   name: string;
-  type: fieldType;
+  type: FieldType;
   label?: string;
   placeholder?: string;
   description?: string;
@@ -48,34 +50,34 @@ const employeeFields: FieldInterface[] = [
   {
     inputComponent: TextInput,
     name: "name",
-    type: fieldType.text,
+    type: FieldType.text,
     label: "Nome",
     required: true,
   },
   {
     inputComponent: TextInput,
     name: "last_name",
-    type: fieldType.text,
+    type: FieldType.text,
     label: "Sobrenome",
     required: true,
   },
   {
     inputComponent: NumberInput,
     name: "cpf",
-    type: fieldType.number,
+    type: FieldType.number,
     label: "CPF",
     required: true,
   },
   {
     inputComponent: NumberInput,
     name: "rg",
-    type: fieldType.number,
+    type: FieldType.number,
     label: "RG",
   },
   {
     inputComponent: Radio,
     name: "sex",
-    type: fieldType.radio,
+    type: FieldType.radio,
     label: "Sexo",
     options: [
       { label: "Masculino", value: "M" },
@@ -87,28 +89,28 @@ const employeeFields: FieldInterface[] = [
   {
     inputComponent: DatePicker,
     name: "birth_date",
-    type: fieldType.date,
+    type: FieldType.date,
     label: "Data de Nascimento",
     locale: "pt-br",
   },
   {
     inputComponent: TextInput,
     name: "address_cep",
-    type: fieldType.text,
+    type: FieldType.text,
     label: "CEP",
     required: true,
   },
   {
     inputComponent: TextInput,
     name: "address_number",
-    type: fieldType.text,
+    type: FieldType.text,
     label: "Número",
     required: true,
   },
   {
     inputComponent: NumberInput,
     name: "salary",
-    type: fieldType.number,
+    type: FieldType.number,
     label: "Salário",
     required: true,
     parser: (value) => value.replace(/\R\$\s?|(,*)/g, ""),
@@ -120,21 +122,21 @@ const employeeFields: FieldInterface[] = [
   {
     inputComponent: TextInput,
     name: "vaccination_number",
-    type: fieldType.text,
+    type: FieldType.text,
     label: "Número da Carteira de vacinação",
     required: true,
   },
   {
     inputComponent: NumberInput,
     name: "passport_number",
-    type: fieldType.number,
+    type: FieldType.number,
     label: "Número do Passaporte",
     required: true,
   },
   {
     inputComponent: TextInput,
     name: "work_registration_number",
-    type: fieldType.text,
+    type: FieldType.text,
     label: "Número do Registro de Trabalho",
     required: true,
   },
@@ -160,7 +162,7 @@ export const formModels: FormModelInterface[] = [
       {
         inputComponent: NumberInput,
         name: "pilot_license_number",
-        type: fieldType.number,
+        type: FieldType.number,
         label: "Número da Habilitação",
         required: true,
       },
@@ -168,7 +170,7 @@ export const formModels: FormModelInterface[] = [
     schema: pilotSchema,
   },
   {
-    name: "flight_attendant",
+    name: "fly_attendant",
     slug: "comissarios",
     title: "Comissário",
     icon: User,
@@ -177,7 +179,7 @@ export const formModels: FormModelInterface[] = [
       {
         inputComponent: NumberInput,
         name: "work_registration_number",
-        type: fieldType.number,
+        type: FieldType.number,
         label: "Número do Registro",
         required: true,
       },
@@ -193,21 +195,21 @@ export const formModels: FormModelInterface[] = [
       {
         inputComponent: NumberInput,
         name: "capacity",
-        type: fieldType.number,
+        type: FieldType.number,
         label: "Capacidade",
         required: true,
       },
       {
         inputComponent: TextInput,
         name: "model",
-        type: fieldType.text,
+        type: FieldType.text,
         label: "Modelo",
         required: true,
       },
       {
         inputComponent: DatePicker,
         name: "manufacture_date",
-        type: fieldType.date,
+        type: FieldType.date,
         label: "Ano de Fabricação",
         allowFreeInput: true,
         locale: "pt-br",
@@ -225,14 +227,14 @@ export const formModels: FormModelInterface[] = [
       {
         inputComponent: NumberInput,
         name: "terminal_number",
-        type: fieldType.number,
+        type: FieldType.number,
         label: "Número do Terminal",
         required: true,
       },
       {
         inputComponent: NumberInput,
         name: "terminal_capacity",
-        type: fieldType.number,
+        type: FieldType.number,
         label: "Capacidade do Terminal",
         required: true,
       },
