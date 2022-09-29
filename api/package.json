@@ -13,7 +13,7 @@
     "prisma:seed": "prisma db seed",
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate --schema=./prisma/schema.prisma",
-    "test": "ts-node-esm src/test/index.ts"
+    "test": "ts-mocha --require mocha-suppress-logs -n loader=./bin/loader.js -p tsconfig.json src/tests/**/*.test.ts"
   },
   "prisma": {
     "seed": "node --loader ts-node/esm prisma/seed.ts"
@@ -21,9 +21,17 @@
   "keywords": [],
   "author": "kszinhu",
   "devDependencies": {
+    "@types/chai": "^4.3.3",
+    "@types/expect": "^24.3.0",
+    "@types/mocha": "^10.0.0",
     "@types/node": "^18.7.11",
     "autocannon": "^7.9.0",
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "mocha-suppress-logs": "^0.3.1",
     "nodemon": "^2.0.19",
+    "supertest": "^6.2.4",
+    "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
     "ttypescript": "^1.5.13",

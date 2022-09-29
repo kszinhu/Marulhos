@@ -22,13 +22,7 @@ class UserDAO implements ModelDAO<User> {
     birth_date: z.optional(z.date()),
     username: z.string({ required_error: "Requirido" }),
     sex: z.nativeEnum(Sex),
-    id: z.number({ required_error: "Requirido" }),
     rg: z.optional(z.string()),
-    created_at: z.date({
-      required_error: "Requirido",
-      invalid_type_error: "Data Inválida",
-    }),
-    updated_at: z.optional(z.date()),
   });
 
   validate(data: User | Prisma.UserCreateInput): boolean {
