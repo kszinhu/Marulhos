@@ -1,31 +1,67 @@
 import { Prisma } from "@prisma/client";
+import { HTTPError } from "apiframework/errors";
+import { EStatusCode } from "apiframework/http";
 
-import { prisma } from "../lib/prisma.js";
+import { ModelDAO } from "./BaseDAO.js";
 import { Company } from "../entities/Company.js";
 
-export default class UserDAO {
-  static async all(args?: Prisma.CompanyFindManyArgs): Promise<Company[]> {
+import { prisma } from "../lib/prisma.js";
+
+import { z } from "zod";
+
+class CompanyDAO implements ModelDAO<Company> {
+  #schema = z.object({
+    cnpj: z.string(),
+    name: z.string(),
+    contact: z.string(),
+  });
+
+  validate(data: Company | Prisma.CompanyCreateInput): boolean {
+    try {
+      this.#schema.parse(data);
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.log(error.formErrors.fieldErrors);
+
+        throw new HTTPError(
+          "Dados não correspondem ao formato esperado",
+          EStatusCode.UNPROCESSABLE_ENTITY
+        );
+      }
+
+      return false;
+    }
+  }
+
+  async all(args?: Prisma.CompanyFindManyArgs): Promise<Company[]> {
     return await prisma.company.findMany(args);
   }
 
-  static async create(data: Prisma.CompanyCreateInput): Promise<Company> {
+  async create(data: Prisma.CompanyCreateInput): Promise<Company> {
+    this.validate(data);
+
     return await prisma.company.create({ data });
   }
 
-  static async get(args: Prisma.CompanyFindFirstArgs): Promise<Company | null> {
+  async get(args: Prisma.CompanyFindFirstArgs): Promise<Company | null> {
     return await prisma.company.findFirst(args);
   }
 
-  static async save(cnpj: string, data: Company): Promise<Company> {
+  async save(cnpj: string, data: Company): Promise<Company> {
+    this.validate(data);
+
     return await prisma.company.update({
       where: { cnpj },
       data,
     });
   }
 
-  static async delete(cnpj: string): Promise<Company> {
+  async delete(cnpj: string): Promise<Company> {
     return await prisma.company.delete({
       where: { cnpj },
     });
   }
 }
+
+export default new CompanyDAO();
