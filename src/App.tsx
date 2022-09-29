@@ -4,6 +4,7 @@ import {
   ColorScheme,
   ColorSchemeProvider,
   MantineProvider,
+  MantineThemeOverride,
 } from "@mantine/core";
 
 import { NotificationsProvider } from "@mantine/notifications";
@@ -26,8 +27,7 @@ function App() {
       <MantineProvider
         theme={{
           colorScheme,
-          fontFamily: "Inter, sans-serif !important",
-          ...(applicationTheme as any),
+          ...applicationTheme,
         }}
         withGlobalStyles
         withNormalizeCSS

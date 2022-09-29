@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { useForm, yupResolver } from "@mantine/form";
 
-import { ManagerProps } from ".";
+import { ManagerProps } from "..";
 
 import { Box, Button } from "@mantine/core";
+
 
 enum fieldType {
   text = "text",
@@ -14,14 +14,12 @@ enum fieldType {
   radio = "radio",
 }
 
-export default function ManagerEditModel({
+export default function ManagerAddModel({
   schema,
   yupSchema,
   title,
   onSubmit,
 }: ManagerProps) {
-  const { id } = useParams();
-
   const form = useForm({
     initialValues: schema.reduce((acc, field) => {
       (acc as any)[field.name] = field.defaultValue;
@@ -33,8 +31,6 @@ export default function ManagerEditModel({
   useEffect(() => {
     // change title of the page
     document.title = `Manager - ${title}`;
-
-    // call api to get data
   }, []);
 
   return (

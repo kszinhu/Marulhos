@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useForm, yupResolver } from "@mantine/form";
 import { showNotification, updateNotification } from "@mantine/notifications";
 
-import { ManagerProps } from ".";
+import { ManagerProps } from "../";
 
-import API from "../../services/api";
+import API from "../../../services/api";
 
 import { Box, Button, Group } from "@mantine/core";
 import { IconX, IconCheck } from "@tabler/icons";
@@ -43,7 +43,7 @@ export default function ManagerListModel({
       disallowClose: true,
     });
 
-    API.get(`${import.meta.env.VITE_API_URL}${endpoint}`)
+    API.get(`/api/${endpoint}`)
       .then(({ data }: any) => {
         form.setValues(data);
         updateNotification({
@@ -66,7 +66,7 @@ export default function ManagerListModel({
           autoClose: 1500,
         });
       });
-  }, []);
+  }, [title]);
 
   return (
     <section>

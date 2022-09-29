@@ -1,9 +1,9 @@
 import { SchemaOf } from "yup";
 
-import ManagerAddModel from "./add";
-import ManagerEditModel from "./edit";
-import ManagerViewModel from "./view";
-import ManagerListModel from "./list";
+import ManagerAddModel from "./Add";
+import ManagerEditModel from "./Edit";
+import ManagerViewModel from "./Show";
+import ManagerListModel from "./List";
 
 interface FieldInterface {
   inputComponent: any;

@@ -38,8 +38,8 @@ interface FieldInterface {
   allowFreeInput?: boolean;
   defaultValue?: number | string;
   dateParser?: (value: any) => any;
-  parser?: (value: any) => any;
-  formatter?: (value: any) => any;
+  parser?: (value: any) => string;
+  formatter?: (value: any) => string;
   options?: { label: string; value: string }[];
   locale?: string;
 }
