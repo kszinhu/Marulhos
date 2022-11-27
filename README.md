@@ -16,7 +16,7 @@ This is a simple application to manage entities of an airport using a manager ro
 - Clone the repository
 - Install dependencies with `npm ci`
 - Run the application with `npm run dev`
-- Run the API with `cd api && npm run dev`
+- Run the API with `cd api && npm ci && npm run dev`
 
 ### Project
 
