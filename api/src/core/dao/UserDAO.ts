@@ -1,6 +1,6 @@
 import { Prisma, Sex } from "@prisma/client";
-import { HTTPError } from "apiframework/errors";
-import { EStatusCode } from "apiframework/http";
+import { HTTPError } from "midori/errors";
+import { EStatusCode } from "midori/http";
 
 import { ModelDAO } from "./BaseDAO.js";
 import { User } from "../entities/User.js";
@@ -57,7 +57,7 @@ class UserDAO implements ModelDAO<User> {
     return await prisma.user.findFirst(args);
   }
 
-  async save(id: number, data: User): Promise<User> {
+  async save(id: string, data: User): Promise<User> {
     this.validate(data);
 
     return await prisma.user.update({
@@ -66,7 +66,7 @@ class UserDAO implements ModelDAO<User> {
     });
   }
 
-  async delete(id: number): Promise<User> {
+  async delete(id: string): Promise<User> {
     return await prisma.user.delete({
       where: { id },
     });

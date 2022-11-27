@@ -1,11 +1,12 @@
-import { EStatusCode, Handler, Request, Response } from "apiframework/http";
-import { HTTPError } from "apiframework/errors";
-import { Payload } from "apiframework/util/jwt.js";
-import { generateUUID } from "apiframework/util/uuid.js";
-import { Server } from "apiframework/app";
-import { JWT } from "apiframework/jwt";
+import { EStatusCode, Handler, Request, Response } from "midori/http";
+import { HTTPError } from "midori/errors";
+import { Payload } from "midori/util/jwt.js";
+import { generateUUID } from "midori/util/uuid.js";
+import { Server } from "midori/app";
+import { AuthServiceProvider, JWTServiceProvider } from "midori/providers";
+import { JWT } from "midori/jwt";
 
-import { Auth, User } from "apiframework/auth";
+import { Auth, User } from "midori/auth";
 
 export default class Oauth2Handler extends Handler {
   #jwt: JWT;
@@ -14,8 +15,8 @@ export default class Oauth2Handler extends Handler {
   constructor(server: Server) {
     super(server);
 
-    this.#jwt = server.providers.get("JWT");
-    this.#auth = server.providers.get("Auth");
+    this.#jwt = server.services.get(JWTServiceProvider);
+    this.#auth = server.services.get(AuthServiceProvider);
   }
 
   async handlePasswordGrant(req: Request): Promise<Response> {
@@ -45,8 +46,7 @@ export default class Oauth2Handler extends Handler {
 
     const data: Payload & {
       username: string;
-      // email: string;
-      scopes: string[];
+      scope: string;
     } = {
       iss: "http://localhost:3000",
       sub: user.id,
@@ -54,9 +54,8 @@ export default class Oauth2Handler extends Handler {
       iat: Math.floor(issuedAt / 1000),
       jti: generateUUID(),
 
-      // email: user.email!,
       username: user.username,
-      scopes: scope.split(" "),
+      scope,
     };
 
     const jwt = this.#jwt.sign(data);

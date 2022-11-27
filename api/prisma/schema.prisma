@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id             Int       @id @default(autoincrement())
+  id             String    @id @default(cuid())
   cpf            String    @unique
   email          String    @unique
   username       String    @unique @db.VarChar(255)
@@ -95,7 +95,7 @@ model Flight_Instance {
 model Ticket {
   id                 Int              @id @default(autoincrement())
   price              Decimal
-  passenger_id       Int
+  passenger_id       String
   flight_instance    Flight_Instance? @relation(fields: [flight_instance_id], references: [id])
   flight_instance_id Int?
   user               User             @relation("traveller", fields: [passenger_id], references: [id])

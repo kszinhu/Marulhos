@@ -1,8 +1,8 @@
-import { Router as RouterWrapper } from "apiframework/router";
+import { Router as RouterWrapper } from "midori/router";
 
 import { Handlers } from "../handler/index.js";
 
-import { AuthBearerMiddleware } from "apiframework/middlewares";
+import { AuthBearerMiddleware } from "midori/middlewares";
 import OauthScopeMiddleware from "../middleware/OauthScopeMiddleware.js";
 
 const OauthScopeMiddlewareAdmin = OauthScopeMiddleware({ scopes: ["admin"] });
@@ -20,13 +20,13 @@ const {
   FlyAttendant: { FlyAttendant, FlyAttendantById },
   FlightInstance: { FlightInstance, FlightInstanceById },
   Oauth2Handler,
-  AuthHandler,
+  AuthHandler: { Register: RegisterHandler, User: UserAuthHandler },
 } = Handlers;
 
 Router.group("/api", () => {
   Router.group("/auth", () => {
-    Router.post("/register", AuthHandler).withName("auth.register");
-    Router.get("/user", AuthHandler, [AuthBearerMiddleware]).withName(
+    Router.post("/register", RegisterHandler).withName("auth.register");
+    Router.get("/user", UserAuthHandler, [AuthBearerMiddleware]).withName(
       "auth.user_info"
     );
   });

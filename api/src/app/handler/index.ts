@@ -17,7 +17,7 @@ import FlyAttendantByIdHandler from "./FlyAttendantHandlers/FlyAttendantByIdHand
 import FlightInstanceHandler from "./FlightInstanceHandlers/FlightInstanceHandler.js";
 import FlightInstanceByIdHandler from "./FlightInstanceHandlers/FlightInstanceByIdHandler.js";
 import Oauth2Handler from "./OauthHandlers/Oauth.js";
-import AuthHandler from "./AuthHandlers/AuthHandler.js";
+import { Register as RegisterHandler, User as UserAuthHandler } from "./AuthHandlers/AuthHandler.js";
 
 export const Handlers: { [key: string]: any } = {
   Terminal: {
@@ -57,5 +57,8 @@ export const Handlers: { [key: string]: any } = {
     FlightInstanceById: FlightInstanceByIdHandler,
   },
   Oauth2Handler,
-  AuthHandler,
+  AuthHandler: {
+    Register: RegisterHandler,
+    User: UserAuthHandler,
+  }
 };

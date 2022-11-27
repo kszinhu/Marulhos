@@ -1,7 +1,8 @@
-import { EStatusCode, Handler, Request, Response } from "apiframework/http";
-import { HTTPError } from "apiframework/errors";
-import { Auth } from "apiframework/auth";
-import { Server } from "apiframework/app";
+import { EStatusCode, Handler, Request, Response } from "midori/http";
+import { HTTPError } from "midori/errors";
+import { Auth } from "midori/auth";
+import { AuthServiceProvider } from "midori/providers";
+import { Server } from "midori/app";
 
 import { Prisma } from "@prisma/client";
 
@@ -13,7 +14,7 @@ export default class TerminalHandler extends Handler {
   constructor(server: Server) {
     super(server);
 
-    this.#auth = server.providers.get("Auth");
+    this.#auth = server.services.get(AuthServiceProvider);
   }
 
   async get(req: Request): Promise<Response> {

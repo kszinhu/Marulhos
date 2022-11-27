@@ -1,8 +1,8 @@
-import { Server } from "apiframework/app";
+import { Server } from "midori/app";
 import {
-  CORSMiddleware,
+  CORSMiddlewareFactory,
   DispatchMiddleware,
-  ErrorMiddleware,
+  ErrorMiddlewareFactory,
   ErrorLoggerMiddleware,
   HTTPErrorMiddleware,
   ImplicitHeadMiddleware,
@@ -10,11 +10,10 @@ import {
   MethodNotAllowedMiddleware,
   NotFoundMiddleware,
   ParseBodyMiddleware,
-  ReadBodyMiddleware,
   RequestLoggerMiddleware,
-  ResponseCompressionMiddleware,
+  ResponseCompressionMiddlewareFactory,
   RouterMiddleware,
-} from "apiframework/middlewares";
+} from "midori/middlewares";
 
 export default function pipeline(server: Server): void {
   /**
@@ -29,7 +28,7 @@ export default function pipeline(server: Server): void {
    *
    * This middleware should be one of the first middlewares in the pipeline
    */
-  server.pipe(ErrorMiddleware({ exposeErrors: !!process.env.EXPOSE_ERRORS }));
+  server.pipe(ErrorMiddlewareFactory({ exposeErrors: !!process.env.EXPOSE_ERRORS }));
 
   /**
    * Log every error using the Logger Service Provider
@@ -41,7 +40,7 @@ export default function pipeline(server: Server): void {
   /**
    * Compress the response using the Accept-Encoding header
    */
-  server.pipe(ResponseCompressionMiddleware({ contentTypes: ["*/*"] }));
+  server.pipe(ResponseCompressionMiddlewareFactory({ contentTypes: ["*/*"] }));
 
   /**
    * Handle any uncaught HTTPError, and return a JSON response
@@ -67,10 +66,9 @@ export default function pipeline(server: Server): void {
   /**
    * Read the request body, then parse it based on the Content-Type header
    */
-  server.pipe(ReadBodyMiddleware);
   server.pipe(ParseBodyMiddleware);
 
-  server.pipe(CORSMiddleware({ origin: "*" }));
+  server.pipe(CORSMiddlewareFactory({ origin: "*" }));
 
   /**
    * Dispatch the Middleware Chain the Router Middleware found

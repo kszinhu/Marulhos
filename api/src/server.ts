@@ -1,14 +1,14 @@
 import dotenv from "dotenv";
 
-import { Server } from "apiframework/app";
+import { Server } from "midori/app";
 
 // import router from "./app/routes/index.js";
 import pipeline from "./pipeline.js";
 import providers from "./providers.js";
-import { prisma } from "./core/lib/prisma.js";
+import { prisma } from "@core/lib/prisma.js";
 
-dotenv.config({ path: "./.env.dev", override: true });
 dotenv.config({ override: true });
+dotenv.config({ path: "./.env.dev", override: true });
 
 export const server = new Server();
 

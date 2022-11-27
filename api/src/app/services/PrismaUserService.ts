@@ -1,26 +1,27 @@
-import { Hash } from "apiframework/hash";
-import { Server } from "apiframework/app";
+import { Hash } from "midori/hash";
+import { Server } from "midori/app";
+import { UserService } from "midori/auth";
 
 import UserDAO from "@core/dao/UserDAO.js";
 
 interface UserData {
-  id: number;
+  id: string;
   cpf: string;
   email: string;
   username: string;
 }
 
-export default class PrismaUserProvider {
+export default class PrismaUserService {
   #hash: Hash;
 
-  constructor(server: Server) {
-    this.#hash = server.providers.get("Hash");
+  constructor(hash: Hash) {
+    this.#hash = hash;
   }
 
-  async getUserById(id: number): Promise<UserData | null> {
+  async getUserById(id: string): Promise<UserData | null> {
     return await UserDAO.get({
       select: { id: true, cpf: true, username: true, password: true },
-      where: { id: Number(id) },
+      where: { id: id },
     });
   }
 

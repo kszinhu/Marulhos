@@ -1,5 +1,5 @@
-import { EStatusCode, Handler, Request, Response } from "apiframework/http";
-import { HTTPError } from "apiframework/errors";
+import { EStatusCode, Handler, Request, Response } from "midori/http";
+import { HTTPError } from "midori/errors";
 
 import UserDAO from "@core/dao/UserDAO.js";
 

@@ -3,7 +3,7 @@ CREATE TYPE "Sex" AS ENUM ('M', 'F', 'X');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "cpf" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "username" VARCHAR(255) NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE "Flight_Instance" (
 CREATE TABLE "Ticket" (
     "id" SERIAL NOT NULL,
     "price" DECIMAL(65,30) NOT NULL,
-    "passenger_id" INTEGER NOT NULL,
+    "passenger_id" TEXT NOT NULL,
     "flight_instance_id" INTEGER,
 
     CONSTRAINT "Ticket_pkey" PRIMARY KEY ("id")

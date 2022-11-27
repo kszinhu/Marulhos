@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-// @ts-ignore
-import { SeedFunction, Seeds } from "./seeds/index";
+import { SeedFunction, Seeds } from "./seeds/index.js";
 
 const prisma = new PrismaClient();
 

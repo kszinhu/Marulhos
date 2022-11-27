@@ -1,5 +1,5 @@
-import { EStatusCode, Handler, Request, Response } from "apiframework/http";
-import { HTTPError } from "apiframework/errors";
+import { EStatusCode, Handler, Request, Response } from "midori/http";
+import { HTTPError } from "midori/errors";
 
 import UserDAO from "@core/dao/UserDAO.js";
 
@@ -12,7 +12,7 @@ export default class UserByIdHandler extends Handler {
 
     const user = await UserDAO.get({
       where: {
-        id: Number(id),
+        id,
       },
     });
 
@@ -31,7 +31,7 @@ export default class UserByIdHandler extends Handler {
 
     const user = await UserDAO.get({
       where: {
-        id: Number(id),
+        id,
       },
     });
 
@@ -65,7 +65,7 @@ export default class UserByIdHandler extends Handler {
 
     const user = await UserDAO.get({
       where: {
-        id: Number(id),
+        id,
       },
     });
 

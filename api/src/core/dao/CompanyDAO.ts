@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { HTTPError } from "apiframework/errors";
-import { EStatusCode } from "apiframework/http";
+import { HTTPError } from "midori/errors";
+import { EStatusCode } from "midori/http";
 
 import { ModelDAO } from "./BaseDAO.js";
 import { Company } from "../entities/Company.js";

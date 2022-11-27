@@ -1,23 +1,22 @@
-import { Server } from "apiframework/app";
-import { HTTPError } from "apiframework/errors";
-import { Hash } from "apiframework/hash";
-import { EStatusCode, Handler, Request, Response } from "apiframework/http";
+import { Server } from "midori/app";
+import { Auth } from "midori/auth";
+import { AuthServiceProvider, HashServiceProvider } from "midori/providers";
+import { HTTPError } from "midori/errors";
+import { Hash } from "midori/hash";
+import { EStatusCode, Handler, Request, Response } from "midori/http";
 
 import UserDAO from "@core/dao/UserDAO.js";
-import { Auth } from "apiframework/auth";
 
-export default class AuthHandler extends Handler {
+export class Register extends Handler {
   #hash: Hash;
-  #auth: Auth;
 
   constructor(server: Server) {
     super(server);
 
-    this.#hash = server.providers.get("Hash");
-    this.#auth = server.providers.get("Auth");
+    this.#hash = server.services.get(HashServiceProvider);
   }
 
-  async register(req: Request): Promise<Response> {
+  async handle(req: Request): Promise<Response> {
     if (!req.parsedBody.username || !req.parsedBody.password) {
       throw new HTTPError("Invalid request.", EStatusCode.BAD_REQUEST);
     }
@@ -49,21 +48,21 @@ export default class AuthHandler extends Handler {
 
     return Response.status(EStatusCode.CREATED);
   }
+}
 
-  async user(req: Request): Promise<Response> {
+export class User extends Handler {
+  #auth: Auth;
+
+  constructor(server: Server) {
+    super(server);
+
+    this.#auth = server.services.get(AuthServiceProvider);
+  }
+
+  async handle(req: Request): Promise<Response> {
     // Since the AuthBearer middleware is used, the user is already authenticated
     const user = this.#auth.user(req)!;
 
     return Response.json({ user, jwt: req.container.get("jwt") });
-  }
-
-  async handle(req: Request): Promise<Response> {
-    if (req.path === "/api/auth/register/") {
-      return await this.register(req);
-    } else if (req.path === "/api/auth/user/") {
-      return await this.user(req);
-    }
-
-    return Response.status(EStatusCode.NOT_FOUND);
   }
 }
