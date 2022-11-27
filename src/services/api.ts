@@ -11,9 +11,6 @@ const API = axios.create({
     Accept: "*/*",
     Authorization: `Bearer ${token}`,
   },
-  data: {
-    scope,
-  },
 });
 
 export default API;

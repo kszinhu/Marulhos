@@ -31,11 +31,17 @@ export default function SignIn({ yupSchema, title, onSubmit }: ManagerProps) {
     },
   });
 
-  const handleSubmit = (values: typeof form.values) => {
-    onSubmit({
+  const handleSubmit = async (values: typeof form.values) => {
+    const { data } = await onSubmit({
       ...values,
       grant_type: "password",
+      scope: "admin",
     });
+
+    if (data) {
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("scope", data.scope);
+    }
   };
 
   return (
