@@ -28,7 +28,9 @@ export default function pipeline(server: Server): void {
    *
    * This middleware should be one of the first middlewares in the pipeline
    */
-  server.pipe(ErrorMiddlewareFactory({ exposeErrors: !!process.env.EXPOSE_ERRORS }));
+  server.pipe(
+    ErrorMiddlewareFactory({ exposeErrors: !!process.env.EXPOSE_ERRORS })
+  );
 
   /**
    * Log every error using the Logger Service Provider
@@ -59,6 +61,8 @@ export default function pipeline(server: Server): void {
    * ImplicitOptionsMiddleware will automatically respond to OPTIONS requests with the allowed methods for the requested route
    * MethodNotAllowedMiddleware will automatically respond to requests with an invalid method with a 405 Method Not Allowed response
    */
+  server.pipe(CORSMiddlewareFactory({ origin: "*" }));
+
   server.pipe(ImplicitHeadMiddleware);
   server.pipe(ImplicitOptionsMiddleware);
   server.pipe(MethodNotAllowedMiddleware);
@@ -67,8 +71,6 @@ export default function pipeline(server: Server): void {
    * Read the request body, then parse it based on the Content-Type header
    */
   server.pipe(ParseBodyMiddleware);
-
-  server.pipe(CORSMiddlewareFactory({ origin: "*" }));
 
   /**
    * Dispatch the Middleware Chain the Router Middleware found
