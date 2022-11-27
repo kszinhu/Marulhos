@@ -18,6 +18,7 @@ import { User, Man, Plane, Icon, PackgeImport } from "tabler-icons-react";
 // Schemas
 import { employeeSchema, pilotSchema } from "../schema";
 import { terminalSchema } from "../schema/terminalSchema";
+import { loginUserSchema, registerUserSchema } from "../schema/userSchema";
 
 export enum FieldType {
   text = "text",
@@ -33,7 +34,7 @@ export interface FieldInterface {
   inputComponent: any;
   name: string;
   type: FieldType;
-  label?: string;
+  label: string;
   placeholder?: string;
   description?: string;
   required?: boolean;
@@ -44,6 +45,7 @@ export interface FieldInterface {
   formatter?: (value: any) => string;
   options?: { label: string; value: string }[];
   locale?: string;
+  omit?: boolean; // omit from table view
 }
 
 const employeeFields: FieldInterface[] = [
@@ -73,6 +75,7 @@ const employeeFields: FieldInterface[] = [
     name: "rg",
     type: FieldType.number,
     label: "RG",
+    omit: true,
   },
   {
     inputComponent: Radio,
@@ -84,6 +87,7 @@ const employeeFields: FieldInterface[] = [
       { label: "Feminino", value: "F" },
       { label: "Não Definido", value: "X" },
     ],
+    omit: true,
     required: true,
   },
   {
@@ -92,6 +96,7 @@ const employeeFields: FieldInterface[] = [
     type: FieldType.date,
     label: "Data de Nascimento",
     locale: "pt-br",
+    omit: true,
   },
   {
     inputComponent: TextInput,
@@ -99,6 +104,7 @@ const employeeFields: FieldInterface[] = [
     type: FieldType.text,
     label: "CEP",
     required: true,
+    omit: true,
   },
   {
     inputComponent: TextInput,
@@ -106,6 +112,7 @@ const employeeFields: FieldInterface[] = [
     type: FieldType.text,
     label: "Número",
     required: true,
+    omit: true,
   },
   {
     inputComponent: NumberInput,
@@ -240,5 +247,27 @@ export const formModels: FormModelInterface[] = [
       },
     ],
     schema: terminalSchema,
+  },
+];
+
+interface FormAuthenticationInterface {
+  endpoint: string; // api endpoint
+  slug: string; // url friendly
+  title: string;
+  schema: SchemaOf<any>;
+}
+
+export const formAuthentications: FormAuthenticationInterface[] = [
+  {
+    endpoint: "auth/register",
+    slug: "sign-up",
+    title: "Cadastrar",
+    schema: registerUserSchema,
+  },
+  {
+    endpoint: "oauth/token",
+    slug: "sign-in",
+    title: "Entrar",
+    schema: loginUserSchema,
   },
 ];

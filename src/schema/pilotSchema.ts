@@ -3,8 +3,8 @@ import * as Yup from "yup";
 export const pilotSchema = Yup.object().shape({
   name: Yup.string().required("Nome é obrigatório"),
   last_name: Yup.string().required("Sobrenome é obrigatório"),
-  CPF: Yup.number().required("CPF é obrigatório"),
-  RG: Yup.number(),
+  cpf: Yup.number().required("CPF é obrigatório"),
+  rg: Yup.number(),
   sex: Yup.mixed().oneOf(["M", "F", "X"]),
   birth_date: Yup.date(),
   address_cep: Yup.number(),

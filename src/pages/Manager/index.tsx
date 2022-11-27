@@ -6,13 +6,22 @@ import ManagerAddModel from "./Add";
 import ManagerEditModel from "./Edit";
 import ManagerViewModel from "./Show";
 import ManagerListModel from "./List";
+import { AxiosResponse } from "axios";
+
+interface Response {
+  data: {
+    [key: string]: any;
+  };
+  message: string;
+  status: number;
+}
 
 export interface ManagerProps {
   endpoint: string;
   schema: FieldInterface[];
   yupSchema: SchemaOf<any>;
   title: string;
-  onSubmit: (values: any) => void; // OnSubmit is a function that takes the form values and submits them to the server
+  onSubmit: (values: any) => any;
 }
 
 const Manager = {

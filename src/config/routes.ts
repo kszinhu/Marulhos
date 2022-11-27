@@ -2,8 +2,9 @@ import * as Pages from "../pages";
 
 import { SchemaOf } from "yup";
 
-import { formModels } from "./forms";
+import { formModels, formAuthentications } from "./forms";
 import { Icon } from "tabler-icons-react";
+import API from "@services/api";
 
 enum layoutTypes {
   default = "default",
@@ -21,9 +22,12 @@ interface ObjectRoute {
   title?: string;
   index?: boolean;
   exact?: boolean;
+  onSubmit?: (values: any) => any;
+  onEdit?: (values: any) => any;
 }
 
 interface Route {
+  type: "model" | "manager" | "authentication" | "default";
   layout: layoutTypes;
   routes: ObjectRoute[];
 }
@@ -40,11 +44,35 @@ export const managerRoutes: ObjectRoute[] = formModels.map(
     layout: layoutTypes.manager,
     schema: fields,
     yupSchema: schema,
+    onSubmit: (values) => API.post(`/api/${name}s`, values),
+    onEdit: (values) => API.put(`/api/${name}s/${values.id}`, values),
+  })
+);
+
+export const AuthenticationRoutes: ObjectRoute[] = formAuthentications.map(
+  ({ endpoint, slug, title, schema }) => ({
+    path: slug, // sign-in
+    key: slug,
+    title,
+    component:
+      // remove "-" and capitalize all first letters
+      Pages.Authentication[
+        slug
+          .replace(/-/g, " ")
+          .split(" ")
+          .map((word) => word[0].toUpperCase() + word.slice(1))
+          .join("") as keyof typeof Pages.Authentication
+      ],
+    layout: layoutTypes.none,
+    schema: [], // static authentication forms
+    yupSchema: schema,
+    onSubmit: (values) => API.post(`api/${endpoint}/`, values),
   })
 );
 
 export const routes: Route[] = [
   {
+    type: "default",
     layout: layoutTypes.default,
     routes: [
       {
@@ -58,10 +86,17 @@ export const routes: Route[] = [
     ],
   },
   {
+    type: "manager",
     layout: layoutTypes.manager,
     routes: managerRoutes,
   },
   {
+    type: "authentication",
+    layout: layoutTypes.none,
+    routes: AuthenticationRoutes,
+  },
+  {
+    type: "default",
     layout: layoutTypes.none,
     routes: [
       {

@@ -51,7 +51,7 @@ export default function FormLayout() {
               />
             </MediaQuery>
 
-            <Text>Application header</Text>
+            <Text>Nilceu Airlines</Text>
           </div>
         </Header>
       }

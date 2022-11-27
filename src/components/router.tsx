@@ -7,7 +7,7 @@ import * as layouts from "./layouts";
 export default function ApplicationRouter() {
   return (
     <Routes>
-      {applicationRoutes.map(({ layout, routes }, index) => {
+      {applicationRoutes.map(({ type, layout, routes }, index) => {
         let LayoutComponent: any;
         switch (layout) {
           case "manager":
@@ -18,34 +18,41 @@ export default function ApplicationRouter() {
             LayoutComponent = layouts.Layout;
             break;
         }
-        const isManagerRoute = layout === "manager";
+        const isManagerRoute = type === "manager";
+        const isAuthRoute = type === "authentication";
 
         return (
           <Route
             key={`route-${index}`}
             element={layout !== "none" ? <LayoutComponent /> : <Outlet />}
             {...(isManagerRoute ? { path: "/manager" } : {})}
+            {...(isAuthRoute ? { path: "/auth" } : {})}
           >
             {routes.map(
-              ({
-                path,
-                key,
-                title,
-                modelName,
-                component: Component,
-                exact,
-                index,
-                schema,
-                yupSchema,
-              }) =>
-                !isManagerRoute ? (
+              (
+                {
+                  path,
+                  key,
+                  title,
+                  modelName,
+                  component: Component,
+                  exact,
+                  index,
+                  schema,
+                  yupSchema,
+                  onSubmit,
+                  onEdit,
+                },
+                idIterator
+              ) =>
+                !isManagerRoute && !isAuthRoute ? (
                   <Route
-                    key={key}
+                    key={`${key}-${idIterator}`}
                     path={path}
                     element={<Component title={title} />}
                     index={index ? undefined : false}
                   />
-                ) : (
+                ) : !isAuthRoute ? (
                   <>
                     <Route
                       key={`list-${key}`}
@@ -84,6 +91,7 @@ export default function ApplicationRouter() {
                           schema={schema}
                           title={title}
                           yupSchema={yupSchema}
+                          onSubmit={onEdit}
                         />
                       }
                       index={index}
@@ -98,6 +106,23 @@ export default function ApplicationRouter() {
                           schema={schema}
                           title={title}
                           yupSchema={yupSchema}
+                          onSubmit={onSubmit}
+                        />
+                      }
+                      index={index}
+                      {...(exact ? { exact: true } : {})} // Conditionally add the exact prop to the Route element
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Route
+                      key={`auth-${key}`}
+                      path={path}
+                      element={
+                        <Component
+                          title={title}
+                          yupSchema={yupSchema}
+                          onSubmit={onSubmit}
                         />
                       }
                       index={index}

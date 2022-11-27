@@ -28,11 +28,9 @@ export default function ManagerAddModel({
   return (
     <section>
       <Body sx={{ maxWidth: 600 }} mx='auto'>
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <form onSubmit={form.onSubmit(onSubmit)}>
           {schema.map((field) => handleFieldTypes(field, form))}
-          <Button type='submit' onClick={onSubmit}>
-            Adicionar
-          </Button>
+          <Button type='submit'>Adicionar</Button>
         </form>
       </Body>
     </section>
