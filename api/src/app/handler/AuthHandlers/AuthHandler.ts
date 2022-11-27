@@ -28,6 +28,7 @@ export class Register extends Handler {
     });
 
     if (usernameAlreadyExists) {
+      console.log("Username already exists.");
       throw new HTTPError("Username already taken.", EStatusCode.BAD_REQUEST);
     }
 

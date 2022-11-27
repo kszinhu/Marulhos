@@ -21,7 +21,6 @@ import API from "@services/api";
 export default function SignUp({ yupSchema, title, onSubmit }: ManagerProps) {
   const handleCEP = (cep: string) => {
     cep = cep.replace(/\D/g, "");
-    debugger;
     if (cep !== "") {
       if (/^[0-9]{8}$/.test(cep)) {
         fetch(`https://viacep.com.br/ws/${cep}/json/`)
@@ -69,8 +68,6 @@ export default function SignUp({ yupSchema, title, onSubmit }: ManagerProps) {
     delete values.passwordConfirmation;
 
     const response = await onSubmit(values);
-
-    debugger;
 
     if (response.status === 201) {
       const { data } = (await API.post("api/oauth/token", {

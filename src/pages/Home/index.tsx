@@ -9,8 +9,6 @@ export default function Home({ title }: HomeProps) {
     document.title = title;
   }, []);
 
-  debugger;
-
   return (
     <div>
       <h1>Home</h1>
