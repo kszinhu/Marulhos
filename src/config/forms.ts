@@ -64,9 +64,9 @@ const employeeFields: FieldInterface[] = [
     required: true,
   },
   {
-    inputComponent: NumberInput,
+    inputComponent: TextInput,
     name: "cpf",
-    type: FieldType.number,
+    type: FieldType.text,
     label: "CPF",
     required: true,
   },
@@ -127,9 +127,9 @@ const employeeFields: FieldInterface[] = [
         : "R$ ",
   },
   {
-    inputComponent: TextInput,
+    inputComponent: NumberInput,
     name: "vaccination_number",
-    type: FieldType.text,
+    type: FieldType.number,
     label: "Número da Carteira de vacinação",
     required: true,
   },
@@ -141,9 +141,9 @@ const employeeFields: FieldInterface[] = [
     required: true,
   },
   {
-    inputComponent: TextInput,
+    inputComponent: NumberInput,
     name: "work_registration_number",
-    type: FieldType.text,
+    type: FieldType.number,
     label: "Número do Registro de Trabalho",
     required: true,
   },
@@ -233,14 +233,14 @@ export const formModels: FormModelInterface[] = [
     fields: [
       {
         inputComponent: NumberInput,
-        name: "terminal_number",
+        name: "id",
         type: FieldType.number,
         label: "Número do Terminal",
         required: true,
       },
       {
         inputComponent: NumberInput,
-        name: "terminal_capacity",
+        name: "capacity",
         type: FieldType.number,
         label: "Capacidade do Terminal",
         required: true,
