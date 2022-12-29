@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 
 import { Server } from "midori/app";
 
-// import router from "./app/routes/index.js";
 import pipeline from "./pipeline.js";
 import providers from "./providers.js";
 import { prisma } from "@core/lib/prisma.js";
