@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { writeFileSync } from "fs";
+import { writeFileSync, existsSync, mkdirSync } from "fs";
 
 function generateKeyPair() {
   // @ts-ignore
@@ -38,8 +38,8 @@ function writeFileSyncRecursive(filename, content, charset) {
   folders.reduce(
     (acc, folder) => {
       const folderPath = acc + folder + '/';
-      if (!fs.existsSync(folderPath)) {
-        fs.mkdirSync(folderPath);
+      if (!existsSync(folderPath)) {
+        mkdirSync(folderPath);
       }
       return folderPath
     },
@@ -47,7 +47,7 @@ function writeFileSyncRecursive(filename, content, charset) {
   ); 
   
   // -- write file
-  fs.writeFileSync(root + filepath, content, charset);
+  writeFileSync(root + filepath, content, charset);
 }
 
 const { publicKey, privateKey } = generateKeyPair();
