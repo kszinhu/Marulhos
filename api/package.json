@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/server.js",
   "scripts": {
-    "build": "tsc",
+    "build": "ttsc",
     "clean": "tsc -b --clean",
     "generateKeys": "node ./bin/generateKeys.js",
     "dev": "nodemon -r ts-node/register -r tsconfig-paths/register --experimental-specifier-resolution=node --loader ./bin/loader.js --inspect src/server.ts",
@@ -35,14 +35,14 @@
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
-    "ttypescript": "^1.5.13",
+    "ttypescript": "^1.5.15",
     "typescript": "^4.7.4",
     "typescript-transform-paths": "^3.3.1"
   },
   "dependencies": {
     "@prisma/client": "^4.6.1",
-    "midori": "github:modscleo4/midori",
     "dotenv": "^16.0.1",
+    "midori": "github:modscleo4/midori",
     "zod": "^3.19.1"
   }
 }

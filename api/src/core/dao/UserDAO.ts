@@ -6,7 +6,7 @@ import { ModelDAO } from "./BaseDAO.js";
 import { User } from "../entities/User.js";
 
 import { prisma } from "../lib/prisma.js";
-import { isValidCPF } from "src/utils/validateCPF.js";
+import { isValidCPF } from "../../utils/validateCPF.js";
 
 import { z } from "zod";
 
