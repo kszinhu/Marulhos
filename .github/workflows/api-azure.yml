@@ -54,5 +54,5 @@ jobs:
         with:
           app-name: 'NilceuAirlines'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_f95b106c4cb64b5990386670eb00b2b3 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AF7715AB848347F78B4D9430E735BF42 }}
           package: .
