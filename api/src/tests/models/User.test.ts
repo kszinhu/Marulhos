@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import UserDAO from "@core/dao/UserDAO.js";
-import { Sex } from "@prisma/client";
 
 describe("UserDAO", () => {
   describe("Validate", () => {
@@ -12,7 +11,7 @@ describe("UserDAO", () => {
         password: "12345678",
         name: "Test",
         last_name: "Name",
-        sex: Sex.X,
+        sex: 'X',
         address_cep: "Rua do Teste",
         address_number: "124",
       };
@@ -28,7 +27,7 @@ describe("UserDAO", () => {
         password: "12345678",
         name: "Test",
         last_name: "Name",
-        sex: Sex.X,
+        sex: 'X',
         address_cep: "Rua do Teste",
         address_number: "124",
       };

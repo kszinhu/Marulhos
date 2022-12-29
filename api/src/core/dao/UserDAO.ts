@@ -1,4 +1,4 @@
-import { Prisma, Sex } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { HTTPError } from "midori/errors";
 import { EStatusCode } from "midori/http";
 
@@ -21,7 +21,7 @@ class UserDAO implements ModelDAO<User> {
     address_number: z.string(),
     birth_date: z.optional(z.date()),
     username: z.string({ required_error: "Requirido" }),
-    sex: z.nativeEnum(Sex),
+    sex: z.string(),
     rg: z.optional(z.string()),
   });
 

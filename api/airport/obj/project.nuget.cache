@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "87jW+od0qeCIHIeKVnJd8cfwkNu19rP1dITvt7mqRDHxN8b74I+yyUPAUQ1quDPeioavhMMbJLc1NJRVKm9wNQ==",
+  "success": true,
+  "projectFilePath": "c:\\Users\\rodri\\projects\\UNESP\\nilCEU-Airlines\\api\\airport\\airport.sqlproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\rodri\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
+    "C:\\Users\\rodri\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net46\\1.0.0\\microsoft.netframework.referenceassemblies.net46.1.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,45 @@
+{
+  "format": 1,
+  "restore": {
+    "c:\\Users\\rodri\\projects\\UNESP\\nilCEU-Airlines\\api\\airport\\airport.sqlproj": {}
+  },
+  "projects": {
+    "c:\\Users\\rodri\\projects\\UNESP\\nilCEU-Airlines\\api\\airport\\airport.sqlproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "c:\\Users\\rodri\\projects\\UNESP\\nilCEU-Airlines\\api\\airport\\airport.sqlproj",
+        "projectName": "airport",
+        "projectPath": "c:\\Users\\rodri\\projects\\UNESP\\nilCEU-Airlines\\api\\airport\\airport.sqlproj",
+        "packagesPath": "C:\\Users\\rodri\\.nuget\\packages\\",
+        "outputPath": "c:\\Users\\rodri\\projects\\UNESP\\nilCEU-Airlines\\api\\airport\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\rodri\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net46"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net46": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net46": {
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )"
+            }
+          }
+        }
+      }
+    }
+  }
+}

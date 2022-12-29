@@ -1,0 +1,10 @@
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\obj\Debug\airport.sqlprojAssemblyReference.cache
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\obj\Debug\airport.dll
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\obj\Debug\airport.pdb
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\bin\Debug\airport.dacpac
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\bin\Debug\airport.dll
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\bin\Debug\airport.pdb
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\obj\Debug\Model.xml
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\obj\Debug\refactor.xml
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\obj\Debug\postdeploy.sql
+c:\Users\rodri\projects\UNESP\nilCEU-Airlines\api\airport\obj\Debug\predeploy.sql

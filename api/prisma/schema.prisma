@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
@@ -16,7 +16,7 @@ model User {
   name           String
   last_name      String
   rg             String?
-  sex            Sex
+  sex            String
   birth_date     DateTime?
   address_cep    String
   address_number String
@@ -30,7 +30,7 @@ model Pilot {
   name                     String
   last_name                String
   rg                       String?
-  sex                      Sex
+  sex                      String
   birth_date               DateTime?
   address_cep              String
   address_number           String
@@ -48,7 +48,7 @@ model Fly_Attendant {
   name                     String
   last_name                String
   rg                       String?
-  sex                      Sex
+  sex                      String
   birth_date               DateTime?
   address_cep              String
   address_number           String
@@ -87,8 +87,8 @@ model Flight_Instance {
   tickets        Ticket[]
   fly_attendants Fly_Attendant[]
   flight         Flight          @relation(fields: [flight_id], references: [id])
-  copilot        Pilot           @relation("copilot", fields: [copilot_cpf], references: [cpf])
-  pilot          Pilot           @relation("pilot", fields: [pilot_cpf], references: [cpf])
+  copilot        Pilot           @relation("copilot", fields: [copilot_cpf], references: [cpf], onUpdate: NoAction)
+  pilot          Pilot           @relation("pilot", fields: [pilot_cpf], references: [cpf], onUpdate: NoAction)
   plane          Plane           @relation("seletedPlane", fields: [plane_id], references: [id])
 }
 
@@ -119,10 +119,4 @@ model Plane {
   company_cnpj     String
   Flight_Instance  Flight_Instance[] @relation("seletedPlane")
   company          Company           @relation(fields: [company_cnpj], references: [cnpj])
-}
-
-enum Sex {
-  M
-  F
-  X
 }
