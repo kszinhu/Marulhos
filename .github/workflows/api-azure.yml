@@ -55,4 +55,5 @@ jobs:
           app-name: 'NilceuAirlines'
           slot-name: 'production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AF7715AB848347F78B4D9430E735BF42 }}
-          package: .
+          # deploy "api" directory
+          package: api
