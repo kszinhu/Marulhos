@@ -11,27 +11,27 @@ import {
   Button,
 } from "@mantine/core";
 import { useForm, yupResolver } from "@mantine/form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ManagerProps } from "../../Manager";
 
 export default function SignIn({ yupSchema, title, onSubmit }: ManagerProps) {
   const form = useForm({
-    initialValues: {
-      credentialName: "",
-      password: "",
-      rememberMe: false,
-    },
-    validate: yupResolver(yupSchema),
-    transformValues: ({ credentialName, ...rest }) => {
-      const isEmail = credentialName.includes("@");
-      return {
+      initialValues: {
+        credentialName: "",
+        password: "",
+        rememberMe: false,
+      },
+      validate: yupResolver(yupSchema),
+      transformValues: ({ credentialName, ...rest }) => ({
         ...rest,
-        ...(isEmail ? { email: credentialName } : { username: credentialName }),
-      };
-    },
-  });
+        username: credentialName,
+      }),
+    }),
+    navigate = useNavigate();
 
-  const handleSubmit = async (values: typeof form.values) => {
+  const handleSubmit = async (
+    values: Omit<typeof form.values, "credentialName">
+  ) => {
     const { data } = await onSubmit({
       ...values,
       grant_type: "password",
@@ -39,8 +39,11 @@ export default function SignIn({ yupSchema, title, onSubmit }: ManagerProps) {
     });
 
     if (data) {
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("scope", data.scope);
+      const { access_token: accessToken, scope } = data;
+      localStorage.setItem("access_token", accessToken);
+      localStorage.setItem("scope", scope);
+
+      scope === "admin" ? navigate("/manager") : navigate("/");
     }
   };
 
