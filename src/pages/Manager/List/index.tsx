@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { showNotification, updateNotification } from "@mantine/notifications";
 
-import { ManagerProps, handleFieldTypes } from "../";
+import { ManagerProps } from "../";
 
 import API from "@services/api";
 
 import { ActionIcon, Group, Table, ScrollArea, Center } from "@mantine/core";
+import { Link } from "react-router-dom";
 import { IconPencil, IconTrash, IconCheck, IconX } from "@tabler/icons";
 
 export default function ManagerListModel({
@@ -15,25 +16,24 @@ export default function ManagerListModel({
   title,
   onSubmit,
 }: ManagerProps) {
-  const [dataModel, setDataModel] = useState([]);
+  const [dataModel, setDataModel] = useState([]),
+    primaryKey = schema.find((field) => field.isPrimaryKey)!.name;
 
-  const rows = dataModel.map((item: any) => (
-    <tr key={item.id}>
-      {schema.map(
-        ({ name, omit }) => !omit && <td>{item[name as keyof typeof item]}</td>
-      )}
-      <td>
-        <Group spacing={0} position='right'>
-          <ActionIcon>
-            <IconPencil size={16} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon>
-            <IconTrash size={16} stroke={1.5} />
-          </ActionIcon>
-        </Group>
-      </td>
-    </tr>
-  ));
+  const onRemove = (primaryKey: string | number) => {
+    API.delete(`/api/${endpoint}/${primaryKey}`).then(() => {
+      setDataModel((prevData) =>
+        prevData.filter((data) => data[primaryKey] !== primaryKey)
+      );
+      updateNotification({
+        id: `${endpoint}-list`,
+        message: `Registro removido com sucesso!`,
+        color: "teal",
+        icon: <IconCheck size={20} />,
+        loading: false,
+        autoClose: 1500,
+      });
+    });
+  };
 
   useEffect(() => {
     // change title of the page
@@ -69,15 +69,55 @@ export default function ManagerListModel({
           autoClose: 1500,
         });
       });
-  }, [title]);
+  }, [title, endpoint]);
 
   return (
     <ScrollArea>
       <Table sx={{ minWidth: 800 }} verticalSpacing='sm'>
         <thead>
-          <tr>{schema.map(({ label, omit }) => !omit && <th>{label}</th>)}</tr>
+          <tr>
+            {schema
+              .sort(({ isPrimaryKey }) => (isPrimaryKey ? -1 : 1))
+              .map(
+                ({ label, omit }, index) =>
+                  !omit && <th key={`label-${index}`}>{label}</th>
+              )}
+            <th>Ações</th>
+          </tr>
         </thead>
-        {dataModel.length > 0 && <tbody>{rows}</tbody>}
+        {dataModel.length > 0 && (
+          <tbody>
+            {dataModel.map((item: any, index: number) => (
+              <tr key={`primary-key-${item[primaryKey]}`}>
+                <td>{item[primaryKey]}</td>
+                {schema.map(({ name, omit, isPrimaryKey, type, locale }) => {
+                  const value = item[name as keyof typeof item];
+
+                  return (
+                    !omit &&
+                    !isPrimaryKey && (
+                      <td>
+                        {type === "date"
+                          ? Intl.DateTimeFormat(locale).format(new Date(value))
+                          : value}
+                      </td>
+                    )
+                  );
+                })}
+                <td>
+                  <Group spacing={0} position='left'>
+                    <ActionIcon component={Link} to={`${item.id}/edit`}>
+                      <IconPencil size={16} stroke={1.5} />
+                    </ActionIcon>
+                    <ActionIcon onClick={() => onRemove(item[primaryKey])}>
+                      <IconTrash size={16} stroke={1.5} />
+                    </ActionIcon>
+                  </Group>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </Table>
       {dataModel.length === 0 && (
         <Center>

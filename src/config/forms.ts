@@ -19,6 +19,7 @@ import { User, Man, Plane, Icon, PackgeImport } from "tabler-icons-react";
 import { employeeSchema, pilotSchema } from "../schema";
 import { terminalSchema } from "../schema/terminalSchema";
 import { loginUserSchema, registerUserSchema } from "../schema/userSchema";
+import { planeSchema } from "../schema/planeSchema";
 
 export enum FieldType {
   text = "text",
@@ -35,10 +36,10 @@ export interface FieldInterface {
   name: string;
   type: FieldType;
   label: string;
+  isPrimaryKey?: boolean;
   placeholder?: string;
   description?: string;
   required?: boolean;
-  allowFreeInput?: boolean;
   defaultValue?: number | string;
   dateParser?: (value: any) => any;
   parser?: (value: any) => string;
@@ -69,6 +70,7 @@ const employeeFields: FieldInterface[] = [
     type: FieldType.text,
     label: "CPF",
     required: true,
+    isPrimaryKey: true,
   },
   {
     inputComponent: NumberInput,
@@ -201,6 +203,13 @@ export const formModels: FormModelInterface[] = [
     fields: [
       {
         inputComponent: NumberInput,
+        name: 'id',
+        type: FieldType.number,
+        label: 'ID',
+        isPrimaryKey: true,
+      },
+      {
+        inputComponent: NumberInput,
         name: "capacity",
         type: FieldType.number,
         label: "Capacidade",
@@ -217,13 +226,12 @@ export const formModels: FormModelInterface[] = [
         inputComponent: DatePicker,
         name: "manufacture_date",
         type: FieldType.date,
-        label: "Ano de Fabricação",
-        allowFreeInput: true,
+        label: "Data de Fabricação",
         locale: "pt-br",
         required: true,
       },
     ],
-    schema: employeeSchema,
+    schema: planeSchema,
   },
   {
     name: "terminal",
@@ -235,8 +243,8 @@ export const formModels: FormModelInterface[] = [
         inputComponent: NumberInput,
         name: "id",
         type: FieldType.number,
-        label: "Número do Terminal",
-        required: true,
+        label: "#",
+        isPrimaryKey: true,
       },
       {
         inputComponent: NumberInput,

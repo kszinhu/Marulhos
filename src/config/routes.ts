@@ -36,6 +36,7 @@ interface Route {
 export const managerRoutes: ObjectRoute[] = formModels.map(
   ({ name, slug, title, fields, schema }) => ({
     path: slug,
+    exact: true,
     key: name,
     title,
     name,
@@ -45,7 +46,10 @@ export const managerRoutes: ObjectRoute[] = formModels.map(
     schema: fields,
     yupSchema: schema,
     onSubmit: (values) => API.post(`/api/${name}s`, values),
-    onEdit: (values) => API.put(`/api/${name}s/${values.id}`, values),
+    onEdit: (values) => {
+      debugger
+      API.put(`/api/${name}s/${values.id}`, values)
+    },
   })
 );
 
@@ -57,11 +61,11 @@ export const AuthenticationRoutes: ObjectRoute[] = formAuthentications.map(
     component:
       // remove "-" and capitalize all first letters
       Pages.Authentication[
-        slug
-          .replace(/-/g, " ")
-          .split(" ")
-          .map((word) => word[0].toUpperCase() + word.slice(1))
-          .join("") as keyof typeof Pages.Authentication
+      slug
+        .replace(/-/g, " ")
+        .split(" ")
+        .map((word) => word[0].toUpperCase() + word.slice(1))
+        .join("") as keyof typeof Pages.Authentication
       ],
     layout: layoutTypes.none,
     schema: [], // static authentication forms

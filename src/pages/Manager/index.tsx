@@ -6,7 +6,6 @@ import ManagerAddModel from "./Add";
 import ManagerEditModel from "./Edit";
 import ManagerViewModel from "./Show";
 import ManagerListModel from "./List";
-import { AxiosResponse } from "axios";
 
 interface Response {
   data: {
@@ -18,9 +17,9 @@ interface Response {
 
 export interface ManagerProps {
   endpoint: string;
+  title: string;
   schema: FieldInterface[];
   yupSchema: SchemaOf<any>;
-  title: string;
   onSubmit: (values: any) => any;
 }
 
@@ -37,6 +36,7 @@ const handleFieldTypes = (
     name,
     type,
     label,
+    isPrimaryKey,
     placeholder,
     description,
     required,
@@ -48,6 +48,8 @@ const handleFieldTypes = (
   }: FieldInterface,
   form: UseFormReturnType<any>
 ) => {
+  if (isPrimaryKey) return null;
+
   switch (type) {
     case FieldType.text:
       return (
@@ -58,6 +60,7 @@ const handleFieldTypes = (
           description={description}
           required={required}
           defaultValue={defaultValue}
+          {...((form.errors[name] && { error: form.errors[name] }) || {})}
           {...form.getInputProps(name)}
         />
       );
@@ -73,6 +76,7 @@ const handleFieldTypes = (
           defaultValue={defaultValue}
           parser={parser}
           formatter={formatter}
+          {...((form.errors[name] && { error: form.errors[name] }) || {})}
           {...form.getInputProps(name)}
         />
       );
@@ -87,6 +91,7 @@ const handleFieldTypes = (
           required={required}
           defaultValue={defaultValue}
           locale={locale}
+          {...((form.errors[name] && { error: form.errors[name] }) || {})}
           {...form.getInputProps(name)}
         />
       );
@@ -101,17 +106,14 @@ const handleFieldTypes = (
           required={required}
           defaultValue={defaultValue}
           data={options}
+          {...((form.errors[name] && { error: form.errors[name] }) || {})}
           {...form.getInputProps(name)}
         />
       );
 
     case FieldType.radio:
       return (
-        <Input.Group
-          key={`${name}-group`}
-          onChange={(value: any) => form.setFieldValue(name, value)}
-          {...form.getInputProps(name)}
-        >
+        <Input.Group key={`${name}-group`} {...form.getInputProps(name)}>
           {options &&
             options.length > 0 &&
             options.map(({ label, value }) => (
