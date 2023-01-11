@@ -40,11 +40,6 @@ export default function pipeline(server: Server): void {
   server.pipe(ErrorLoggerMiddleware);
 
   /**
-   * Compress the response using the Accept-Encoding header
-   */
-  server.pipe(ResponseCompressionMiddlewareFactory({ contentTypes: ["*/*"] }));
-
-  /**
    * Handle any uncaught HTTPError, and return a JSON response
    */
   server.pipe(HTTPErrorMiddleware);
