@@ -11,7 +11,11 @@ import { isValidCPF } from "../../utils/validateCPF.js";
 import { z } from "zod";
 
 class UserDAO implements ModelDAO<User> {
-  #schema = z.object({
+  primary_key = {
+    name: "id",
+    validate: z.string(),
+  }
+  schema = z.object({
     name: z.string(),
     email: z.string().email("Email inválido"),
     password: z.string().min(8, "Senha muito curta"),
@@ -27,7 +31,7 @@ class UserDAO implements ModelDAO<User> {
 
   validate(data: User | Prisma.UserCreateInput): boolean {
     try {
-      this.#schema.parse(data);
+      this.schema.parse(data);
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {

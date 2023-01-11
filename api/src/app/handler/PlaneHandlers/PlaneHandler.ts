@@ -26,6 +26,22 @@ export default class PlaneHandler extends Handler {
       throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
+    req.parsedBody.manufacture_date = new Date(req.parsedBody.manufacture_date);
+
+    if (!req.parsedBody?.company?.hasOwnProperty("connect") || !req.parsedBody?.company?.hasOwnProperty("create")) {
+      req.parsedBody.company = {
+        company: {
+          ...(typeof req.parsedBody?.company === "string" ? {
+            connect: {
+              id: req.parsedBody?.company,
+            }
+          } : {
+            create: req.parsedBody?.company,
+          })
+        }
+      }
+    }
+
     const saved = await PlaneDAO.create(req.parsedBody);
     if (!saved) {
       throw new HTTPError(

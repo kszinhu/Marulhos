@@ -9,7 +9,7 @@ import { prisma } from "@core/lib/prisma.js";
 dotenv.config({ override: true });
 dotenv.config({ path: "./.env.dev", override: true });
 
-export const server = new Server();
+export const server = new Server({ production: process.env.NODE_ENV?.toUpperCase() === 'PRODUCTION' });
 
 providers(server);
 pipeline(server);
