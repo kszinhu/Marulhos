@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "sudo rm -rf api && tsc && vite build",
+    "build": "rm -Rf api && tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
