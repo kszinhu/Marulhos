@@ -10,7 +10,7 @@ import {
   Group,
   Button,
 } from "@mantine/core";
-import { useForm, yupResolver } from "@mantine/form";
+import { useForm, UseFormReturnType, yupResolver } from "@mantine/form";
 import { Link, useNavigate } from "react-router-dom";
 import { ManagerProps } from "../../Manager";
 
@@ -70,7 +70,13 @@ export default function SignIn({ yupSchema, title, onSubmit }: ManagerProps) {
       </Text>
 
       <Paper withBorder shadow='md' p={30} mt={30} radius='md'>
-        <form onSubmit={form.onSubmit(handleSubmit)}>
+        <form
+          onSubmit={(
+            form.onSubmit as unknown as UseFormReturnType<
+              Omit<typeof form.values, "credentialName">
+            >["onSubmit"]
+          )(handleSubmit)}
+        >
           <TextInput
             label='Email ou nome de usuário'
             placeholder='seu-email@email.com ou fulano'
