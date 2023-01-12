@@ -18,6 +18,7 @@ interface Response {
 export interface ManagerProps {
   endpoint: string;
   title: string;
+  modelName: string;
   schema: FieldInterface[];
   yupSchema: SchemaOf<any>;
   onSubmit: (values: any) => any;
@@ -33,6 +34,7 @@ const Manager = {
 const handleFieldTypes = (
   {
     inputComponent: Input,
+    itemComponent: Item,
     name,
     type,
     label,
@@ -45,15 +47,20 @@ const handleFieldTypes = (
     formatter,
     options,
     locale,
+    endpoint,
+    customInputProps,
+    ...restInputProps
   }: FieldInterface,
   form: UseFormReturnType<any>
 ) => {
-  if (isPrimaryKey) return null;
+  if (isPrimaryKey && !required) return null;
 
   switch (type) {
     case FieldType.text:
       return (
         <Input
+          {...restInputProps}
+          {...customInputProps}
           key={name}
           label={label}
           placeholder={placeholder}
@@ -68,6 +75,8 @@ const handleFieldTypes = (
     case FieldType.number:
       return (
         <Input
+          {...restInputProps}
+          {...customInputProps}
           key={name}
           label={label}
           placeholder={placeholder}
@@ -84,6 +93,8 @@ const handleFieldTypes = (
     case FieldType.date:
       return (
         <Input
+          {...restInputProps}
+          {...customInputProps}
           key={name}
           label={label}
           placeholder={placeholder}
@@ -99,6 +110,8 @@ const handleFieldTypes = (
     case FieldType.select:
       return (
         <Input
+          {...restInputProps}
+          {...customInputProps}
           key={name}
           label={label}
           placeholder={placeholder}
@@ -113,13 +126,35 @@ const handleFieldTypes = (
 
     case FieldType.radio:
       return (
-        <Input.Group key={`${name}-group`} {...form.getInputProps(name)}>
+        <Input.Group
+          key={`${name}-group`}
+          {...customInputProps}
+          {...restInputProps}
+          {...form.getInputProps(name)}
+        >
           {options &&
             options.length > 0 &&
             options.map(({ label, value }) => (
               <Input key={value} value={value} label={label} />
             ))}
         </Input.Group>
+      );
+
+    case FieldType.modelSelect:
+      return (
+        <Input
+          {...restInputProps}
+          {...customInputProps}
+          key={name}
+          name={name}
+          label={label}
+          endpoint={endpoint}
+          optionsMapper={formatter}
+          itemComponent={Item}
+          form={form}
+          {...((form.errors[name] && { error: form.errors[name] }) || {})}
+          {...form.getInputProps(name)}
+        />
       );
 
     default:

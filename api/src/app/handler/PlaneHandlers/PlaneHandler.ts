@@ -5,6 +5,8 @@ import { AuthServiceProvider } from "midori/providers";
 import { Server } from "midori/app";
 
 import PlaneDAO from "@core/dao/PlaneDAO.js";
+import CompanyDAO from "@core/dao/CompanyDAO.js";
+import { parseRelation } from "src/utils/parsers.js";
 
 export default class PlaneHandler extends Handler {
   #auth: Auth;
@@ -28,21 +30,9 @@ export default class PlaneHandler extends Handler {
 
     req.parsedBody.manufacture_date = new Date(req.parsedBody.manufacture_date);
 
-    if (!req.parsedBody?.company?.hasOwnProperty("connect") || !req.parsedBody?.company?.hasOwnProperty("create")) {
-      req.parsedBody.company = {
-        company: {
-          ...(typeof req.parsedBody?.company === "string" ? {
-            connect: {
-              id: req.parsedBody?.company,
-            }
-          } : {
-            create: req.parsedBody?.company,
-          })
-        }
-      }
-    }
+    const data = parseRelation({ model: CompanyDAO, name: "company" }, req.parsedBody);
 
-    const saved = await PlaneDAO.create(req.parsedBody);
+    const saved = await PlaneDAO.create(data);
     if (!saved) {
       throw new HTTPError(
         "Failed to save Plane.",

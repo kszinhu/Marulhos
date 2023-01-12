@@ -34,6 +34,7 @@ export default function ApplicationRouter() {
                   path,
                   key,
                   title,
+                  endpoint,
                   modelName,
                   component: Component,
                   exact,
@@ -59,7 +60,8 @@ export default function ApplicationRouter() {
                       path={path}
                       element={
                         <Component.List
-                          endpoint={`${modelName}s`}
+                          modelName={modelName}
+                          endpoint={endpoint ?? `${modelName}s`}
                           schema={schema}
                           title={title}
                           yupSchema={yupSchema}
@@ -73,7 +75,8 @@ export default function ApplicationRouter() {
                       path={`${path}/:id`}
                       element={
                         <Component.View
-                          endpoint={`${modelName}s`}
+                          modelName={modelName}
+                          endpoint={endpoint ?? `${modelName}s`}
                           schema={schema}
                           title={title}
                           yupSchema={yupSchema}
@@ -87,7 +90,8 @@ export default function ApplicationRouter() {
                       path={`${path}/:id/edit`}
                       element={
                         <Component.Edit
-                          endpoint={`${modelName}s`}
+                          modelName={modelName}
+                          endpoint={endpoint ?? `${modelName}s`}
                           schema={schema}
                           title={title}
                           yupSchema={yupSchema}
@@ -102,7 +106,8 @@ export default function ApplicationRouter() {
                       path={`${path}/new`}
                       element={
                         <Component.Add
-                          endpoint={`${modelName}s`}
+                          modelName={modelName}
+                          endpoint={endpoint ?? `${modelName}s`}
                           schema={schema}
                           title={title}
                           yupSchema={yupSchema}

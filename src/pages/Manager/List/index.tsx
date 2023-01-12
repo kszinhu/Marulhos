@@ -20,7 +20,7 @@ export default function ManagerListModel({
     primaryKey = schema.find((field) => field.isPrimaryKey)!.name;
 
   const onRemove = (primaryKey: string | number) => {
-    API.delete(`/api/${endpoint}/${primaryKey}`).then(() => {
+    API.delete(`${endpoint}/${primaryKey}`).then(() => {
       setDataModel((prevData) =>
         prevData.filter((data) => data[primaryKey] !== primaryKey)
       );
@@ -46,7 +46,7 @@ export default function ManagerListModel({
       disallowClose: true,
     });
 
-    API.get(`/api/${endpoint}`)
+    API.get(endpoint)
       .then(({ data }: any) => {
         setDataModel(data);
         updateNotification({
@@ -87,13 +87,14 @@ export default function ManagerListModel({
         </thead>
         {dataModel.length > 0 && (
           <tbody>
-            {dataModel.map((item: any, index: number) => (
+            {dataModel.map((item: any) => (
               <tr key={`primary-key-${item[primaryKey]}`}>
                 <td>{item[primaryKey]}</td>
                 {schema.map(({ name, omit, isPrimaryKey, type, locale }) => {
                   const value = item[name as keyof typeof item];
 
                   return (
+                    value &&
                     !omit &&
                     !isPrimaryKey && (
                       <td>

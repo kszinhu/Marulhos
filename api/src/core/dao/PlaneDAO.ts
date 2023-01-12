@@ -22,18 +22,19 @@ class PlaneDAO implements ModelDAO<Plane> {
     capacity: z.number(),
     manufacture_date: z.date().optional(),
     company: z.object({
-      create: CompanyDAO.schema,
+      create: CompanyDAO.schema.optional(),
       connect: z.object({
         [CompanyDAO.primary_key.name]: CompanyDAO.primary_key.validate,
-      }),
+      }).optional(),
     }).refine(
-      data => !!data.create || !!data.connect,
-      "Either create or connect should be filled in."
-    ),
+      data => data.create || data.connect,
+      "Either create or connect must be provided"
+    )
   });
 
   validate(data: Plane | Prisma.PlaneCreateInput): boolean {
     try {
+      console.log(data)
       this.schema.parse(data);
       return true;
     } catch (error) {

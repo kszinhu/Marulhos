@@ -26,13 +26,8 @@ export default class CompanyHandler extends Handler {
       throw new HTTPError("Invalid body.", EStatusCode.BAD_REQUEST);
     }
 
-    const data = {
-      cnpj: req.parsedBody.cnpj,
-      name: req.parsedBody.name,
-      contact: req.parsedBody.contact,
-    };
+    const saved = await CompanyDAO.create(req.parsedBody);
 
-    const saved = await CompanyDAO.create(data);
     if (!saved) {
       throw new HTTPError(
         "Failed to save Company.",
@@ -40,7 +35,7 @@ export default class CompanyHandler extends Handler {
       );
     }
 
-    return Response.json(data).withStatus(EStatusCode.CREATED);
+    return Response.json(saved).withStatus(EStatusCode.CREATED);
   }
 
   async handle(req: Request): Promise<Response> {

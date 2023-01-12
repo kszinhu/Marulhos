@@ -16,6 +16,7 @@ interface ObjectRoute {
   path: string;
   key: string;
   component: any;
+  endpoint?: string;
   modelName?: string;
   schema?: Object[];
   yupSchema?: SchemaOf<any>;
@@ -34,22 +35,20 @@ interface Route {
 
 // Preenche as rotas administrativas com os modelos de formulários cadastrados em './forms'
 export const managerRoutes: ObjectRoute[] = formModels.map(
-  ({ name, slug, title, fields, schema }) => ({
+  ({ name, slug, endpoint, title, fields, schema }) => ({
     path: slug,
     exact: true,
     key: name,
     title,
     name,
+    endpoint,
     modelName: name,
     component: Pages.Manager,
     layout: layoutTypes.manager,
     schema: fields,
     yupSchema: schema,
-    onSubmit: (values) => API.post(`/api/${name}s`, values),
-    onEdit: (values) => {
-      debugger
-      API.put(`/api/${name}s/${values.id}`, values)
-    },
+    onSubmit: (values) => API.post(endpoint ?? `${name}s`, values),
+    onEdit: (values) => API.put(endpoint ? `${endpoint}/${values.id}` : `${name}s/${values.id}`, values),
   })
 );
 
@@ -58,6 +57,7 @@ export const AuthenticationRoutes: ObjectRoute[] = formAuthentications.map(
     path: slug, // sign-in
     key: slug,
     title,
+    endpoint,
     component:
       // remove "-" and capitalize all first letters
       Pages.Authentication[
@@ -70,7 +70,7 @@ export const AuthenticationRoutes: ObjectRoute[] = formAuthentications.map(
     layout: layoutTypes.none,
     schema: [], // static authentication forms
     yupSchema: schema,
-    onSubmit: (values) => API.post(`api/${endpoint}/`, values),
+    onSubmit: (values) => API.post(endpoint, values),
   })
 );
 

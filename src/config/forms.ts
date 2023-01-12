@@ -4,22 +4,22 @@ import { SchemaOf } from "yup";
 import "dayjs/locale/pt-br";
 
 import {
-  Autocomplete,
-  Checkbox,
   Radio,
-  Switch,
   NumberInput,
   TextInput,
 } from "@mantine/core";
+import InputMask from "react-input-mask";
 import { DatePicker } from "@mantine/dates";
 
-import { User, Man, Plane, Icon, PackgeImport } from "tabler-icons-react";
+import { User, Man, Plane, Icon, PackgeImport, Briefcase } from "tabler-icons-react";
 
 // Schemas
 import { employeeSchema, pilotSchema } from "../schema";
 import { terminalSchema } from "../schema/terminalSchema";
 import { loginUserSchema, registerUserSchema } from "../schema/userSchema";
 import { planeSchema } from "../schema/planeSchema";
+import RelationInput from "@components/RelationInput";
+import { companySchema } from "../schema/companySchema";
 
 export enum FieldType {
   text = "text",
@@ -31,11 +31,15 @@ export enum FieldType {
   modelTable = "model-table",
 }
 
-export interface FieldInterface {
+type CommonFieldInterfaceProps = {
   inputComponent: any;
   name: string;
   type: FieldType;
   label: string;
+  enableCreate?: boolean;
+  endpoint?: string;
+  component?: React.Component<any> | React.ComponentClass<any>;
+  itemComponent?: React.FC<any>;
   isPrimaryKey?: boolean;
   placeholder?: string;
   description?: string;
@@ -43,11 +47,14 @@ export interface FieldInterface {
   defaultValue?: number | string;
   dateParser?: (value: any) => any;
   parser?: (value: any) => string;
-  formatter?: (value: any) => string;
+  formatter?: (value: any) => any;
   options?: { label: string; value: string }[];
   locale?: string;
   omit?: boolean; // omit from table view
+  customInputProps?: any;
 }
+
+export type FieldInterface = CommonFieldInterfaceProps
 
 const employeeFields: FieldInterface[] = [
   {
@@ -99,6 +106,9 @@ const employeeFields: FieldInterface[] = [
     label: "Data de Nascimento",
     locale: "pt-br",
     omit: true,
+    customInputProps: {
+      allowFreeInput: true
+    }
   },
   {
     inputComponent: TextInput,
@@ -151,9 +161,10 @@ const employeeFields: FieldInterface[] = [
   },
 ];
 
-interface FormModelInterface {
+export interface FormModelInterface {
   name: string;
   slug: string; // url friendly
+  endpoint: string;
   title: string;
   icon: Icon;
   fields: FieldInterface[];
@@ -165,6 +176,7 @@ export const formModels: FormModelInterface[] = [
     name: "pilot",
     slug: "pilotos",
     title: "Piloto",
+    endpoint: "pilots",
     icon: User,
     fields: [
       ...employeeFields,
@@ -182,6 +194,7 @@ export const formModels: FormModelInterface[] = [
     name: "fly_attendant",
     slug: "comissarios",
     title: "Comissário",
+    endpoint: "fly_attendants",
     icon: User,
     fields: [
       ...employeeFields,
@@ -199,6 +212,7 @@ export const formModels: FormModelInterface[] = [
     name: "plane",
     slug: "avioes",
     title: "Avião",
+    endpoint: "planes",
     icon: Plane,
     fields: [
       {
@@ -229,7 +243,19 @@ export const formModels: FormModelInterface[] = [
         label: "Data de Fabricação",
         locale: "pt-br",
         required: true,
+        customInputProps: {
+          allowFreeInput: true
+        }
       },
+      {
+        inputComponent: RelationInput,
+        type: FieldType.modelSelect,
+        name: "company",
+        endpoint: "companies",
+        label: "Empresa",
+        enableCreate: true,
+        required: true,
+      }
     ],
     schema: planeSchema,
   },
@@ -237,6 +263,7 @@ export const formModels: FormModelInterface[] = [
     name: "terminal",
     slug: "terminais",
     title: "Terminal",
+    endpoint: "terminals",
     icon: PackgeImport,
     fields: [
       {
@@ -255,6 +282,42 @@ export const formModels: FormModelInterface[] = [
       },
     ],
     schema: terminalSchema,
+  },
+  {
+    name: "company",
+    slug: "companhias",
+    title: "Companhia",
+    endpoint: "companies",
+    icon: Briefcase,
+    fields: [
+      {
+        inputComponent: TextInput,
+        component: InputMask,
+        name: "cnpj",
+        type: FieldType.text,
+        label: "CNPJ",
+        required: true,
+        isPrimaryKey: true,
+        customInputProps: {
+          mask: "99.999.999/9999-99",
+        }
+      },
+      {
+        inputComponent: TextInput,
+        name: 'name',
+        type: FieldType.text,
+        label: 'Nome',
+        required: true,
+      },
+      {
+        inputComponent: TextInput,
+        name: 'contact',
+        type: FieldType.text,
+        label: 'Contato',
+        required: true,
+      }
+    ],
+    schema: companySchema,
   },
 ];
 

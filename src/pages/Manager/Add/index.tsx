@@ -5,17 +5,32 @@ import { ManagerProps, handleFieldTypes } from "../";
 
 import { Button } from "@mantine/core";
 import { Body } from "../styles";
+import { getFormModel } from "../../../utils/getFormModel";
 
 export default function ManagerAddModel({
   schema,
   yupSchema,
   title,
   onSubmit,
+  modelName,
 }: ManagerProps) {
   const form = useForm({
     initialValues: schema.reduce((acc, field) => {
-      (acc as any)[field.name] = field.defaultValue;
-      return acc;
+      const isRelation = field.type.includes("model");
+      if (isRelation) {
+        const relationFormModel = getFormModel(field.name)!;
+        (acc as any)[field.name] = relationFormModel.fields.reduce(
+          (acc, field) => {
+            (acc as any)[field.name] = field.defaultValue;
+            return acc;
+          },
+          {}
+        );
+        return acc;
+      } else {
+        (acc as any)[field.name] = field.defaultValue;
+        return acc;
+      }
     }, {}),
     validate: yupResolver(yupSchema),
   });
