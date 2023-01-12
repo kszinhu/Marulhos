@@ -6,7 +6,7 @@ import { Server } from "midori/app";
 
 import PlaneDAO from "@core/dao/PlaneDAO.js";
 import CompanyDAO from "@core/dao/CompanyDAO.js";
-import { parseRelation } from "src/utils/parsers.js";
+import { parseRelation } from "../../../utils/parsers.js";
 
 export default class PlaneHandler extends Handler {
   #auth: Auth;
