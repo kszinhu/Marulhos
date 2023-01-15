@@ -11,7 +11,7 @@ export default function OauthScopeMiddleware(options: {
       next: (req: Request) => Promise<Response>
     ): Promise<Response> {
       if (req.container.get("jwt")) {
-        const userScopes = (req.container.get('jwt').scope ?? '').split(' ');
+        const userScopes = (req.container.get("jwt").scope ?? "").split(" ");
 
         for (const scope of options.scopes) {
           if (!userScopes.includes(scope)) {

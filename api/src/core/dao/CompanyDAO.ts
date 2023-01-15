@@ -10,19 +10,22 @@ import { prisma } from "../lib/prisma.js";
 import { z } from "zod";
 
 class CompanyDAO implements ModelDAO<Company> {
-  primary_key = {
-    name: "cnpj",
-    validate: z.string(),
-  }
-  schema = z.object({
-    cnpj: z.string(),
-    name: z.string(),
-    contact: z.string(),
-  });
+  definition = {
+    name: "Company",
+    primary_key: {
+      name: "cnpj",
+      validate: z.string(),
+    },
+    schemaValidator: z.object({
+      cnpj: z.string(),
+      name: z.string(),
+      contact: z.string(),
+    }),
+  };
 
   validate(data: Company | Prisma.CompanyCreateInput): boolean {
     try {
-      this.schema.parse(data);
+      this.definition.schemaValidator.parse(data);
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {

@@ -4,12 +4,16 @@ import { Server } from "midori/app";
 
 import pipeline from "./pipeline.js";
 import providers from "./providers.js";
+
 import { prisma } from "@core/lib/prisma.js";
+import { Prisma } from "@prisma/client";
 
 dotenv.config({ override: true });
 dotenv.config({ path: "./.env.dev", override: true });
 
-export const server = new Server({ production: process.env.NODE_ENV?.toUpperCase() === 'PRODUCTION' });
+export const server = new Server({
+  production: process.env.NODE_ENV?.toUpperCase() === "PRODUCTION",
+});
 
 providers(server);
 pipeline(server);
@@ -21,7 +25,7 @@ await new Promise<void>((resolve, reject) => {
     .listen(port)
     .on("listening", async () => {
       await prisma.$connect();
-      console.log(`Server is running on port ${port}\n`);
+      console.log(`\n Server is running on port ${port}\n`);
       resolve();
     })
     .on("close", async () => {

@@ -11,27 +11,30 @@ import { isValidCPF } from "../../utils/validateCPF.js";
 import { z } from "zod";
 
 class UserDAO implements ModelDAO<User> {
-  primary_key = {
-    name: "id",
-    validate: z.string(),
-  }
-  schema = z.object({
-    name: z.string(),
-    email: z.string().email("Email inválido"),
-    password: z.string().min(8, "Senha muito curta"),
-    last_name: z.string(),
-    cpf: z.string().refine((cpf) => isValidCPF(cpf), "CPF inválido"),
-    address_cep: z.string(),
-    address_number: z.string(),
-    birth_date: z.optional(z.date()),
-    username: z.string({ required_error: "Requirido" }),
-    sex: z.string(),
-    rg: z.optional(z.string()),
-  });
+  definition = {
+    name: "User",
+    primary_key: {
+      name: "id",
+      validate: z.string(),
+    },
+    schemaValidator: z.object({
+      name: z.string(),
+      email: z.string().email("Email inválido"),
+      password: z.string().min(8, "Senha muito curta"),
+      last_name: z.string(),
+      cpf: z.string().refine((cpf) => isValidCPF(cpf), "CPF inválido"),
+      address_cep: z.string(),
+      address_number: z.string(),
+      birth_date: z.optional(z.date()),
+      username: z.string({ required_error: "Requirido" }),
+      sex: z.string(),
+      rg: z.optional(z.string()),
+    }),
+  };
 
   validate(data: User | Prisma.UserCreateInput): boolean {
     try {
-      this.schema.parse(data);
+      this.definition.schemaValidator.parse(data);
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {

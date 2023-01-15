@@ -13,29 +13,36 @@ import { prisma } from "../lib/prisma.js";
 import { z } from "zod";
 
 class PlaneDAO implements ModelDAO<Plane> {
-  primary_key = {
-    name: "id",
-    validate: z.string(),
-  }
-  schema = z.object({
-    model: z.string(),
-    capacity: z.number(),
-    manufacture_date: z.date().optional(),
-    company: z.object({
-      create: CompanyDAO.schema.optional(),
-      connect: z.object({
-        [CompanyDAO.primary_key.name]: CompanyDAO.primary_key.validate,
-      }).optional(),
-    }).refine(
-      data => data.create || data.connect,
-      "Either create or connect must be provided"
-    )
-  });
+  definition = {
+    name: "Plane",
+    primary_key: {
+      name: "id",
+      validate: z.string(),
+    },
+    schemaValidator: z.object({
+      model: z.string(),
+      capacity: z.number(),
+      manufacture_date: z.date().optional(),
+      company: z
+        .object({
+          create: CompanyDAO.definition.schemaValidator.optional(),
+          connect: z
+            .object({
+              [CompanyDAO.definition.primary_key.name]:
+                CompanyDAO.definition.primary_key.validate,
+            })
+            .optional(),
+        })
+        .refine(
+          (data) => data.create || data.connect,
+          "Either create or connect must be provided"
+        ),
+    }),
+  };
 
   validate(data: Plane | Prisma.PlaneCreateInput): boolean {
     try {
-      console.log(data)
-      this.schema.parse(data);
+      this.definition.schemaValidator.parse(data);
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {

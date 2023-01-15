@@ -5,3 +5,11 @@ node_modules
 
 # Keys
 keys/
+
+# Logs
+logs
+*.log
+
+# builds
+builds
+dist

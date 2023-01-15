@@ -1,12 +1,21 @@
 import { ZodSchema } from "zod";
 
+export interface Relation {
+  type: string;
+  model: ModelDAO<any>;
+  key: string;
+}
+
 export interface ModelDAO<T> {
-  // public variables 
-  primary_key: {
+  // Model Definition as Public Property
+  definition: {
     name: string;
-    validate: ZodSchema<any>;
-  }
-  schema: ZodSchema<any>;
+    primary_key: {
+      name: string;
+      validate: ZodSchema<any>;
+    };
+    schemaValidator: ZodSchema<any>;
+  };
   all(args?: any): Promise<T[]>;
   create(data: any): Promise<T>;
   get(args: any): Promise<T | null>;

@@ -5,8 +5,6 @@ import { AuthServiceProvider } from "midori/providers";
 import { Server } from "midori/app";
 
 import PlaneDAO from "@core/dao/PlaneDAO.js";
-import CompanyDAO from "@core/dao/CompanyDAO.js";
-import { parseRelation } from "../../../utils/parsers.js";
 
 export default class PlaneHandler extends Handler {
   #auth: Auth;
@@ -18,9 +16,10 @@ export default class PlaneHandler extends Handler {
   }
 
   async get(req: Request): Promise<Response> {
-    const data = await PlaneDAO.all();
+    const pagination = JSON.parse(req.query.get("meta") ?? "{}");
+    const data = await PlaneDAO.all(pagination);
 
-    return Response.json(data);
+    return Response.json({ data, meta: pagination });
   }
 
   async post(req: Request): Promise<Response> {
@@ -30,9 +29,7 @@ export default class PlaneHandler extends Handler {
 
     req.parsedBody.manufacture_date = new Date(req.parsedBody.manufacture_date);
 
-    const data = parseRelation({ model: CompanyDAO, name: "company" }, req.parsedBody);
-
-    const saved = await PlaneDAO.create(data);
+    const saved = await PlaneDAO.create(req.parsedBody);
     if (!saved) {
       throw new HTTPError(
         "Failed to save Plane.",

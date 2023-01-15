@@ -3,7 +3,11 @@ import { Router as RouterWrapper } from "midori/router";
 import { Handlers } from "../handler/index.js";
 
 import { AuthBearerMiddleware } from "midori/middlewares";
-import OauthScopeMiddleware from "../middleware/OauthScopeMiddleware.js";
+import {
+  OauthScopeMiddleware,
+  DataRelationMiddleware,
+  PaginationMiddleware,
+} from "../middleware/index.js";
 
 const OauthScopeMiddlewareAdmin = OauthScopeMiddleware({ scopes: ["admin"] });
 
@@ -51,7 +55,9 @@ Router.group("/api", () => {
   Router.group(
     "/companies",
     () => {
-      Router.get("/", Company).withName("company.list");
+      Router.get("/", Company, [PaginationMiddleware()]).withName(
+        "company.list"
+      );
       Router.post("/", Company).withName("company.create");
 
       Router.group("/{cnpj}", () => {
@@ -66,12 +72,16 @@ Router.group("/api", () => {
   Router.group(
     "/planes",
     () => {
-      Router.get("/", Plane).withName("plane.list");
-      Router.post("/", Plane).withName("plane.create");
+      Router.get("/", Plane, [PaginationMiddleware()]).withName("plane.list");
+      Router.post("/", Plane, [DataRelationMiddleware("Plane")]).withName(
+        "plane.create"
+      );
 
       Router.group("/{id}", () => {
         Router.get("/", PlaneById).withName("plane.get");
-        Router.put("/", PlaneById).withName("plane.update");
+        Router.put("/", PlaneById, [DataRelationMiddleware("Plane")]).withName(
+          "plane.update"
+        );
         Router.delete("/", PlaneById).withName("plane.delete");
       });
     },
