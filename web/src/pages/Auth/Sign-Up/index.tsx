@@ -1,3 +1,7 @@
+import { useEffect } from "react";
+import InputMask from "react-input-mask";
+import { Link } from "react-router-dom";
+
 import { useForm, yupResolver } from "@mantine/form";
 import {
   TextInput,
@@ -12,13 +16,16 @@ import {
   Select,
   Group,
 } from "@mantine/core";
-import InputMask from "react-input-mask";
+import { IUserInfoData, useUserInfo } from "@hooks/Auth/useUserInfo";
+import useAPI from "@hooks/Services/useAPI";
+
 import { ManagerProps } from "../../Manager"; // TODO: fix this import
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import API from "@services/api";
 
 export default function SignUp({ yupSchema, title, onSubmit }: ManagerProps) {
+  const { call: requestRegister } = useAPI({
+    path: "api/auth/register",
+    method: "POST",
+  });
   const handleCEP = (cep: string) => {
     cep = cep.replace(/\D/g, "");
     if (cep !== "") {
@@ -57,7 +64,8 @@ export default function SignUp({ yupSchema, title, onSubmit }: ManagerProps) {
       { label: "Masculino", value: "M" },
       { label: "Feminino", value: "F" },
       { label: "Outro", value: "X" },
-    ];
+    ],
+    { userInfo: userState, setUserInfo } = useUserInfo();
 
   useEffect(() => {
     // change title of the page
@@ -70,29 +78,39 @@ export default function SignUp({ yupSchema, title, onSubmit }: ManagerProps) {
     const response = await onSubmit(values);
 
     if (response.status === 201) {
-      const { data } = (await API.post("api/oauth/token", {
-        grant_type: "password",
-        username: values.username,
-        password: values.password,
-        scope: "admin",
+      const { data } = (await requestRegister({
+        body: {
+          grant_type: "password",
+          username: values.username,
+          password: values.password,
+          scope: "admin",
+        },
       })) as unknown as {
         data: {
           access_token: string;
           expires_in: number;
-          scope: string;
+          scope: "admin" | "user";
           token_type: string;
         };
       };
 
       if (data) {
-        localStorage.setItem("access_token", data.access_token);
-        localStorage.setItem("scope", data.scope);
+        const { scope, expires_in: expiresIn, ...restData } = data,
+          expiresAt = new Date(+new Date() + expiresIn * 1000);
+
+        setUserInfo({
+          ...userState,
+          ...restData,
+          isLogged: true,
+          expiresAt,
+          scope,
+        } as IUserInfoData);
       }
     }
   };
 
   return (
-    <Container size={420} my={40}>
+    <Container size='sm' my={40}>
       <Title
         align='center'
         sx={(theme) => ({
@@ -100,12 +118,12 @@ export default function SignUp({ yupSchema, title, onSubmit }: ManagerProps) {
           fontWeight: 900,
         })}
       >
-        Welcome
+        Bem-Vindo
       </Title>
       <Text color='dimmed' size='sm' align='center' mt={5}>
-        Do have an account?{" "}
+        {"Você tem uma conta? "}
         <Anchor component={Link} to='/auth/sign-in'>
-          Sign in
+          Entrar
         </Anchor>
       </Text>
 
@@ -187,7 +205,7 @@ export default function SignUp({ yupSchema, title, onSubmit }: ManagerProps) {
           />
           <Group position='center' mt='md'>
             <Button fullWidth type='submit'>
-              Sign up
+              Criar conta
             </Button>
           </Group>
         </form>

@@ -8,8 +8,15 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 
-export function User() {
-  const theme = useMantineTheme();
+export interface IUserItemProps {
+  imageUrl?: string;
+  name?: string;
+  email?: string;
+}
+
+export function User({ imageUrl, name, email }: IUserItemProps) {
+  const theme = useMantineTheme(),
+    isLoggedIn = !!name;
 
   return (
     <Box
@@ -41,15 +48,18 @@ export function User() {
       >
         <Group>
           <Avatar
-            src='https://media.discordapp.net/attachments/699400972195332116/1011092071647543397/unknown.png'
+            src={
+              imageUrl ||
+              "https://media.discordapp.net/attachments/699400972195332116/1011092071647543397/unknown.png"
+            }
             radius='xl'
           />
           <Box sx={{ flex: 1 }}>
             <Text size='sm' weight={500}>
-              Nilceu Marana
+              {name}
             </Text>
             <Text color='dimmed' size='xs'>
-              nilceumarana@gmail.com
+              {email}
             </Text>
           </Box>
 

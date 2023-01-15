@@ -1,4 +1,7 @@
+import { Box } from "@mantine/core";
 import { useEffect } from "react";
+
+import { HeroHeader } from "./content";
 
 interface HomeProps {
   title: string;
@@ -10,8 +13,11 @@ export default function Home({ title }: HomeProps) {
   }, []);
 
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <>
+      <HeroHeader />
+      <Box p='md'>
+        <h1>Home</h1>
+      </Box>
+    </>
   );
 }

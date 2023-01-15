@@ -13,6 +13,7 @@ import API from "@services/api";
 import { getFormModel } from "../../utils/getFormModel";
 import { UseFormReturnType } from "@mantine/form";
 import { FormModelInterface } from "../../config/forms";
+import useAPI from "@hooks/Services/useAPI";
 
 type ConditionalComponentProps<T> =
   | {
@@ -43,7 +44,8 @@ const RelationInput = ({
 }: RelationInputProps<any>) => {
   const [options, setOptions] = useState<any[]>([]),
     modalState = useState<boolean>(false),
-    [opened, setOpen] = modalState,
+    { call: fetchOptions } = useAPI({ path: endpoint }),
+    [_opened, setOpen] = modalState,
     formModel = getFormModel(name)!,
     primaryKey = formModel.fields.find(
       ({ isPrimaryKey }) => isPrimaryKey
@@ -67,7 +69,7 @@ const RelationInput = ({
   );
 
   useEffect(() => {
-    API.get(endpoint).then(({ data }: { data: any[] }) => {
+    fetchOptions().then(({ data }: { data: any[] }) => {
       setOptions(
         !!itemComponent
           ? optionsMapper(data)

@@ -27,6 +27,20 @@ interface ObjectRoute {
   onEdit?: (values: any) => any;
 }
 
+interface FunctionalRoute {
+  key: string;
+  slug: string;
+  title: string;
+  label: string;
+  endpoint?: string;
+  options?: {
+    links?: {
+      link: string;
+      label: string;
+    }[];
+  };
+}
+
 interface Route {
   type: "model" | "manager" | "authentication" | "default";
   layout: layoutTypes;
@@ -48,24 +62,28 @@ export const managerRoutes: ObjectRoute[] = formModels.map(
     schema: fields,
     yupSchema: schema,
     onSubmit: (values) => API.post(endpoint ?? `${name}s`, values),
-    onEdit: (values) => API.put(endpoint ? `${endpoint}/${values.id}` : `${name}s/${values.id}`, values),
+    onEdit: (values) =>
+      API.put(
+        endpoint ? `${endpoint}/${values.id}` : `${name}s/${values.id}`,
+        values
+      ),
   })
 );
 
 export const AuthenticationRoutes: ObjectRoute[] = formAuthentications.map(
-  ({ endpoint, slug, title, schema }) => ({
+  ({ key, endpoint, slug, title, schema }) => ({
     path: slug, // sign-in
-    key: slug,
+    key,
     title,
     endpoint,
     component:
       // remove "-" and capitalize all first letters
       Pages.Authentication[
-      slug
-        .replace(/-/g, " ")
-        .split(" ")
-        .map((word) => word[0].toUpperCase() + word.slice(1))
-        .join("") as keyof typeof Pages.Authentication
+        slug
+          .replace(/-/g, " ")
+          .split(" ")
+          .map((word) => word[0].toUpperCase() + word.slice(1))
+          .join("") as keyof typeof Pages.Authentication
       ],
     layout: layoutTypes.none,
     schema: [], // static authentication forms
@@ -73,6 +91,28 @@ export const AuthenticationRoutes: ObjectRoute[] = formAuthentications.map(
     onSubmit: (values) => API.post(endpoint, values),
   })
 );
+
+export const FunctionalRoutes: FunctionalRoute[] = [
+  {
+    key: "tickets",
+    slug: "/passagens",
+    title: "Passagens",
+    label: "Passagens",
+    endpoint: "tickets",
+  },
+  {
+    key: "about-me",
+    slug: "/sobre",
+    title: "Sobre nós",
+    label: "Sobre nós",
+  },
+  {
+    key: "contact",
+    slug: "/contato",
+    title: "Contato",
+    label: "Contato",
+  },
+];
 
 export const routes: Route[] = [
   {

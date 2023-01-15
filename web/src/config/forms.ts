@@ -322,6 +322,7 @@ export const formModels: FormModelInterface[] = [
 ];
 
 interface FormAuthenticationInterface {
+  key: string;
   endpoint: string; // api endpoint
   slug: string; // url friendly
   title: string;
@@ -330,12 +331,14 @@ interface FormAuthenticationInterface {
 
 export const formAuthentications: FormAuthenticationInterface[] = [
   {
+    key: "register",
     endpoint: "auth/register",
     slug: "sign-up",
     title: "Cadastrar",
     schema: registerUserSchema,
   },
   {
+    key: "login",
     endpoint: "oauth/token",
     slug: "sign-in",
     title: "Entrar",

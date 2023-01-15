@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+
 import { useForm, yupResolver } from "@mantine/form";
+import { Button } from "@mantine/core";
+
+import useAPI from "@hooks/Services/useAPI";
 
 import { ManagerProps, handleFieldTypes } from "../";
 
-import { Button } from "@mantine/core";
 import { Body } from "../styles";
-import API from "@services/api";
 
 export default function ManagerEditModel({
   schema,
@@ -15,7 +17,8 @@ export default function ManagerEditModel({
   title,
   onSubmit,
 }: ManagerProps) {
-  const { id } = useParams();
+  const { id } = useParams(),
+    { call: fetchModel } = useAPI({ path: `${endpoint}/${id}` });
 
   const form = useForm({
     initialValues: schema.reduce((acc, field) => {
@@ -30,9 +33,12 @@ export default function ManagerEditModel({
     document.title = `Manager - ${title}`;
 
     // call api to get data
-    API.get(`/api/${endpoint}/${id}`).then(({ data }: any) => {
+    fetchModel().then(({ data }: any) => {
       const { manufacture_date: manufactureDate, ...rest } = data;
-      form.setValues({ ...rest, manufacture_date: new Date(manufactureDate) });
+      form.setValues({
+        ...rest,
+        manufacture_date: new Date(manufactureDate),
+      });
     });
   }, []);
 

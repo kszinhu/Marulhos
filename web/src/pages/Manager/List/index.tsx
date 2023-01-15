@@ -3,7 +3,7 @@ import { showNotification, updateNotification } from "@mantine/notifications";
 
 import { ManagerProps } from "../";
 
-import API from "@services/api";
+import useAPI from "@hooks/Services/useAPI";
 
 import { ActionIcon, Group, Table, ScrollArea, Center } from "@mantine/core";
 import { Link } from "react-router-dom";
@@ -17,10 +17,15 @@ export default function ManagerListModel({
   onSubmit,
 }: ManagerProps) {
   const [dataModel, setDataModel] = useState([]),
-    primaryKey = schema.find((field) => field.isPrimaryKey)!.name;
+    { call: fetchModel } = useAPI({ path: endpoint }),
+    primaryKey = schema.find((field) => field.isPrimaryKey)!.name,
+    { call: deleteModel } = useAPI({
+      path: `${endpoint}/${primaryKey}`,
+      method: "DELETE",
+    });
 
   const onRemove = (primaryKey: string | number) => {
-    API.delete(`${endpoint}/${primaryKey}`).then(() => {
+    deleteModel().then(() => {
       setDataModel((prevData) =>
         prevData.filter((data) => data[primaryKey] !== primaryKey)
       );
@@ -46,8 +51,9 @@ export default function ManagerListModel({
       disallowClose: true,
     });
 
-    API.get(endpoint)
-      .then(({ data }: any) => {
+    fetchModel()
+      .then((data: any) => {
+        debugger;
         setDataModel(data);
         updateNotification({
           id: `${endpoint}-list`,

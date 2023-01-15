@@ -1,3 +1,4 @@
+import { useUserInfo } from "@hooks/Auth/useUserInfo";
 import {
   TextInput,
   PasswordInput,
@@ -27,7 +28,8 @@ export default function SignIn({ yupSchema, title, onSubmit }: ManagerProps) {
         username: credentialName,
       }),
     }),
-    navigate = useNavigate();
+    navigate = useNavigate(),
+    { userInfo: prevUserInfo, setUserInfo } = useUserInfo();
 
   const handleSubmit = async (
     values: Omit<typeof form.values, "credentialName">
@@ -39,16 +41,23 @@ export default function SignIn({ yupSchema, title, onSubmit }: ManagerProps) {
     });
 
     if (data) {
-      const { access_token: accessToken, scope } = data;
-      localStorage.setItem("access_token", accessToken);
-      localStorage.setItem("scope", scope);
+      const { scope, expires_in: expiresIn, ...restData } = data,
+        expiresAt = new Date(+new Date() + expiresIn * 1000);
+
+      setUserInfo({
+        ...prevUserInfo,
+        ...restData,
+        isLogged: true,
+        expiresAt,
+        scope,
+      });
 
       scope === "admin" ? navigate("/manager") : navigate("/");
     }
   };
 
   return (
-    <Container size={420} my={40}>
+    <Container size='sm' my={40}>
       <Title
         align='center'
         sx={(theme) => ({

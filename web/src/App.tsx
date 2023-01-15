@@ -1,4 +1,4 @@
-import { useToggle } from "@mantine/hooks";
+import { useTimeout, useToggle } from "@mantine/hooks";
 
 import {
   ColorScheme,
@@ -12,12 +12,31 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { BrowserRouter as Router } from "react-router-dom";
 import ApplicationRouter from "./components/router";
 import { applicationTheme } from "./config/theme";
+import { useUserInfo } from "@hooks/Auth/useUserInfo";
+import { useEffect } from "react";
 
 function App() {
   const [colorScheme, toggleColorScheme] = useToggle<ColorScheme>([
-    "dark",
-    "light",
-  ]);
+      "dark",
+      "light",
+    ]),
+    { userInfo, setUserInfo, isLogged } = useUserInfo(),
+    now = new Date(),
+    { start, clear } = useTimeout(
+      () => {
+        setUserInfo({});
+      },
+      Math.max(0, new Date(userInfo.expiresAt).getTime() - now.getTime()),
+      { autoInvoke: true }
+    );
+
+  // Auto logout when token expires
+  useEffect(() => {
+    clear();
+    if (isLogged) {
+      start();
+    }
+  }, [userInfo]);
 
   return (
     <ColorSchemeProvider

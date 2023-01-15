@@ -16,7 +16,11 @@
     "noEmit": true,
     "paths": {
       "@components/*": ["./src/components/*"],
-      "@services/*": ["./src/services/*"]
+      "@hooks/*": ["./src/hooks/*"],
+      "@config/*": ["./src/config/*"],
+      "@services/*": ["./src/services/*"],
+      "@applicationTypes/*": ["./src/types/*"],
+      "@utils/*": ["./src/utils/*"]
     },
     "jsx": "react-jsx"
   },

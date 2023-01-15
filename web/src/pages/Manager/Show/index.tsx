@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+
+import { Button } from "@mantine/core";
 import { useForm, yupResolver } from "@mantine/form";
 import { showNotification, updateNotification } from "@mantine/notifications";
+import { IconX, IconCheck } from "@tabler/icons";
 
 import { ManagerProps, handleFieldTypes } from "../";
 
-import API from "@services/api";
+import useAPI from "@hooks/Services/useAPI";
 
-import { Button } from "@mantine/core";
 import { Body } from "../styles";
-import { IconX, IconCheck } from "@tabler/icons";
 
 export default function ManagerViewModel({
   endpoint,
@@ -18,7 +19,8 @@ export default function ManagerViewModel({
   title,
   onSubmit,
 }: ManagerProps) {
-  const { id } = useParams();
+  const { id } = useParams(),
+    { call: fetchModel } = useAPI({ path: `${endpoint}/${id}` });
 
   const form = useForm({
     initialValues: schema.reduce(
@@ -46,7 +48,7 @@ export default function ManagerViewModel({
       disallowClose: true,
     });
 
-    API.get(`${import.meta.env.VITE_API_URL}${endpoint}/${id}`)
+    fetchModel()
       .then(({ data: values }: any) => {
         form.setValues(values);
         updateNotification({

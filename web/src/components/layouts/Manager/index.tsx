@@ -3,18 +3,21 @@ import { useState } from "react";
 import {
   AppShell,
   Burger,
+  Group,
   Header,
   MediaQuery,
   Navbar,
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import { MainLinks, User } from "./NavBarItems";
+import { MainLinks } from "../NavBarItems";
 import { Outlet } from "react-router-dom";
+import UserSection from "@components/UserSection";
 
 export default function FormLayout() {
   const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState<boolean>(false),
+    [userMenuOpened, setUserMenuOpened] = useState(false);
 
   return (
     <AppShell
@@ -32,15 +35,13 @@ export default function FormLayout() {
             <MainLinks />
           </Navbar.Section>
           <Navbar.Section>
-            <User />
+            <UserSection name='Nilceu' email='nilceu@marana.com' />
           </Navbar.Section>
         </Navbar>
       }
       header={
         <Header height={70} p='xs'>
-          <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
-          >
+          <Group dir='column' align='center' sx={{ height: "100%" }}>
             <MediaQuery largerThan='sm' styles={{ display: "none" }}>
               <Burger
                 opened={opened}
@@ -52,7 +53,7 @@ export default function FormLayout() {
             </MediaQuery>
 
             <Text>Nilceu Airlines</Text>
-          </div>
+          </Group>
         </Header>
       }
       styles={(theme) => ({
