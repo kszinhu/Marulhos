@@ -4,7 +4,7 @@ import { Auth } from "midori/auth";
 import { AuthServiceProvider } from "midori/providers";
 import { Server } from "midori/app";
 
-import formatQueryParams from "src/utils/formatQueryParams.js";
+import formatQueryParams from "@utils/formatQueryParams.js";
 
 import PlaneDAO from "@core/dao/PlaneDAO.js";
 

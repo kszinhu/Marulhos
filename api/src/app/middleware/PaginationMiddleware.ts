@@ -39,20 +39,20 @@ export default function PaginationMiddleware(): Constructor<Middleware> {
 
       const response = await next(req);
 
-      const newBody: [number, any] = await new Promise((resolve) => {
-        response.body.on("data", (chunk) => {
-          resolve(JSON.parse(chunk));
-        });
-      });
-
-      const [count, data] = newBody;
+      const [totalRecords, responseData]: [number, any] = await new Promise(
+        (resolve) => {
+          response.body.on("data", (chunk) => {
+            resolve(JSON.parse(chunk));
+          });
+        }
+      );
 
       return response.empty().json({
-        data,
+        data: responseData,
         meta: {
           page,
           per,
-          total: count,
+          total: totalRecords,
         },
       });
     }

@@ -5,7 +5,7 @@ import { AuthServiceProvider } from "midori/providers";
 import { Server } from "midori/app";
 
 import PilotDAO from "@core/dao/PilotDAO.js";
-import formatQueryParams from "src/utils/formatQueryParams.js";
+import formatQueryParams from "@utils/formatQueryParams.js";
 
 export default class PilotHandler extends Handler {
   #auth: Auth;

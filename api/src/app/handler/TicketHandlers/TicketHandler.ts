@@ -2,7 +2,7 @@ import { EStatusCode, Handler, Request, Response } from "midori/http";
 import { HTTPError } from "midori/errors";
 
 import TicketDAO from "@core/dao/TicketDAO.js";
-import formatQueryParams from "src/utils/formatQueryParams.js";
+import formatQueryParams from "@utils/formatQueryParams.js";
 
 export default class TicketHandler extends Handler {
   async get(req: Request): Promise<Response> {

@@ -6,7 +6,7 @@ import { Server } from "midori/app";
 
 import { Prisma } from "@prisma/client";
 
-import formatQueryParams from "src/utils/formatQueryParams.js";
+import formatQueryParams from "@utils/formatQueryParams.js";
 
 import TerminalDao from "@core/dao/TerminalDAO.js";
 

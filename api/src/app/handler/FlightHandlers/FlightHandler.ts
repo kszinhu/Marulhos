@@ -5,7 +5,7 @@ import { AuthServiceProvider } from "midori/providers";
 import { Server } from "midori/app";
 
 import FlightDAO from "@core/dao/FlightDAO.js";
-import formatQueryParams from "src/utils/formatQueryParams.js";
+import formatQueryParams from "@utils/formatQueryParams.js";
 
 export default class FlightHandler extends Handler {
   #auth: Auth;

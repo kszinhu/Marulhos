@@ -1,8 +1,6 @@
 {
   "ts-node": {
-    "require": [
-      "tsconfig-paths/register"
-    ]
+    "require": ["tsconfig-paths/register"]
   },
   "compilerOptions": {
     "moduleResolution": "NodeNext",
@@ -16,34 +14,22 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@app/*": [
-        "./src/app/*"
-      ],
-      "@core/*": [
-        "./src/core/*"
-      ]
+      "@app/*": ["./src/app/*"],
+      "@core/*": ["./src/core/*"],
+      "@utils/*": ["./src/utils/*"]
     },
     "plugins": [
       {
         "transform": "typescript-transform-paths",
-        "exclude": [
-          "**/node_modules/**"
-        ]
+        "exclude": ["**/node_modules/**"]
       },
       {
         "transform": "typescript-transform-paths",
-        "exclude": [
-          "**/node_modules/**"
-        ],
+        "exclude": ["**/node_modules/**"],
         "afterDeclarations": true
       }
     ]
   },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

@@ -2,14 +2,18 @@ import { EStatusCode, Handler, Request, Response } from "midori/http";
 import { HTTPError } from "midori/errors";
 
 import UserDAO from "@core/dao/UserDAO.js";
-import formatQueryParams from "src/utils/formatQueryParams.js";
+import formatQueryParams from "@utils/formatQueryParams.js";
+import { User } from "@prisma/client";
 
 export default class UserHandler extends Handler {
   async get(req: Request): Promise<Response> {
     const query = formatQueryParams(req.query),
-      data = await UserDAO.all(query);
+      [count, data] = await UserDAO.all(query);
 
-    return Response.json(data);
+    return Response.json([
+      count,
+      data.map(({ password, ...rest }: User) => rest),
+    ]);
   }
 
   async post(req: Request): Promise<Response> {

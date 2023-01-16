@@ -37,7 +37,7 @@ class UserDAO implements ModelDAO<User> {
   }
 
   async all(args?: Prisma.UserFindManyArgs): Promise<[number, User[]]> {
-    return await Promise.all([prisma.user.count(), prisma.user.findMany(args)]);
+    return await Promise.all([prisma.user.count(), prisma.user.findMany()]);
   }
 
   async create(data: Prisma.UserCreateInput): Promise<User> {
