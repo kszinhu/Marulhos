@@ -32,10 +32,29 @@ export default function PaginationMiddleware(): Constructor<Middleware> {
         req.query.delete("per");
 
         // add formatted pagination parameters to body
-        req.query.set("meta", JSON.stringify(prismaPagination));
+        for (const [key, value] of Object.entries(prismaPagination)) {
+          req.query.set(key, String(value));
+        }
       }
 
-      return next(req);
+      const response = await next(req);
+
+      const newBody: [number, any] = await new Promise((resolve) => {
+        response.body.on("data", (chunk) => {
+          resolve(JSON.parse(chunk));
+        });
+      });
+
+      const [count, data] = newBody;
+
+      return response.empty().json({
+        data,
+        meta: {
+          page,
+          per,
+          total: count,
+        },
+      });
     }
   };
 }

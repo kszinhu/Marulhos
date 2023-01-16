@@ -2,10 +2,12 @@ import { EStatusCode, Handler, Request, Response } from "midori/http";
 import { HTTPError } from "midori/errors";
 
 import TicketDAO from "@core/dao/TicketDAO.js";
+import formatQueryParams from "src/utils/formatQueryParams.js";
 
 export default class TicketHandler extends Handler {
   async get(req: Request): Promise<Response> {
-    const data = await TicketDAO.all();
+    const query = formatQueryParams(req.query),
+      data = await TicketDAO.all(query);
 
     return Response.json(data);
   }

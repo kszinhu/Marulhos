@@ -16,7 +16,8 @@ export default class FlyAttendantHandler extends Handler {
   }
 
   async get(req: Request): Promise<Response> {
-    const data = await FlyAttendantDAO.all();
+    const pagination = JSON.parse(req.query.get("meta") ?? "{}"),
+      data = await FlyAttendantDAO.all(pagination);
 
     return Response.json(data);
   }

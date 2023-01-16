@@ -5,6 +5,7 @@ import { AuthServiceProvider } from "midori/providers";
 import { Server } from "midori/app";
 
 import FlightDAO from "@core/dao/FlightDAO.js";
+import formatQueryParams from "src/utils/formatQueryParams.js";
 
 export default class FlightHandler extends Handler {
   #auth: Auth;
@@ -16,7 +17,10 @@ export default class FlightHandler extends Handler {
   }
 
   async get(req: Request): Promise<Response> {
-    const data = await FlightDAO.all();
+    const query = formatQueryParams(req.query),
+      data = await FlightDAO.all(query);
+
+    console.log(data);
 
     return Response.json(data);
   }

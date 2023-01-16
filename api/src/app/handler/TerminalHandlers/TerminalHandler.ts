@@ -6,6 +6,8 @@ import { Server } from "midori/app";
 
 import { Prisma } from "@prisma/client";
 
+import formatQueryParams from "src/utils/formatQueryParams.js";
+
 import TerminalDao from "@core/dao/TerminalDAO.js";
 
 export default class TerminalHandler extends Handler {
@@ -18,7 +20,8 @@ export default class TerminalHandler extends Handler {
   }
 
   async get(req: Request): Promise<Response> {
-    const data = await TerminalDao.all();
+    const query = formatQueryParams(req.query),
+      data = await TerminalDao.all(query);
 
     return Response.json(data);
   }

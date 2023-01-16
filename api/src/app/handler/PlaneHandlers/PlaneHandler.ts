@@ -4,6 +4,8 @@ import { Auth } from "midori/auth";
 import { AuthServiceProvider } from "midori/providers";
 import { Server } from "midori/app";
 
+import formatQueryParams from "src/utils/formatQueryParams.js";
+
 import PlaneDAO from "@core/dao/PlaneDAO.js";
 
 export default class PlaneHandler extends Handler {
@@ -16,10 +18,10 @@ export default class PlaneHandler extends Handler {
   }
 
   async get(req: Request): Promise<Response> {
-    const pagination = JSON.parse(req.query.get("meta") ?? "{}");
-    const data = await PlaneDAO.all(pagination);
+    const query = formatQueryParams(req.query),
+      data = await PlaneDAO.all(query);
 
-    return Response.json({ data, meta: pagination });
+    return Response.json(data);
   }
 
   async post(req: Request): Promise<Response> {

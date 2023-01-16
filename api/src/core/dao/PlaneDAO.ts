@@ -58,8 +58,11 @@ class PlaneDAO implements ModelDAO<Plane> {
     }
   }
 
-  async all(args?: Prisma.PlaneFindManyArgs): Promise<Plane[]> {
-    return await prisma.plane.findMany(args);
+  async all(args?: Prisma.PlaneFindManyArgs): Promise<[number, Plane[]]> {
+    return await Promise.all([
+      prisma.plane.count(),
+      prisma.plane.findMany(args),
+    ]);
   }
 
   async create(data: Prisma.PlaneCreateInput): Promise<Plane> {

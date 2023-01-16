@@ -10,6 +10,7 @@ import {
 } from "../middleware/index.js";
 
 const OauthScopeMiddlewareAdmin = OauthScopeMiddleware({ scopes: ["admin"] });
+const PaginationMiddlewareModule = PaginationMiddleware();
 
 const Router = new RouterWrapper();
 
@@ -40,7 +41,9 @@ Router.group("/api", () => {
   Router.group(
     "/terminals",
     () => {
-      Router.get("/", Terminal).withName("terminal.list");
+      Router.get("/", Terminal, [PaginationMiddlewareModule]).withName(
+        "terminal.list"
+      );
       Router.post("/", Terminal).withName("terminal.create");
 
       Router.group("/{id}", () => {
@@ -55,7 +58,7 @@ Router.group("/api", () => {
   Router.group(
     "/companies",
     () => {
-      Router.get("/", Company, [PaginationMiddleware()]).withName(
+      Router.get("/", Company, [PaginationMiddlewareModule]).withName(
         "company.list"
       );
       Router.post("/", Company).withName("company.create");
@@ -72,7 +75,9 @@ Router.group("/api", () => {
   Router.group(
     "/planes",
     () => {
-      Router.get("/", Plane, [PaginationMiddleware()]).withName("plane.list");
+      Router.get("/", Plane, [PaginationMiddlewareModule]).withName(
+        "plane.list"
+      );
       Router.post("/", Plane, [DataRelationMiddleware("Plane")]).withName(
         "plane.create"
       );
@@ -91,7 +96,9 @@ Router.group("/api", () => {
   Router.group(
     "/pilots",
     () => {
-      Router.get("/", Pilot).withName("pilot.list");
+      Router.get("/", Pilot, [PaginationMiddlewareModule]).withName(
+        "pilot.list"
+      );
       Router.post("/", Pilot).withName("pilot.create");
 
       Router.group("/{cpf}", () => {
@@ -104,7 +111,9 @@ Router.group("/api", () => {
   );
 
   Router.group("/flights_scheduled", () => {
-    Router.get("/", Flight).withName("flights_scheduled.list");
+    Router.get("/", Flight, [PaginationMiddlewareModule]).withName(
+      "flights_scheduled.list"
+    );
     Router.post("/", Flight, [OauthScopeMiddlewareAdmin]);
 
     Router.group("/{id}", () => {
@@ -121,7 +130,9 @@ Router.group("/api", () => {
   Router.group(
     "/tickets",
     () => {
-      Router.get("/", Ticket).withName("ticket.list");
+      Router.get("/", Ticket, [PaginationMiddlewareModule]).withName(
+        "ticket.list"
+      );
       Router.post("/", Ticket, [OauthScopeMiddlewareAdmin]).withName(
         "ticket.create"
       );
@@ -142,7 +153,10 @@ Router.group("/api", () => {
   Router.group(
     "/users",
     () => {
-      Router.get("/", User, [OauthScopeMiddlewareAdmin]).withName("user.list");
+      Router.get("/", User, [
+        OauthScopeMiddlewareAdmin, // Only admin can list users
+        PaginationMiddlewareModule,
+      ]).withName("user.list");
 
       Router.group("/{id}", () => {
         Router.get("/", UserById).withName("user.get");
@@ -158,7 +172,9 @@ Router.group("/api", () => {
   Router.group(
     "/fly_attendants",
     () => {
-      Router.get("/", FlyAttendant).withName("fly_attendant.list");
+      Router.get("/", FlyAttendant, [PaginationMiddlewareModule]).withName(
+        "fly_attendant.list"
+      );
       Router.post("/", FlyAttendant).withName("fly_attendant.create");
 
       Router.group("/{cpf}", () => {
@@ -173,7 +189,9 @@ Router.group("/api", () => {
   Router.group(
     "/flights",
     () => {
-      Router.get("/", FlightInstance).withName("flight.list");
+      Router.get("/", FlightInstance, [PaginationMiddlewareModule]).withName(
+        "flight.list"
+      );
       Router.post("/", FlightInstance, [OauthScopeMiddlewareAdmin]).withName(
         "flight.create"
       );

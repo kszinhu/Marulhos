@@ -41,8 +41,11 @@ class CompanyDAO implements ModelDAO<Company> {
     }
   }
 
-  async all(args?: Prisma.CompanyFindManyArgs): Promise<Company[]> {
-    return await prisma.company.findMany(args);
+  async all(args?: Prisma.CompanyFindManyArgs): Promise<[number, Company[]]> {
+    return await Promise.all([
+      prisma.company.count(),
+      prisma.company.findMany(args),
+    ]);
   }
 
   async create(data: Prisma.CompanyCreateInput): Promise<Company> {

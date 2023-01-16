@@ -19,7 +19,7 @@ export default class CompanyHandler extends Handler {
     const pagination = JSON.parse(req.query.get("meta") ?? "{}");
     const data = await CompanyDAO.all(pagination);
 
-    return Response.json({ data, meta: pagination });
+    return Response.json(data)
   }
 
   async post(req: Request): Promise<Response> {

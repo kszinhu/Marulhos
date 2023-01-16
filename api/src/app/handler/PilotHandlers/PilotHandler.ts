@@ -5,6 +5,7 @@ import { AuthServiceProvider } from "midori/providers";
 import { Server } from "midori/app";
 
 import PilotDAO from "@core/dao/PilotDAO.js";
+import formatQueryParams from "src/utils/formatQueryParams.js";
 
 export default class PilotHandler extends Handler {
   #auth: Auth;
@@ -16,7 +17,8 @@ export default class PilotHandler extends Handler {
   }
 
   async get(req: Request): Promise<Response> {
-    const data = await PilotDAO.all();
+    const query = formatQueryParams(req.query),
+      data = await PilotDAO.all(query);
 
     return Response.json(data);
   }

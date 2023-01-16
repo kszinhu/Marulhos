@@ -2,10 +2,12 @@ import { EStatusCode, Handler, Request, Response } from "midori/http";
 import { HTTPError } from "midori/errors";
 
 import UserDAO from "@core/dao/UserDAO.js";
+import formatQueryParams from "src/utils/formatQueryParams.js";
 
 export default class UserHandler extends Handler {
   async get(req: Request): Promise<Response> {
-    const data = await UserDAO.all();
+    const query = formatQueryParams(req.query),
+      data = await UserDAO.all(query);
 
     return Response.json(data);
   }
