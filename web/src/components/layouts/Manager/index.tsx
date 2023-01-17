@@ -13,11 +13,13 @@ import {
 import { MainLinks } from "../NavBarItems";
 import { Outlet } from "react-router-dom";
 import UserSection from "@components/UserSection";
+import { useUserInfo } from "@hooks/Auth/useUserInfo";
 
 export default function FormLayout() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState<boolean>(false),
-    [userMenuOpened, setUserMenuOpened] = useState(false);
+    [userMenuOpened, setUserMenuOpened] = useState(false),
+    { userInfo, isLogged } = useUserInfo();
 
   return (
     <AppShell
@@ -35,7 +37,7 @@ export default function FormLayout() {
             <MainLinks />
           </Navbar.Section>
           <Navbar.Section>
-            <UserSection name='Nilceu' email='nilceu@marana.com' />
+            <UserSection {...userInfo} isLoggedIn={isLogged} />
           </Navbar.Section>
         </Navbar>
       }
